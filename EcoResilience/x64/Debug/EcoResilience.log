@@ -1,1 +1,5 @@
-﻿
+﻿  Cell.cpp
+  World.cpp
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(7,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating Code...
+  EcoResilience.vcxproj -> C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\x64\Debug\EcoResilience.lib

@@ -1,13 +1,16 @@
 #include "DemoApp.h"
 
+DemoApp::DemoApp() :
+    window(NULL),
+    width(DEFAULT_SIDE),
+    height(DEFAULT_SIDE),
+    world(DEFAULT_SIDE, DEFAULT_SIDE)
+{}
+
 void DemoApp::init()
 {
     //Initialise window and starting variables
     window = new sf::RenderWindow(sf::VideoMode(1600, 900), "Ecosystem Resilience Demonstration");
-
-    rect.setFillColor(sf::Color::Green);
-    speed = 0.001f;
-    scale = 100.f;
 
     sf::Time currentTime = clock.getElapsedTime();
 }
@@ -53,11 +56,7 @@ void DemoApp::handleUpdate()
         //The user has pressed a key
         if (event.type == sf::Event::KeyPressed)
         {
-            if (event.key.code == sf::Keyboard::A)
-                scale *= 2.f;
-
-            if (event.key.code == sf::Keyboard::S)
-                scale *= 0.5f;
+            
         }
     }
 
@@ -70,11 +69,7 @@ void DemoApp::update(float dt)
 {
     float timeElapsed = clock.getElapsedTime().asMilliseconds();
 
-    float x = scale + 5.f + scale * cos(timeElapsed * speed);
-    float y = scale + 5.f + scale * sin(2 * timeElapsed * speed);
-
-    rect.setSize(sf::Vector2f(x, y));
-    rect.setPosition(sf::Vector2f(window->getSize().x / 2 - rect.getSize().x / 2, window->getSize().y / 2 - rect.getSize().y / 2));
+    world.Update();
 }
 
 //Render the application to the screen
@@ -83,8 +78,23 @@ void DemoApp::render()
     //Clear the display
     window->clear();
 
+    sf::RectangleShape cellRep;
+    cellRep.setSize(sf::Vector2f(20, 20));
+
     //Render anything needed
-    window->draw(rect);
+    for (int cellNum = 0; cellNum < world.size(); cellNum++)
+    {
+        sf::Vector2f pos;
+        pos.x = cellNum / world.GetHeight() * 20 - (width / 2 * 20);
+        pos.y = cellNum % world.GetWidth() * 20 - (height / 2 * 20);
+        cellRep.setPosition(window->getView().getCenter() + pos);
+
+        int waterNum = float(world[cellNum]->GetWater() * 255.f) / 1;
+
+        cellRep.setFillColor(sf::Color(0, 0, waterNum, 255));
+
+        window->draw(cellRep);
+    }
 
     //Send the drawn objects to the screen
     window->display();
