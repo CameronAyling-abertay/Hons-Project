@@ -1,11 +1,13 @@
 #include "DemoApp.h"
+#include <random>
 
 DemoApp::DemoApp() :
     window(NULL),
     width(DEFAULT_SIDE),
-    height(DEFAULT_SIDE),
-    world(DEFAULT_SIDE, DEFAULT_SIDE)
-{}
+    height(DEFAULT_SIDE)
+{
+    srand(time(0));
+}
 
 void DemoApp::init()
 {
@@ -13,6 +15,8 @@ void DemoApp::init()
     window = new sf::RenderWindow(sf::VideoMode(1600, 900), "Ecosystem Resilience Demonstration");
 
     sf::Time currentTime = clock.getElapsedTime();
+
+    world.Generate(DEFAULT_SIDE, DEFAULT_SIDE, EcoResilience::GenerationType::RANDOM);
 }
 
 //Run the app until the window is closed
@@ -22,7 +26,7 @@ void DemoApp::run()
     while (window->isOpen())
     {
         //Handle Input
-        handleUpdate();
+        handleInput();
 
         //Update Variables
         float prevTime = currentTime.asMilliseconds();
@@ -35,7 +39,7 @@ void DemoApp::run()
 }
 
 //Handle the user's inputs
-void DemoApp::handleUpdate()
+void DemoApp::handleInput()
 {
     //Create an event to determine whether the user has done somthing noteworthy
     //It will be used as a container to run through every event the user has triggered
@@ -56,7 +60,8 @@ void DemoApp::handleUpdate()
         //The user has pressed a key
         if (event.type == sf::Event::KeyPressed)
         {
-            
+            if(event.key.code == sf::Keyboard::A)
+                world.Generate(DEFAULT_SIDE, DEFAULT_SIDE, EcoResilience::GenerationType::RANDOM);
         }
     }
 
@@ -91,7 +96,10 @@ void DemoApp::render()
 
         int waterNum = float(world[cellNum]->GetWater() * 255.f) / 1;
 
-        cellRep.setFillColor(sf::Color(0, 0, waterNum, 255));
+        if (waterNum > 200)
+            cellRep.setFillColor(sf::Color(0, 0, waterNum));
+        else
+            cellRep.setFillColor(sf::Color(86, 125 + world[cellNum]->GetPopulation(EcoResilience::PopulationType::PLANT) * 5, 70));
 
         window->draw(cellRep);
     }

@@ -16,7 +16,7 @@ private:
 	int height;
 	EcoResilience::World world;
 
-	void handleUpdate();
+	void handleInput();
 	void update(float deltaTime);
 	void render();
 
