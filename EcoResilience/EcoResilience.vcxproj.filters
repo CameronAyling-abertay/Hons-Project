@@ -30,6 +30,12 @@
     <ClInclude Include="CPerlinNoise\CPerlinNoise.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AnimalMover.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EcoApp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="World.cpp">
@@ -45,6 +51,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CPerlinNoise\CPerlinNoise.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimalMover.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EcoApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

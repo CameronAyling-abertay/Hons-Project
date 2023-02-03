@@ -32,7 +32,7 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type)
 		{
 			for (int column = 0; column < width; column++)
 			{
-				Cell* newCell = new Cell();
+				Cell* newCell = new Cell(row, column);
 
 				float water = float((rand() % 1000)) / 1000.f;
 
@@ -54,12 +54,12 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type)
 		break;
 
 	case GenerationType::PERLIN:
-		sunTime = sunTime = float(rand() % 1000) / 24.f;
+		sunTime = float(rand() % 1000) / 24.f;
 		for (int row = 0; row < height; row++)
 		{
 			for (int column = 0; column < width; column++)
 			{
-				Cell* newCell = new Cell();
+				Cell* newCell = new Cell(row, column);
 
 				float waterOffset = rand();
 				float waterVec[2]{ (row + waterOffset) * 0.001, (column + waterOffset) * 0.001};

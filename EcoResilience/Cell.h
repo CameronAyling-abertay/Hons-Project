@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include "World.h"
 #include "Animal.h"
 #include "Plant.h"
 
@@ -11,18 +10,18 @@ namespace EcoResilience
 	class Cell
 	{
 	private:
-		std::vector<Plant> plants;
-		std::vector<Animal> animals;
 
 		//Unique properties
 		float waterLevel;
 		
-		World* world;
 		int cellRow;
 		int cellColumn;
 
 	public:
-		Cell(EcoResilience::World* world_, int row, int column);
+		std::vector<Plant> plants;
+		std::vector<Animal> animals;
+
+		Cell(int row, int column);
 		~Cell() {};
 
 		void Update();

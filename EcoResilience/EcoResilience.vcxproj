@@ -132,15 +132,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animal.h" />
+    <ClInclude Include="AnimalMover.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="CPerlinNoise\CPerlinNoise.h" />
+    <ClInclude Include="EcoApp.h" />
     <ClInclude Include="Plant.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animal.cpp" />
+    <ClCompile Include="AnimalMover.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="CPerlinNoise\CPerlinNoise.cpp" />
+    <ClCompile Include="EcoApp.cpp" />
     <ClCompile Include="Plant.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>

@@ -1,8 +1,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <World.h>
-
-#define DEFAULT_SIDE 100
+#include <EcoApp.h>
 
 class DemoApp
 {
@@ -11,15 +10,12 @@ private:
 
 	sf::Clock clock;
 	sf::Time currentTime;
-	float timebank;
-
-	int width;
-	int height;
-	EcoResilience::World world;
 
 	void handleInput();
 	void update(float deltaTime);
 	void render();
+
+	EcoApp ecology;
 
 public:
 	DemoApp();

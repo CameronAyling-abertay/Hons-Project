@@ -17,7 +17,7 @@ namespace EcoResilience
 	public:
 		Animal();
 		~Animal() {};
-
+		
 		void Update();
 	};
 }

@@ -2,9 +2,7 @@
 #include <random>
 
 DemoApp::DemoApp() :
-    window(NULL),
-    width(DEFAULT_SIDE),
-    height(DEFAULT_SIDE)
+    window(NULL)
 {
     srand(time(0));
 }
@@ -16,9 +14,7 @@ void DemoApp::init()
 
     sf::Time currentTime = clock.getElapsedTime();
 
-    world.Generate(DEFAULT_SIDE, DEFAULT_SIDE, EcoResilience::GenerationType::RANDOM);
-
-    timebank = 0;
+    ecology.GenerateWorld();
 }
 
 //Run the app until the window is closed
@@ -63,10 +59,10 @@ void DemoApp::handleInput()
         if (event.type == sf::Event::KeyPressed)
         {
             if(event.key.code == sf::Keyboard::A)
-                world.Generate(DEFAULT_SIDE, DEFAULT_SIDE, EcoResilience::GenerationType::RANDOM);
+                ecology.GenerateWorld();
 
             if (event.key.code == sf::Keyboard::S)
-                world.Generate(DEFAULT_SIDE, DEFAULT_SIDE, EcoResilience::GenerationType::PERLIN);
+                ecology.GenerateWorld(EcoResilience::GenerationType::PERLIN);
         }
     }
 
@@ -79,13 +75,7 @@ void DemoApp::update(float dt)
 {
     float timeElapsed = clock.getElapsedTime().asMilliseconds();
     
-    timebank += dt;
-
-    if (timebank > 0.5)
-    {
-        world.Update();
-        timebank -= 0.5;
-    }
+    ecology.Update(dt);
 }
 
 //Render the application to the screen
@@ -101,23 +91,23 @@ void DemoApp::render()
     cellRep.setSize(sf::Vector2f(sideSize, sideSize));
 
     //Render anything needed
-    for (int cellNum = 0; cellNum < world.size(); cellNum++)
+    for (int cellNum = 0; cellNum < ecology.world.size(); cellNum++)
     {
         sf::Vector2f pos;
-        pos.x = cellNum / world.GetHeight() * sideSize - (width / 2 * sideSize);
-        pos.y = cellNum % world.GetWidth() * sideSize - (height / 2 * sideSize);
+        pos.x = cellNum / ecology.world.GetHeight() * sideSize - (ecology.width / 2 * sideSize);
+        pos.y = cellNum % ecology.world.GetWidth() * sideSize - (ecology.height / 2 * sideSize);
         cellRep.setPosition(window->getView().getCenter() + pos);
 
         sf::Color repColor(0, 0, 0);
 
-        int waterNum = float(world[cellNum]->GetWater() * 255.f) / int(1);
+        int waterNum = float(ecology.world[cellNum]->GetWater() * 255.f) / int(1);
 
         if (waterNum > 150)
             repColor.b = waterNum;
         else
         {
-            repColor = sf::Color(86, 125 + world[cellNum]->GetPopulation(EcoResilience::PopulationType::PLANT) * 5, 70);
-            repColor.r += world[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) * 15;
+            repColor = sf::Color(86, 125 + ecology.world[cellNum]->GetPopulation(EcoResilience::PopulationType::PLANT) * 5, 70);
+            repColor.r += ecology.world[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) * 15;
         }
 
         cellRep.setFillColor(repColor);
