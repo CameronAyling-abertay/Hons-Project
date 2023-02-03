@@ -17,6 +17,8 @@ void DemoApp::init()
     sf::Time currentTime = clock.getElapsedTime();
 
     world.Generate(DEFAULT_SIDE, DEFAULT_SIDE, EcoResilience::GenerationType::RANDOM);
+
+    timebank = 0;
 }
 
 //Run the app until the window is closed
@@ -62,6 +64,9 @@ void DemoApp::handleInput()
         {
             if(event.key.code == sf::Keyboard::A)
                 world.Generate(DEFAULT_SIDE, DEFAULT_SIDE, EcoResilience::GenerationType::RANDOM);
+
+            if (event.key.code == sf::Keyboard::S)
+                world.Generate(DEFAULT_SIDE, DEFAULT_SIDE, EcoResilience::GenerationType::PERLIN);
         }
     }
 
@@ -73,8 +78,14 @@ void DemoApp::handleInput()
 void DemoApp::update(float dt)
 {
     float timeElapsed = clock.getElapsedTime().asMilliseconds();
+    
+    timebank += dt;
 
-    world.Update();
+    if (timebank > 0.5)
+    {
+        world.Update();
+        timebank -= 0.5;
+    }
 }
 
 //Render the application to the screen
@@ -84,22 +95,32 @@ void DemoApp::render()
     window->clear();
 
     sf::RectangleShape cellRep;
-    cellRep.setSize(sf::Vector2f(20, 20));
+
+    int sideSize = 800 / DEFAULT_SIDE;
+
+    cellRep.setSize(sf::Vector2f(sideSize, sideSize));
 
     //Render anything needed
     for (int cellNum = 0; cellNum < world.size(); cellNum++)
     {
         sf::Vector2f pos;
-        pos.x = cellNum / world.GetHeight() * 20 - (width / 2 * 20);
-        pos.y = cellNum % world.GetWidth() * 20 - (height / 2 * 20);
+        pos.x = cellNum / world.GetHeight() * sideSize - (width / 2 * sideSize);
+        pos.y = cellNum % world.GetWidth() * sideSize - (height / 2 * sideSize);
         cellRep.setPosition(window->getView().getCenter() + pos);
 
-        int waterNum = float(world[cellNum]->GetWater() * 255.f) / 1;
+        sf::Color repColor(0, 0, 0);
 
-        if (waterNum > 200)
-            cellRep.setFillColor(sf::Color(0, 0, waterNum));
+        int waterNum = float(world[cellNum]->GetWater() * 255.f) / int(1);
+
+        if (waterNum > 150)
+            repColor.b = waterNum;
         else
-            cellRep.setFillColor(sf::Color(86, 125 + world[cellNum]->GetPopulation(EcoResilience::PopulationType::PLANT) * 5, 70));
+        {
+            repColor = sf::Color(86, 125 + world[cellNum]->GetPopulation(EcoResilience::PopulationType::PLANT) * 5, 70);
+            repColor.r += world[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) * 15;
+        }
+
+        cellRep.setFillColor(repColor);
 
         window->draw(cellRep);
     }

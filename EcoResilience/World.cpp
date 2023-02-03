@@ -1,5 +1,6 @@
 #include "World.h"
 #include <random>
+#include "CPerlinNoise/CPerlinNoise.h"
 
 EcoResilience::World::World() :
 	width(0),
@@ -40,14 +41,49 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type)
 				int plantPop = rand() % 10;
 
 				for (int plantNum = 0; plantNum < plantPop; plantNum++)
-				{
-					newCell->AddPlant();
-				}
+					newCell->AddPlant(EcoResilience::Plant());
+
+				int animalPop = rand() % 10;
+
+				for(int animalNum = 0; animalNum < animalPop; animalNum++)
+					newCell->AddAnimal(EcoResilience::Animal());
 
 				push_back(newCell);
 			}
 		}
 		break;
+
+	case GenerationType::PERLIN:
+		sunTime = sunTime = float(rand() % 1000) / 24.f;
+		for (int row = 0; row < height; row++)
+		{
+			for (int column = 0; column < width; column++)
+			{
+				Cell* newCell = new Cell();
+
+				float waterOffset = rand();
+				float waterVec[2]{ (row + waterOffset) * 0.001, (column + waterOffset) * 0.001};
+				float water = CPerlinNoise::noise2(waterVec) + 0.5f;
+
+				newCell->SetWater(water);
+
+				float plantOffset = rand();
+				float plantVec[2]{ (row + plantOffset) * 0.001, (column + plantOffset) * 0.001 };
+				int plantPop = (CPerlinNoise::noise2(plantVec) + 0.5f) * 10;
+
+				for (int plantNum = 0; plantNum < plantPop; plantNum++)
+					newCell->AddPlant(Plant());
+
+				float animalOffset = rand();
+				float animalVec[2]{ (row + animalOffset) * 0.001, (column + animalOffset) * 0.001 };
+				int animalPop = (CPerlinNoise::noise2(animalVec) + 0.5f) * 10;
+
+				for (int animalNum = 0; animalNum < animalPop; animalNum++)
+					newCell->AddAnimal(Animal());
+
+				push_back(newCell);
+			}
+		}
 	}
 }
 

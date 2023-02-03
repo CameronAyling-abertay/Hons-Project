@@ -1,7 +1,40 @@
 ﻿  Cell.cpp
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Cell.cpp(13,23): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Cell.cpp(15,24): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.h(9,35): error C2065: 'Cell': undeclared identifier
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.h(9,40): error C2059: syntax error: '>'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.h(10,2): error C3770: 'unknown-type': is not a valid base class
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.h(28,21): error C2061: syntax error: identifier 'PopulationType'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(16,23): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(18,24): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(38,51): error C2819: type 'EcoResilience::World' does not have an overloaded member 'operator ->'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.h(9): message : see declaration of 'EcoResilience::World'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(38,51): message : did you intend to use '.' instead?
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(38,53): error C2039: 'AddAnimal': is not a member of 'EcoResilience::World'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.h(9): message : see declaration of 'EcoResilience::World'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(46,2): error C2059: syntax error: '}'
   World.cpp
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(20,8): error C2143: syntax error: missing ';' before '*'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(20,8): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(20,15): error C2238: unexpected token(s) preceding ';'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(25,23): error C2039: 'World': is not a member of 'EcoResilience'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(7): message : see declaration of 'EcoResilience'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(25,7): error C2061: syntax error: identifier 'World'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\CPerlinNoise\CPerlinNoise.h(48,18): warning C4244: 'return': conversion from 'double' to 'const float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(64,23): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(65,44): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(65,44): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(65,76): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(65,76): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(66,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(70,23): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(71,44): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(71,44): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(71,76): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(71,76): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(72,18): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(77,24): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(78,46): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(78,46): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(78,79): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(78,79): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(79,19): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   Generating Code...
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Cell.cpp(17): warning C4715: 'EcoResilience::Cell::GetPopulation': not all control paths return a value
-  EcoResilience.vcxproj -> C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\x64\Debug\EcoResilience.lib

@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <World.h>
 
-#define DEFAULT_SIDE 40
+#define DEFAULT_SIDE 100
 
 class DemoApp
 {
@@ -11,6 +11,7 @@ private:
 
 	sf::Clock clock;
 	sf::Time currentTime;
+	float timebank;
 
 	int width;
 	int height;

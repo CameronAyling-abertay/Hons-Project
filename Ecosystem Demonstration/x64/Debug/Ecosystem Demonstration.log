@@ -1,28 +1,49 @@
 ﻿  DemoApp.cpp
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(9,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(32,24): warning C4244: 'initializing': conversion from 'sf::Int32' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(56,73): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(20,8): error C2143: syntax error: missing ';' before '*'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(20,8): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(20,15): error C2238: unexpected token(s) preceding ';'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(25,23): error C2039: 'World': is not a member of 'EcoResilience'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(7): message : see declaration of 'EcoResilience'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(25,7): error C2061: syntax error: identifier 'World'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(9,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(34,24): warning C4244: 'initializing': conversion from 'sf::Int32' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(58,73): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(56,55): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(58,55): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(75,23): warning C4244: 'initializing': conversion from 'sf::Int32' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(93,50): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(80,23): warning C4244: 'initializing': conversion from 'sf::Int32' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(101,44): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(94,49): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(101,34): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(97,22): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(107,56): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(108,55): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(113,22): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
   Main.cpp
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(20,8): error C2143: syntax error: missing ';' before '*'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(20,8): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(20,15): error C2238: unexpected token(s) preceding ';'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(25,23): error C2039: 'World': is not a member of 'EcoResilience'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(7): message : see declaration of 'EcoResilience'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.h(25,7): error C2061: syntax error: identifier 'World'
   Generating Code...
-  Ecosystem Demonstration.vcxproj -> C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\x64\Debug\Ecosystem Demonstration.exe

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "World.h"
 #include "Animal.h"
 #include "Plant.h"
 
@@ -16,12 +17,19 @@ namespace EcoResilience
 		//Unique properties
 		float waterLevel;
 		
+		World* world;
+		int cellRow;
+		int cellColumn;
+
 	public:
-		Cell();
+		Cell(EcoResilience::World* world_, int row, int column);
 		~Cell() {};
 
-		void Update() {};
-		void AddPlant() { plants.push_back(Plant()); };
+		void Update();
+		void AddPlant(Plant plant) { plants.push_back(plant); };
+		void AddAnimal(Animal animal) { animals.push_back(animal); };
+
+		void MoveAnimal(int direction, Animal* animal);
 
 		float GetWater() { return waterLevel; };
 		void SetWater(float newWaterLevel) { waterLevel = std::min(1.f, std::max(0.f, newWaterLevel)); };
