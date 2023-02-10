@@ -100,7 +100,7 @@ void DemoApp::render()
 
         sf::Color repColor(0, 0, 0);
 
-        int waterNum = float(ecology.world[cellNum]->GetWater() * 255.f) / int(1);
+        int waterNum = float(ecology.world[cellNum]->GetWater() * 255.f);
 
         if (waterNum > 150)
             repColor.b = waterNum;

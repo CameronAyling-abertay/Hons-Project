@@ -55,27 +55,28 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type)
 
 	case GenerationType::PERLIN:
 		sunTime = float(rand() % 1000) / 24.f;
+		const float waterOffset = rand();
+		const float plantOffset = rand();
+		const float animalOffset = rand();
+
 		for (int row = 0; row < height; row++)
 		{
 			for (int column = 0; column < width; column++)
 			{
 				Cell* newCell = new Cell(row, column);
 
-				float waterOffset = rand();
-				float waterVec[2]{ (row + waterOffset) * 0.001, (column + waterOffset) * 0.001};
+				float waterVec[2]{ (row + waterOffset) * 0.1f, (column + waterOffset) * 0.1f };
 				float water = CPerlinNoise::noise2(waterVec) + 0.5f;
 
 				newCell->SetWater(water);
 
-				float plantOffset = rand();
-				float plantVec[2]{ (row + plantOffset) * 0.001, (column + plantOffset) * 0.001 };
+				float plantVec[2]{ (row + plantOffset) * 0.1f, (column + plantOffset) * 0.1f };
 				int plantPop = (CPerlinNoise::noise2(plantVec) + 0.5f) * 10;
 
 				for (int plantNum = 0; plantNum < plantPop; plantNum++)
 					newCell->AddPlant(Plant());
 
-				float animalOffset = rand();
-				float animalVec[2]{ (row + animalOffset) * 0.001, (column + animalOffset) * 0.001 };
+				float animalVec[2]{ (row + animalOffset) * 0.1f, (column + animalOffset) * 0.1f };
 				int animalPop = (CPerlinNoise::noise2(animalVec) + 0.5f) * 10;
 
 				for (int animalNum = 0; animalNum < animalPop; animalNum++)

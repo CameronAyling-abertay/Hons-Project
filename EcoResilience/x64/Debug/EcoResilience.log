@@ -1,28 +1,12 @@
-﻿  AnimalMover.cpp
-  Cell.cpp
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(15,23): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(17,24): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-  EcoApp.cpp
-  World.cpp
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\CPerlinNoise\CPerlinNoise.h(48,18): warning C4244: 'return': conversion from 'double' to 'const float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(64,23): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(65,44): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(65,44): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(65,76): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(65,76): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(66,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(70,23): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(71,44): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(71,44): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(71,76): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(71,76): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(72,18): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(77,24): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(78,46): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(78,46): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(78,79): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(78,79): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(79,19): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-  Generating Code...
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(19): warning C4715: 'EcoResilience::Cell::GetPopulation': not all control paths return a value
-  EcoResilience.vcxproj -> \\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\x64\Debug\EcoResilience.lib
+﻿  World.cpp
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\CPerlinNoise\CPerlinNoise.h(48,18): warning C4244: 'return': conversion from 'double' to 'const float', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(58,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(58,27): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(59,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(59,27): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(60,34): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(60,28): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(69,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(74,18): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(80,19): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  EcoResilience.vcxproj -> C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\x64\Debug\EcoResilience.lib
