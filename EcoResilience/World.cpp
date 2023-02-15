@@ -35,16 +35,13 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type)
 				Cell* newCell = new Cell(row, column);
 
 				float water = float((rand() % 1000)) / 1000.f;
-
 				newCell->SetWater(water);
 				
 				int plantPop = rand() % 10;
-
 				for (int plantNum = 0; plantNum < plantPop; plantNum++)
 					newCell->AddPlant(EcoResilience::Plant());
 
 				int animalPop = rand() % 10;
-
 				for(int animalNum = 0; animalNum < animalPop; animalNum++)
 					newCell->AddAnimal(EcoResilience::Animal());
 

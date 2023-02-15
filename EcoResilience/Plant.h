@@ -14,10 +14,13 @@ namespace EcoResilience
 
 		void ProduceFruit();
 		void Reproduce();
-		void Intake();
 
 	public:
+
 		Plant();
 		void Update();
+
+		bool wantsFood;
+		void Feed(float food);
 	};
 }

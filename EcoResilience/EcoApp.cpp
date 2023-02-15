@@ -7,7 +7,7 @@ void EcoApp::Update(float dt)
 	if (timebank > 0.5f)
 	{
 		timebank -= 0.5f;
-
+		world.Update();
 	}
 }
 
@@ -18,12 +18,4 @@ void EcoApp::GenerateWorld(EcoResilience::GenerationType genType, int worldWidth
 	height = worldHeight;
 
 	timebank = 0;
-
-	for (auto cell : world)
-	{
-		for (auto animal : cell->animals)
-		{
-			animals.push_back(&animal);
-		}
-	}
 }

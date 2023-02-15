@@ -6,6 +6,7 @@
 namespace EcoResilience
 {
 	enum class PopulationType { PLANT, PREY, PREDATOR };
+	enum class CellType { WATER, LAND };
 
 	class Cell
 	{
@@ -21,6 +22,8 @@ namespace EcoResilience
 		std::vector<Plant> plants;
 		std::vector<Animal> animals;
 
+		CellType cellType;
+
 		Cell(int row, int column);
 		~Cell() {};
 
@@ -28,10 +31,8 @@ namespace EcoResilience
 		void AddPlant(Plant plant) { plants.push_back(plant); };
 		void AddAnimal(Animal animal) { animals.push_back(animal); };
 
-		void MoveAnimal(int direction, Animal* animal);
-
 		float GetWater() { return waterLevel; };
-		void SetWater(float newWaterLevel) { waterLevel = std::min(1.f, std::max(0.f, newWaterLevel)); };
+		void SetWater(float newWaterLevel) { waterLevel = std::min(1.f, std::max(0.f, newWaterLevel)); (waterLevel * 255.f > 150.f) ? cellType = CellType::WATER : cellType = CellType::LAND; };
 
 		int GetPopulation(PopulationType type);
 	};

@@ -26,18 +26,3 @@ void EcoResilience::Cell::Update()
 	for (auto animal : animals)
 		animal.Update();
 }
-
-void EcoResilience::Cell::MoveAnimal(int direction, Animal* animal)
-{
-	switch (direction)
-	{
-	case 1: //North
-		break;
-	case 2: //East
-		break;
-	case 3: //South
-		break;
-	case 4: // West
-		break;
-	}
-}

@@ -21,13 +21,15 @@ void EcoResilience::Plant::Reproduce()
 	stomach -= 0.5;
 }
 
-void EcoResilience::Plant::Intake()
+void EcoResilience::Plant::Feed(float food)
 {
-	stomach += 0.05;
+	stomach += food;
 }
 
 void EcoResilience::Plant::Update()
 {
+	stomach -= 0.005 * mass;
+
 	if (stomach > 0.6 && rand() % 100 < 60)
 	{
 		Reproduce();
@@ -35,5 +37,9 @@ void EcoResilience::Plant::Update()
 	if (stomach > 0.5f && rand() % 100 < 20)
 	{
 		ProduceFruit();
+	}
+	if (stomach < 0.2f) 
+	{
+		wantsFood = true;
 	}
 }

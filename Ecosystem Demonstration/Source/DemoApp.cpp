@@ -102,7 +102,7 @@ void DemoApp::render()
 
         int waterNum = float(ecology.world[cellNum]->GetWater() * 255.f);
 
-        if (waterNum > 150)
+        if (ecology.world[cellNum]->cellType == EcoResilience::CellType::WATER)
             repColor.b = waterNum;
         else
         {
