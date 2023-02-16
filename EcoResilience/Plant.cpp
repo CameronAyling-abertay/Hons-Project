@@ -3,11 +3,13 @@
 
 EcoResilience::Plant::Plant()
 {
-	stomach = 1;
-	mass = float(rand() % 1000) / 100.f;
+	mass = float(rand() % 1000) / 1000.f;
+	stomach = mass;
 	waterIntake = float(rand() % 1000) / 1000.f;
 	heatThreshold = float(rand() % 1000) / 1000.f;
 	vigor = float(rand() % 100) / 10.f;
+
+	wantsFood = false;
 }
 
 void EcoResilience::Plant::ProduceFruit()
@@ -40,7 +42,7 @@ void EcoResilience::Plant::Update()
 		ProduceFruit();
 	}*/
 
-	if (stomach < 0.2f) 
+	if (stomach < 0.2f * mass) 
 	{
 		wantsFood = true;
 	}

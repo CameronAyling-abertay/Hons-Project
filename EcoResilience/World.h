@@ -26,5 +26,7 @@ namespace EcoResilience
 		int GetHeight() { return height; };
 
 		int GetPopulation(PopulationType type);
+
+		void Rain(GenerationType);
 	};
 };

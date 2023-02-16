@@ -116,3 +116,34 @@ int EcoResilience::World::GetPopulation(PopulationType type)
 
 	return population;
 }
+
+void EcoResilience::World::Rain(GenerationType type)
+{
+	switch (type)
+	{
+	case GenerationType::RANDOM:
+		for (int row = 0; row < height; row++)
+		{
+			for (int column = 0; column < width; column++)
+			{
+				float water = float((rand() % 1000)) / 1000.f;
+				at(row * width + column)->SetWater(std::min(1.f, water));
+			}
+		}
+		break;
+
+	case GenerationType::PERLIN:
+		const float waterOffset = rand();
+
+		for (int row = 0; row < height; row++)
+		{
+			for (int column = 0; column < width; column++)
+			{
+				float waterVec[2]{ (row + waterOffset) * 0.1f, (column + waterOffset) * 0.1f };
+				float water = CPerlinNoise::noise2(waterVec) + 0.5f;
+
+				at(row * width + column)->SetWater(std::min(1.f, water + at(row * width + column)->GetWater()));
+			}
+		}
+	}
+}

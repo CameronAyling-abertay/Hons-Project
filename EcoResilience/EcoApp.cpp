@@ -13,6 +13,8 @@ void EcoApp::Update(float dt)
 
 void EcoApp::GenerateWorld(EcoResilience::GenerationType genType, int worldWidth, int worldHeight)
 {
+	worldGenType = genType;
+
 	world.Generate(worldWidth, worldHeight, genType);
 	width = worldWidth;
 	height = worldHeight;

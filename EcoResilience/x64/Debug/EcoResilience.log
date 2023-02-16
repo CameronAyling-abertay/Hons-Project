@@ -1,4 +1,15 @@
-﻿  Plant.cpp
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Plant.cpp(15,16): warning C4305: '-=': truncation from 'double' to 'float'
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Plant.cpp(32,19): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+﻿  World.cpp
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\CPerlinNoise\CPerlinNoise.h(48,18): warning C4244: 'return': conversion from 'double' to 'const float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(55,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(55,27): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(56,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(56,27): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(57,34): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(57,28): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(66,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(71,18): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(77,19): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(136,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(136,27): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(143,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   EcoResilience.vcxproj -> \\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\x64\Debug\EcoResilience.lib

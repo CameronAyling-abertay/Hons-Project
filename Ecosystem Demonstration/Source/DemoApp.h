@@ -19,6 +19,8 @@ private:
 
 	EcoApp ecology;
 
+	int steps;
+
 public:
 	DemoApp();
 	~DemoApp() {};

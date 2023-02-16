@@ -26,6 +26,8 @@ void DemoApp::init()
     waterDiagnostic.setPosition(50, 50);
     waterDiagnostic.setCharacterSize(24);
     waterDiagnostic.setStyle(sf::Text::Regular);
+
+    steps = 0;
 }
 
 //Run the app until the window is closed
@@ -84,9 +86,14 @@ void DemoApp::handleInput()
 //Update the application
 void DemoApp::update(float dt)
 {
-    float timeElapsed = clock.getElapsedTime().asMilliseconds();
-    
     ecology.Update(dt);
+
+    steps++;
+    if (steps > 5000)
+    {
+        ecology.Rain();
+        steps -= 5000;
+    }
 }
 
 //Render the application to the screen
