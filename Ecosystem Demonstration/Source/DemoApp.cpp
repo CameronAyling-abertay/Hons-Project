@@ -97,7 +97,7 @@ void DemoApp::render()
 
     sf::RectangleShape cellRep;
 
-    int sideSize = 800 / DEFAULT_SIDE;
+    int sideSize = std::min(window->getSize().x, window->getSize().y) / DEFAULT_SIDE;
 
     cellRep.setSize(sf::Vector2f(sideSize, sideSize));
 

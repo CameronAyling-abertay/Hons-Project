@@ -1,38 +1,38 @@
 ﻿  DemoApp.cpp
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(7,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(41,24): warning C4244: 'initializing': conversion from 'sf::Int32' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(65,73): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+M:\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(7,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+M:\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(41,24): warning C4244: 'initializing': conversion from 'sf::Int32' to 'float', possible loss of data
+M:\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(65,73): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(65,55): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+M:\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(65,55): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(87,23): warning C4244: 'initializing': conversion from 'sf::Int32' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(102,44): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+M:\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(87,23): warning C4244: 'initializing': conversion from 'sf::Int32' to 'float', possible loss of data
+M:\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(102,44): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(102,34): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+M:\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(102,34): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(108,64): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+M:\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(108,64): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(109,63): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+M:\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(109,63): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(114,22): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+M:\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(114,22): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
   Main.cpp
   Generating Code...
-  Ecosystem Demonstration.vcxproj -> \\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\x64\Debug\Ecosystem Demonstration.exe
+  Ecosystem Demonstration.vcxproj -> M:\GitHub\Hons-Project\Ecosystem Demonstration\x64\Debug\Ecosystem Demonstration.exe
