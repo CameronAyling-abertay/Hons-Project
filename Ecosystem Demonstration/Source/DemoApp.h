@@ -10,6 +10,8 @@ private:
 
 	sf::Clock clock;
 	sf::Time currentTime;
+	sf::Font font;
+	sf::Text waterDiagnostic;
 
 	void handleInput();
 	void update(float deltaTime);

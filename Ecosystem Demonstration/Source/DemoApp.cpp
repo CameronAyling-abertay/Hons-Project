@@ -15,6 +15,17 @@ void DemoApp::init()
     sf::Time currentTime = clock.getElapsedTime();
 
     ecology.GenerateWorld();
+
+    if (!font.loadFromFile("media/arial.ttf"))
+    {
+        exit(0);
+    }
+
+    waterDiagnostic.setFont(font);
+    waterDiagnostic.setFillColor(sf::Color::White);
+    waterDiagnostic.setPosition(50, 50);
+    waterDiagnostic.setCharacterSize(24);
+    waterDiagnostic.setStyle(sf::Text::Regular);
 }
 
 //Run the app until the window is closed
@@ -114,6 +125,15 @@ void DemoApp::render()
 
         window->draw(cellRep);
     }
+
+    float water = 0;
+    for (auto cell : ecology.world)
+    {
+        water += cell->GetWater();
+    }
+
+    waterDiagnostic.setString("Global Water: " + std::to_string(water));
+    window->draw(waterDiagnostic);
 
     //Send the drawn objects to the screen
     window->display();
