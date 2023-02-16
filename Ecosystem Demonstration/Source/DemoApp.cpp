@@ -38,9 +38,9 @@ void DemoApp::run()
         handleInput();
 
         //Update Variables
-        float prevTime = currentTime.asMilliseconds();
+        float prevTime = currentTime.asSeconds();
         currentTime = clock.getElapsedTime();
-        update(currentTime.asMilliseconds() - prevTime);
+        update(currentTime.asSeconds() - prevTime);
 
         //Render to Screen
         render();
@@ -132,7 +132,7 @@ void DemoApp::render()
         water += cell->GetWater();
     }
 
-    waterDiagnostic.setString("Global Water: " + std::to_string(water));
+    waterDiagnostic.setString("Global Water: " + std::to_string(ecology.world[0]->plants[0].stomach));
     window->draw(waterDiagnostic);
 
     //Send the drawn objects to the screen

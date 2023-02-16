@@ -5,8 +5,6 @@ namespace EcoResilience
 	class Plant
 	{
 	private:
-		float stomach;
-		float mass;
 		float waterIntake;
 		float heatThreshold;
 		float vigor;
@@ -16,6 +14,8 @@ namespace EcoResilience
 		void Reproduce();
 
 	public:
+		float mass;
+		float stomach;
 
 		Plant();
 		void Update();

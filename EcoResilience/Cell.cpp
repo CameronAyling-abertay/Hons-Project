@@ -19,10 +19,18 @@ int EcoResilience::Cell::GetPopulation(PopulationType type)
 }
 
 void EcoResilience::Cell::Update()
-{
-	for (auto plant : plants)
-		plant.Update();
+{	
+	for (int plantNum = 0; plantNum < plants.size(); plantNum++)
+	{
+		plants[plantNum].Update();
 
-	for (auto animal : animals)
-		animal.Update();
+		if (plants[plantNum].wantsFood)
+		{
+			plants[plantNum].Feed(plants[plantNum].mass * 0.05);
+			waterLevel -= plants[plantNum].mass * 0.05;
+		}
+	}
+
+	for (int animalNum = 0; animalNum < animals.size(); animalNum++)
+		animals[animalNum].Update();
 }

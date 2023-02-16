@@ -1,29 +1,4 @@
-﻿  Animal.cpp
-  Cell.cpp
-M:\GitHub\Hons-Project\EcoResilience\Cell.cpp(15,23): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-M:\GitHub\Hons-Project\EcoResilience\Cell.cpp(17,24): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-  CPerlinNoise.cpp
-M:\GitHub\Hons-Project\EcoResilience\CPerlinNoise\CPerlinNoise.h(48,18): warning C4244: 'return': conversion from 'double' to 'const float', possible loss of data
-M:\GitHub\Hons-Project\EcoResilience\CPerlinNoise\CPerlinNoise.cpp(19,34): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-M:\GitHub\Hons-Project\EcoResilience\CPerlinNoise\CPerlinNoise.cpp(19,34): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-M:\GitHub\Hons-Project\EcoResilience\CPerlinNoise\CPerlinNoise.cpp(140,10): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-M:\GitHub\Hons-Project\EcoResilience\CPerlinNoise\CPerlinNoise.cpp(145,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-M:\GitHub\Hons-Project\EcoResilience\CPerlinNoise\CPerlinNoise.cpp(152,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  EcoApp.cpp
-  Plant.cpp
-M:\GitHub\Hons-Project\EcoResilience\Plant.cpp(15,16): warning C4305: '-=': truncation from 'double' to 'float'
-M:\GitHub\Hons-Project\EcoResilience\Plant.cpp(31,19): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-  World.cpp
-M:\GitHub\Hons-Project\EcoResilience\CPerlinNoise\CPerlinNoise.h(48,18): warning C4244: 'return': conversion from 'double' to 'const float', possible loss of data
-M:\GitHub\Hons-Project\EcoResilience\World.cpp(55,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-M:\GitHub\Hons-Project\EcoResilience\World.cpp(55,27): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-M:\GitHub\Hons-Project\EcoResilience\World.cpp(56,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-M:\GitHub\Hons-Project\EcoResilience\World.cpp(56,27): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-M:\GitHub\Hons-Project\EcoResilience\World.cpp(57,34): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-M:\GitHub\Hons-Project\EcoResilience\World.cpp(57,28): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-M:\GitHub\Hons-Project\EcoResilience\World.cpp(66,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-M:\GitHub\Hons-Project\EcoResilience\World.cpp(71,18): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-M:\GitHub\Hons-Project\EcoResilience\World.cpp(77,19): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-  Generating Code...
-M:\GitHub\Hons-Project\EcoResilience\Cell.cpp(19): warning C4715: 'EcoResilience::Cell::GetPopulation': not all control paths return a value
-  EcoResilience.vcxproj -> M:\GitHub\Hons-Project\Ecosystem Demonstration\x64\Debug\EcoResilience.lib
+﻿  Plant.cpp
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Plant.cpp(15,16): warning C4305: '-=': truncation from 'double' to 'float'
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Plant.cpp(32,19): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+  EcoResilience.vcxproj -> \\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\x64\Debug\EcoResilience.lib
