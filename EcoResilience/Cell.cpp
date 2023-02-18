@@ -29,7 +29,7 @@ void EcoResilience::Cell::Update()
 			if (waterLevel - plants[plantNum].mass * 0.05 > 0)
 			{
 				plants[plantNum].Feed(plants[plantNum].mass * 0.05);
-				waterLevel -= plants[plantNum].mass * 0.05;
+				SetWater(waterLevel - plants[plantNum].mass * 0.05);
 			}
 		}
 	}

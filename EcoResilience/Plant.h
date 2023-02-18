@@ -16,6 +16,7 @@ namespace EcoResilience
 	public:
 		float mass;
 		float stomach;
+		float stomachMax;
 
 		Plant();
 		void Update();

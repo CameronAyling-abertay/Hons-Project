@@ -127,7 +127,7 @@ void EcoResilience::World::Rain(GenerationType type)
 			for (int column = 0; column < width; column++)
 			{
 				float water = float((rand() % 1000)) / 1000.f;
-				at(row * width + column)->SetWater(std::min(1.f, water));
+				at(row * width + column)->SetWater(std::min(1.f, water + at(row * width + column)->GetWater()));
 			}
 		}
 		break;

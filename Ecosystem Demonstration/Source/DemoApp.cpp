@@ -26,8 +26,6 @@ void DemoApp::init()
     waterDiagnostic.setPosition(50, 50);
     waterDiagnostic.setCharacterSize(24);
     waterDiagnostic.setStyle(sf::Text::Regular);
-
-    steps = 0;
 }
 
 //Run the app until the window is closed
@@ -76,6 +74,9 @@ void DemoApp::handleInput()
 
             if (event.key.code == sf::Keyboard::S)
                 ecology.GenerateWorld(EcoResilience::GenerationType::PERLIN);
+
+            if (event.key.code == sf::Keyboard::R)
+                ecology.Rain();
         }
     }
 
@@ -87,13 +88,6 @@ void DemoApp::handleInput()
 void DemoApp::update(float dt)
 {
     ecology.Update(dt);
-
-    steps++;
-    if (steps > 5000)
-    {
-        ecology.Rain();
-        steps -= 5000;
-    }
 }
 
 //Render the application to the screen
