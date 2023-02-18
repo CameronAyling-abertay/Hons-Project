@@ -3,7 +3,8 @@
 EcoResilience::Cell::Cell(int row, int column) :
 	waterLevel(0.5),
 	cellRow(row),
-	cellColumn(column)
+	cellColumn(column),
+	desiredChildCount(0)
 {
 }
 
@@ -19,7 +20,7 @@ int EcoResilience::Cell::GetPopulation(PopulationType type)
 }
 
 void EcoResilience::Cell::Update()
-{	
+{
 	for (int plantNum = 0; plantNum < plants.size(); plantNum++)
 	{
 		plants[plantNum].Update();
@@ -33,10 +34,18 @@ void EcoResilience::Cell::Update()
 			}
 		}
 
-		if(plants[plantNum].wantsDeath)
+		if (plants[plantNum].wantsDeath)
+		{
 			plants.erase(plants.begin() + plantNum);
+			plantNum--;
+			continue;
+		}
 
-
+		if (plants[plantNum].wantsChild)
+		{
+			desiredChildCount++;
+			plants[plantNum].Reproduce();
+		}
 	}
 
 	for (int animalNum = 0; animalNum < animals.size(); animalNum++)

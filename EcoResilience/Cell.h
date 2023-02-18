@@ -24,6 +24,8 @@ namespace EcoResilience
 
 		CellType cellType;
 
+		int desiredChildCount;
+
 		Cell(int row, int column);
 		~Cell() {};
 
@@ -35,5 +37,7 @@ namespace EcoResilience
 		void SetWater(float newWaterLevel) { waterLevel = std::min(1.f, std::max(0.f, newWaterLevel)); (waterLevel * 255.f > 150.f) ? cellType = CellType::WATER : cellType = CellType::LAND; };
 
 		int GetPopulation(PopulationType type);
+
+		void ResetChildCount() { desiredChildCount = 0; };
 	};
 };

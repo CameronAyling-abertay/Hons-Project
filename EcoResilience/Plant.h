@@ -11,7 +11,6 @@ namespace EcoResilience
 		int fruits;
 
 		void ProduceFruit();
-		void Reproduce();
 
 	public:
 		float mass;
@@ -22,6 +21,7 @@ namespace EcoResilience
 		bool wantsDeath;
 
 		bool wantsChild;
+		void Reproduce();
 
 		Plant();
 		void Update();

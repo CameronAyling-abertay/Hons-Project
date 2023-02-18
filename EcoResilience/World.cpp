@@ -139,7 +139,104 @@ void EcoResilience::World::Update()
 {
 	for (int cellNum = 0; cellNum < width * height; cellNum++)
 	{
-		this->data()[cellNum]->Update();
+		data()[cellNum]->Update();
+
+		//Handle child creation
+		if (data()[cellNum]->desiredChildCount > 0)
+		{
+			for (int childNum = 0; childNum < data()[cellNum]->desiredChildCount; childNum++)
+			{
+				int iterations = 0;
+				bool createdChild = false;
+				while (iterations < 50 && !createdChild)
+				{
+					int dir = rand() % 5;
+
+					EcoResilience::Plant newPlant;
+
+					float currentMass;
+					switch (dir)
+					{
+
+					case 0://Above this cell
+						currentMass = 0;
+						if (cellNum - width < 0)
+							continue;
+
+						for (auto plant : data()[cellNum - width]->plants)
+							currentMass += plant.mass;
+
+						if (currentMass + newPlant.mass < maxCellPlantMass)
+						{
+							data()[cellNum - width]->AddPlant(newPlant);
+							createdChild = true;
+						}
+						break;
+
+					case 1://Left of this cell
+						currentMass = 0;
+						if (cellNum % width == 0)
+							continue;
+
+						for (auto plant : data()[cellNum - 1]->plants)
+							currentMass += plant.mass;
+
+						if (currentMass + newPlant.mass < maxCellPlantMass)
+						{
+							data()[cellNum - 1]->AddPlant(newPlant);
+							createdChild = true;
+						}
+						break;
+
+					case 2://This cell
+						currentMass = 0;
+						for (auto plant : data()[cellNum]->plants)
+							currentMass += plant.mass;
+
+						if (currentMass + newPlant.mass < maxCellPlantMass)
+						{
+							data()[cellNum]->AddPlant(newPlant);
+							createdChild = true;
+						}
+						break;
+
+					case 3://Right of this cell
+						currentMass = 0;
+						if (cellNum % width == width - 1)
+							continue;
+
+						for (auto plant : data()[cellNum + 1]->plants)
+							currentMass += plant.mass;
+
+						if (currentMass + newPlant.mass < maxCellPlantMass)
+						{
+							data()[cellNum + 1]->AddPlant(newPlant);
+							createdChild = true;
+						}
+						break;
+
+					case 4://Below this cell
+						currentMass = 0;
+						if (cellNum + width > width * height - 1)
+							continue;
+
+						for (auto plant : data()[cellNum + width]->plants)
+							currentMass += plant.mass;
+
+						if (currentMass + newPlant.mass < maxCellPlantMass)
+						{
+							data()[cellNum + width]->AddPlant(newPlant);
+							createdChild = true;
+						}
+						break;
+					}
+
+					iterations++;
+				}
+			}
+		}
+
+		data()[cellNum]->ResetChildCount();
 	}
 }
 
