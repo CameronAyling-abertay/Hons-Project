@@ -9,8 +9,10 @@ EcoResilience::Plant::Plant()
 	waterIntake = float(rand() % 1000) / 1000.f;
 	heatThreshold = float(rand() % 1000) / 1000.f;
 	vigor = float(rand() % 100) / 10.f;
+	stepsBeforeDeath = 0;
 
 	wantsFood = false;
+	killMe = false;
 }
 
 void EcoResilience::Plant::ProduceFruit()
@@ -28,6 +30,8 @@ void EcoResilience::Plant::Feed(float food)
 {
 	stomach += food;
 	wantsFood = false;
+	stepsBeforeDeath = 0;
+	killMe = false;
 }
 
 void EcoResilience::Plant::Update()
@@ -46,5 +50,11 @@ void EcoResilience::Plant::Update()
 	if (stomach < 0.2f * stomachMax) 
 	{
 		wantsFood = true;
+		stepsBeforeDeath++;
+	}
+
+	if(stepsBeforeDeath == int(vigor * 10))
+	{
+		killMe = true;
 	}
 }

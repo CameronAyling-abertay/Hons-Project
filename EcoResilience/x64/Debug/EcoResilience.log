@@ -1,12 +1,12 @@
 ﻿  Cell.cpp
 C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Cell.cpp(15,23): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Cell.cpp(17,24): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Cell.cpp(31,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Cell.cpp(31,55): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Cell.cpp(32,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   EcoApp.cpp
   Plant.cpp
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Plant.cpp(18,16): warning C4305: '-=': truncation from 'double' to 'float'
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Plant.cpp(35,19): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Plant.cpp(20,16): warning C4305: '-=': truncation from 'double' to 'float'
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Plant.cpp(39,19): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
   World.cpp
 C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\CPerlinNoise\CPerlinNoise.h(48,18): warning C4244: 'return': conversion from 'double' to 'const float', possible loss of data
 C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(55,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data

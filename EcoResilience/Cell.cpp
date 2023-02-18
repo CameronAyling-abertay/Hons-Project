@@ -26,11 +26,16 @@ void EcoResilience::Cell::Update()
 
 		if (plants[plantNum].wantsFood)
 		{
-			if (waterLevel - plants[plantNum].mass * 0.05 > 0)
+			if (waterLevel - plants[plantNum].stomachMax * 0.05 > 0)
 			{
-				plants[plantNum].Feed(plants[plantNum].mass * 0.05);
-				SetWater(waterLevel - plants[plantNum].mass * 0.05);
+				plants[plantNum].Feed(plants[plantNum].stomachMax * 0.05);
+				SetWater(waterLevel - plants[plantNum].stomachMax * 0.05);
 			}
+		}
+
+		if(plants[plantNum].killMe)
+		{
+			plants.erase(plants.begin() + plantNum);
 		}
 	}
 

@@ -26,6 +26,11 @@ void DemoApp::init()
     waterDiagnostic.setPosition(50, 50);
     waterDiagnostic.setCharacterSize(24);
     waterDiagnostic.setStyle(sf::Text::Regular);
+    plantDiagnostic.setFont(font);
+    plantDiagnostic.setFillColor(sf::Color::White);
+    plantDiagnostic.setPosition(50, 100);
+    plantDiagnostic.setCharacterSize(24);
+    plantDiagnostic.setStyle(sf::Text::Regular);
 }
 
 //Run the app until the window is closed
@@ -133,8 +138,17 @@ void DemoApp::render()
         water += cell->GetWater();
     }
 
-    waterDiagnostic.setString("Global Water: " + std::to_string(ecology.world[0]->plants[0].stomach));
+    waterDiagnostic.setString("Global Water: " + std::to_string(water));
     window->draw(waterDiagnostic);
+
+    int numOfPlants = 0;
+    for(auto cell : ecology.world)
+    {
+        numOfPlants += cell->plants.size();
+    }
+
+    plantDiagnostic.setString("Global Plants: " + std::to_string(numOfPlants));
+    window->draw(plantDiagnostic);
 
     //Send the drawn objects to the screen
     window->display();

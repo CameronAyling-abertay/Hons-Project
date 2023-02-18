@@ -18,6 +18,9 @@ namespace EcoResilience
 		float stomach;
 		float stomachMax;
 
+		int stepsBeforeDeath;
+		bool killMe;
+
 		Plant();
 		void Update();
 

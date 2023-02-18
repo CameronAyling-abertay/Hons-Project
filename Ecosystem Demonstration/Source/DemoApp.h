@@ -12,6 +12,7 @@ private:
 	sf::Time currentTime;
 	sf::Font font;
 	sf::Text waterDiagnostic;
+	sf::Text plantDiagnostic;
 
 	void handleInput();
 	void update(float deltaTime);
