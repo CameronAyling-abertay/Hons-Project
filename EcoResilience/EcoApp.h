@@ -2,7 +2,7 @@
 #include "World.h"
 
 #define DEFAULT_SIDE 40
-#define DEFAULT_MASS 1.f
+#define DEFAULT_MASS 2.f
 
 class EcoApp
 {

@@ -36,24 +36,35 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 			{
 				Cell* newCell = new Cell(row, column);
 
+				//Add water
 				float water = float((rand() % 1000)) / 1000.f;
 				newCell->SetWater(water);
-				
-				int plantPop = rand() % 10;
-				for (int plantNum = 0; plantNum < plantPop; plantNum++)
-				{
-					float currentMass = 0;
-					for(auto plant : newCell->plants)
-						currentMass += plant.mass;
 
-					if(currentMass < maxCellPlantMass)
-						newCell->AddPlant(EcoResilience::Plant());
+				//Create plants
+				float plantMass = ((rand() % 1000) / 1000.f) * maxCellPlantMass;
+				float currentMass = 0;
+
+				int iterations = 0;
+				while(currentMass < plantMass * 0.85f && iterations < 50)
+				{
+					EcoResilience::Plant newPlant;
+
+					if (currentMass + newPlant.mass < maxCellPlantMass && currentMass + newPlant.mass < plantMass * 1.15f)
+					{
+						newCell->AddPlant(newPlant);
+						currentMass += newPlant.mass;
+						iterations = 0;
+					}
+
+					iterations++;
 				}
 
+				//Add animals
 				int animalPop = rand() % 10;
 				for(int animalNum = 0; animalNum < animalPop; animalNum++)
 					newCell->AddAnimal(EcoResilience::Animal());
 
+				//Add the cell to the world vector
 				push_back(newCell);
 			}
 		}
@@ -71,30 +82,41 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 			{
 				Cell* newCell = new Cell(row, column);
 
+				//Create the water level
 				float waterVec[2]{ (row + waterOffset) * 0.1f, (column + waterOffset) * 0.1f };
 				float water = CPerlinNoise::noise2(waterVec) + 0.5f;
 
 				newCell->SetWater(water);
 
+				//Create the plants
 				float plantVec[2]{ (row + plantOffset) * 0.1f, (column + plantOffset) * 0.1f };
-				int plantPop = (CPerlinNoise::noise2(plantVec) + 0.5f) * 10;
+				float plantMass = (CPerlinNoise::noise2(plantVec) + 0.5f) * maxCellPlantMass;
 
-				for (int plantNum = 0; plantNum < plantPop; plantNum++)
+				float currentMass = 0;
+				int iterations = 0;
+
+				while (currentMass < plantMass * 0.85f && iterations != 50)
 				{
-					float currentMass = 0;
-					for (auto plant : newCell->plants)
-						currentMass += plant.mass;
+					EcoResilience::Plant newPlant;
 
-					if (currentMass < maxCellPlantMass)
-						newCell->AddPlant(EcoResilience::Plant());
+					if (currentMass + newPlant.mass < maxCellPlantMass && currentMass + newPlant.mass < plantMass * 1.15f)
+					{
+						newCell->AddPlant(newPlant);
+						currentMass += newPlant.mass;
+						iterations = 0;
+					}
+
+					iterations++;
 				}
 
+				//Create the animals
 				float animalVec[2]{ (row + animalOffset) * 0.1f, (column + animalOffset) * 0.1f };
 				int animalPop = (CPerlinNoise::noise2(animalVec) + 0.5f) * 10;
 
 				for (int animalNum = 0; animalNum < animalPop; animalNum++)
 					newCell->AddAnimal(Animal());
 
+				//Add the cell to the world vector
 				push_back(newCell);
 			}
 		}

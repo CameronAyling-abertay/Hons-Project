@@ -123,7 +123,11 @@ void DemoApp::render()
             repColor.b = waterNum;
         else
         {
-            repColor = sf::Color(86, 125 + ecology.world[cellNum]->GetPopulation(EcoResilience::PopulationType::PLANT) * 5, 70);
+            float mass = 0;
+            for (auto plant : ecology.world[cellNum]->plants)
+                mass += plant.mass;
+
+            repColor = sf::Color(86, 125 + int(mass * 60.f / DEFAULT_MASS), 70);
             //repColor.r += ecology.world[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) * 15;
         }
 
