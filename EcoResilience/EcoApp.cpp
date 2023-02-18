@@ -11,11 +11,11 @@ void EcoApp::Update(float dt)
 	}
 }
 
-void EcoApp::GenerateWorld(EcoResilience::GenerationType genType, int worldWidth, int worldHeight)
+void EcoApp::GenerateWorld(EcoResilience::GenerationType genType, int worldWidth, int worldHeight, float maxCellPlantMass)
 {
 	worldGenType = genType;
 
-	world.Generate(worldWidth, worldHeight, genType);
+	world.Generate(worldWidth, worldHeight, genType, maxCellPlantMass);
 	width = worldWidth;
 	height = worldHeight;
 

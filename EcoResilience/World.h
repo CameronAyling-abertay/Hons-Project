@@ -13,12 +13,13 @@ namespace EcoResilience
 		int height;
 
 		float sunTime;
+		float maxCellPlantMass;
 
 	public:
 		World();
 		~World();
 
-		void Generate(int width, int height, GenerationType type);
+		void Generate(int width, int height, GenerationType type, float maxCellPlantMass);
 		void Clear();
 		void Update();
 

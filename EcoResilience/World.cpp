@@ -13,12 +13,14 @@ EcoResilience::World::~World()
 	Clear();
 }
 
-void EcoResilience::World::Generate(int w, int h, GenerationType type)
+void EcoResilience::World::Generate(int w, int h, GenerationType type, float plantMassMax)
 {
 	Clear();
 
 	width = w;
 	height = h;
+
+	maxCellPlantMass = plantMassMax;
 
 	//Generate the world
 	//Random generation will randomly allocate cells water levels
@@ -39,7 +41,14 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type)
 				
 				int plantPop = rand() % 10;
 				for (int plantNum = 0; plantNum < plantPop; plantNum++)
-					newCell->AddPlant(EcoResilience::Plant());
+				{
+					float currentMass = 0;
+					for(auto plant : newCell->plants)
+						currentMass += plant.mass;
+
+					if(currentMass < maxCellPlantMass)
+						newCell->AddPlant(EcoResilience::Plant());
+				}
 
 				int animalPop = rand() % 10;
 				for(int animalNum = 0; animalNum < animalPop; animalNum++)
@@ -71,7 +80,14 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type)
 				int plantPop = (CPerlinNoise::noise2(plantVec) + 0.5f) * 10;
 
 				for (int plantNum = 0; plantNum < plantPop; plantNum++)
-					newCell->AddPlant(Plant());
+				{
+					float currentMass = 0;
+					for (auto plant : newCell->plants)
+						currentMass += plant.mass;
+
+					if (currentMass < maxCellPlantMass)
+						newCell->AddPlant(EcoResilience::Plant());
+				}
 
 				float animalVec[2]{ (row + animalOffset) * 0.1f, (column + animalOffset) * 0.1f };
 				int animalPop = (CPerlinNoise::noise2(animalVec) + 0.5f) * 10;

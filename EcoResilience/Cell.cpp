@@ -35,6 +35,8 @@ void EcoResilience::Cell::Update()
 
 		if(plants[plantNum].wantsDeath)
 			plants.erase(plants.begin() + plantNum);
+
+
 	}
 
 	for (int animalNum = 0; animalNum < animals.size(); animalNum++)
