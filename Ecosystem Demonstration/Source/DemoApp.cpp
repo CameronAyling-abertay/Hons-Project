@@ -124,7 +124,7 @@ void DemoApp::render()
         else
         {
             repColor = sf::Color(86, 125 + ecology.world[cellNum]->GetPopulation(EcoResilience::PopulationType::PLANT) * 5, 70);
-            repColor.r += ecology.world[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) * 15;
+            //repColor.r += ecology.world[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) * 15;
         }
 
         cellRep.setFillColor(repColor);

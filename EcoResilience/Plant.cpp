@@ -12,7 +12,7 @@ EcoResilience::Plant::Plant()
 	stepsBeforeDeath = 0;
 
 	wantsFood = false;
-	killMe = false;
+	wantsDeath = false;
 }
 
 void EcoResilience::Plant::ProduceFruit()
@@ -23,7 +23,8 @@ void EcoResilience::Plant::ProduceFruit()
 
 void EcoResilience::Plant::Reproduce()
 {
-	stomach -= 0.5;
+	stomach -= 0.5 * stomachMax;
+	
 }
 
 void EcoResilience::Plant::Feed(float food)
@@ -31,18 +32,18 @@ void EcoResilience::Plant::Feed(float food)
 	stomach += food;
 	wantsFood = false;
 	stepsBeforeDeath = 0;
-	killMe = false;
+	wantsDeath = false;
 }
 
 void EcoResilience::Plant::Update()
 {
 	stomach -= 0.005 * stomachMax;
 
-	/*if (stomach > 0.6 && rand() % 100 < 60)
+	if (stomach > 0.6 * stomachMax && rand() % 100 < 20)
 	{
 		Reproduce();
 	}
-	if (stomach > 0.5f && rand() % 100 < 20)
+	/*if (stomach > 0.5f && rand() % 100 < 20)
 	{
 		ProduceFruit();
 	}*/
@@ -53,8 +54,8 @@ void EcoResilience::Plant::Update()
 		stepsBeforeDeath++;
 	}
 
-	if(stepsBeforeDeath == int(vigor * 10))
+	if(stepsBeforeDeath == int(vigor * 10) + 1)
 	{
-		killMe = true;
+		wantsDeath = true;
 	}
 }
