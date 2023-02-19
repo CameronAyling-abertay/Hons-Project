@@ -18,6 +18,8 @@ namespace EcoResilience
 		int cellRow;
 		int cellColumn;
 
+		float maxPlantMass;
+
 	public:
 		std::vector<Plant> plants;
 		std::vector<Animal> animals;
@@ -26,7 +28,7 @@ namespace EcoResilience
 
 		int desiredChildCount;
 
-		Cell(int row, int column);
+		Cell(int row, int column, float maxPlantMass);
 		~Cell() {};
 
 		void Update();

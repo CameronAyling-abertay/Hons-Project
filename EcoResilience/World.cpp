@@ -1,6 +1,7 @@
 #include "World.h"
 #include <random>
 #include "CPerlinNoise/CPerlinNoise.h"
+#include "NewPlant.h"
 
 EcoResilience::World::World() :
 	width(0),
@@ -22,10 +23,12 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 
 	maxCellPlantMass = plantMassMax;
 
+	genType = type;
+
 	//Generate the world
 	//Random generation will randomly allocate cells water levels
 	//Perlin generation will generate it using perlin noise for better natural-ness
-	switch (type)
+	switch (genType)
 	{
 	case GenerationType::RANDOM:
 		sunTime = float(rand() % 1000) / 24.f;
@@ -34,7 +37,7 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 		{
 			for (int column = 0; column < width; column++)
 			{
-				Cell* newCell = new Cell(row, column);
+				Cell* newCell = new Cell(row, column, maxCellPlantMass);
 
 				//Add water
 				float water = float((rand() % 1000)) / 1000.f;
@@ -80,7 +83,7 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 		{
 			for (int column = 0; column < width; column++)
 			{
-				Cell* newCell = new Cell(row, column);
+				Cell* newCell = new Cell(row, column, maxCellPlantMass);
 
 				//Create the water level
 				float waterVec[2]{ (row + waterOffset) * 0.1f, (column + waterOffset) * 0.1f };
@@ -121,6 +124,8 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 			}
 		}
 	}
+
+	steps = 0;
 }
 
 void EcoResilience::World::Clear()
@@ -137,6 +142,11 @@ void EcoResilience::World::Clear()
 
 void EcoResilience::World::Update()
 {
+	steps++;
+
+	if (steps == 100)
+		Rain();
+
 	for (int cellNum = 0; cellNum < width * height; cellNum++)
 	{
 		data()[cellNum]->Update();
@@ -152,7 +162,7 @@ void EcoResilience::World::Update()
 				{
 					int dir = rand() % 5;
 
-					EcoResilience::Plant newPlant;
+					EcoResilience::NewPlant newPlant;
 
 					float currentMass;
 					switch (dir)
@@ -252,9 +262,9 @@ int EcoResilience::World::GetPopulation(PopulationType type)
 	return population;
 }
 
-void EcoResilience::World::Rain(GenerationType type)
+void EcoResilience::World::Rain()
 {
-	switch (type)
+	switch (genType)
 	{
 	case GenerationType::RANDOM:
 		for (int row = 0; row < height; row++)

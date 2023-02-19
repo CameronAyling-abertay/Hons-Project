@@ -1,10 +1,11 @@
 #include "Cell.h"
 
-EcoResilience::Cell::Cell(int row, int column) :
+EcoResilience::Cell::Cell(int row, int column, float plantMass) :
 	waterLevel(0.5),
 	cellRow(row),
 	cellColumn(column),
-	desiredChildCount(0)
+	desiredChildCount(0),
+	maxPlantMass(plantMass)
 {
 }
 
@@ -21,6 +22,8 @@ int EcoResilience::Cell::GetPopulation(PopulationType type)
 
 void EcoResilience::Cell::Update()
 {
+	float currentMass = 0;
+
 	for (int plantNum = 0; plantNum < plants.size(); plantNum++)
 	{
 		plants[plantNum].Update();
@@ -29,7 +32,7 @@ void EcoResilience::Cell::Update()
 		{
 			if (waterLevel - plants[plantNum].stomachMax * 0.02 > 0)
 			{
-				plants[plantNum].Feed(plants[plantNum].stomachMax * 0.05);
+				plants[plantNum].Feed(plants[plantNum].stomachMax * 0.5);
 				SetWater(waterLevel - plants[plantNum].stomachMax * 0.02);
 			}
 		}
@@ -45,6 +48,30 @@ void EcoResilience::Cell::Update()
 		{
 			desiredChildCount++;
 			plants[plantNum].Reproduce();
+		}
+
+		currentMass += plants[plantNum].mass;
+	}
+
+	while(currentMass > maxPlantMass)
+	{
+		float totalVigor = 0;
+		for(auto plant : plants)
+		{
+			totalVigor += 10.f - plant.vigor;
+		}
+
+		float killVigor = totalVigor * static_cast<float>(rand() % 1000) / 1000.f;
+
+		for(int plantNum = 0; plantNum < plants.size(); plantNum++)
+		{
+			killVigor -= 10.f - plants[plantNum].vigor;
+			if (killVigor <= 0)
+			{
+				currentMass -= plants[plantNum].mass;
+				plants.erase(plants.begin() + plantNum);
+				break;
+			}
 		}
 	}
 

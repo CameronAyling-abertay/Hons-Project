@@ -4,21 +4,18 @@ namespace EcoResilience
 {
 	class Plant
 	{
-	private:
-		float waterIntake;
-		float heatThreshold;
-		float vigor;
-		int fruits;
-
-		void ProduceFruit();
-
 	public:
+		float vigor;
 		float mass;
 		float stomach;
 		float stomachMax;
 
+		int maxAge;
+		int age;
+
 		int stepsBeforeDeath;
 		bool wantsDeath;
+		void Kill() { wantsDeath = true; };
 
 		bool wantsChild;
 		void Reproduce();

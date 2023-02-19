@@ -1,4 +1,2 @@
-﻿  Plant.cpp
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Plant.cpp(21,16): warning C4305: '-=': truncation from 'double' to 'float'
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Plant.cpp(27,17): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+﻿  NewPlant.cpp
   EcoResilience.vcxproj -> C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\x64\Debug\EcoResilience.lib

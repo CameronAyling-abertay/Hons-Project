@@ -15,6 +15,10 @@ namespace EcoResilience
 		float sunTime;
 		float maxCellPlantMass;
 
+		GenerationType genType;
+
+		int steps;
+
 	public:
 		World();
 		~World();
@@ -28,6 +32,6 @@ namespace EcoResilience
 
 		int GetPopulation(PopulationType type);
 
-		void Rain(GenerationType);
+		void Rain();
 	};
 };

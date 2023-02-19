@@ -117,19 +117,21 @@ void DemoApp::render()
 
         sf::Color repColor(0, 0, 0);
 
-        int waterNum = float(ecology.world[cellNum]->GetWater() * 255.f);
+        //int waterNum = float(ecology.world[cellNum]->GetWater() * 255.f);
 
-        if (ecology.world[cellNum]->cellType == EcoResilience::CellType::WATER)
-            repColor.b = waterNum;
-        else
-        {
-            float mass = 0;
-            for (auto plant : ecology.world[cellNum]->plants)
-                mass += plant.mass;
+        //if (ecology.world[cellNum]->cellType == EcoResilience::CellType::WATER)
+        //    repColor.b = waterNum;
+        //else
+        //{
+        //    
+        //    //repColor.r += ecology.world[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) * 15;
+        //}
 
-            repColor = sf::Color(86, 125 + int(mass * 60.f / DEFAULT_MASS), 70);
-            //repColor.r += ecology.world[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) * 15;
-        }
+        float mass = 0;
+        for (auto plant : ecology.world[cellNum]->plants)
+            mass += plant.mass;
+
+        repColor = sf::Color(86, 125 + int(mass * 60.f / DEFAULT_MASS), 70);
 
         cellRep.setFillColor(repColor);
 

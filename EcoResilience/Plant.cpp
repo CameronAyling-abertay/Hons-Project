@@ -6,9 +6,11 @@ EcoResilience::Plant::Plant()
 	mass = float(rand() % 1000) / 1000.f;
 	stomach = mass * float(rand() % 1000) / 1000.f;
 	stomachMax = mass;
-	waterIntake = float(rand() % 1000) / 1000.f;
-	heatThreshold = float(rand() % 1000) / 1000.f;
-	vigor = float(rand() % 100) / 10.f;
+
+	vigor = float(rand() % 9000) / 1000.f + 1.f;
+
+	maxAge = pow(static_cast<int>(vigor), 5);
+	age = 0;
 	stepsBeforeDeath = 0;
 
 	wantsFood = false;
@@ -16,15 +18,9 @@ EcoResilience::Plant::Plant()
 	wantsDeath = false;
 }
 
-void EcoResilience::Plant::ProduceFruit()
-{
-	stomach -= 0.3;
-	fruits += 10;
-}
-
 void EcoResilience::Plant::Reproduce()
 {
-	stomach -= 0.5 * stomachMax;
+	stomach -= 0.5f * stomachMax;
 	wantsChild = false;
 }
 
@@ -39,24 +35,23 @@ void EcoResilience::Plant::Feed(float food)
 void EcoResilience::Plant::Update()
 {
 	stomach -= 0.005f * stomachMax;
+	mass *= 1.f + (vigor * 0.001f);
+	vigor += (9.f - vigor) * 0.001f;
+	age++;
 
-	if (stomach > 0.6f * stomachMax && rand() % 100 < 20)
+	if (stomach > 0.6f * stomachMax && rand() % 1000 < (50.f * 9.f / vigor))
 	{
 		wantsChild = true;
 	}
-	/*if (stomach > 0.5f && rand() % 100 < 20)
-	{
-		ProduceFruit();
-	}*/
 
-	if (stomach < 0.2f * stomachMax) 
+	if (stomach < 0.2f * stomachMax && age < maxAge) 
 	{
 		wantsFood = true;
 		stepsBeforeDeath++;
 	}
 
-	if(stepsBeforeDeath == int(vigor * 10) + 1)
+	if(stepsBeforeDeath == static_cast<int>(vigor) || stomach < 0)
 	{
-		wantsDeath = true;
+		Kill();
 	}
 }
