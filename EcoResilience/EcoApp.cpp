@@ -4,11 +4,16 @@ void EcoApp::Update(float dt)
 {
 	timebank += dt;
 
-	if (timebank > 0.05f)
+	world.Update();
+
+	float water = 0;
+	for(auto cell : world)
 	{
-		timebank -= 0.05f;
-		world.Update();
+		water += cell->GetWater();
 	}
+
+	if (water <= width * height / 4.f)
+		Rain();
 }
 
 void EcoApp::GenerateWorld(EcoResilience::GenerationType genType, int worldWidth, int worldHeight, float maxCellPlantMass)

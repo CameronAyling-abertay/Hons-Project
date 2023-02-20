@@ -20,6 +20,10 @@ private:
 
 	EcoApp ecology;
 
+	int stepCount;
+	bool paused;
+	bool cont;
+
 public:
 	DemoApp();
 	~DemoApp() {};

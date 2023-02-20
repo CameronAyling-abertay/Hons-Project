@@ -82,6 +82,12 @@ void DemoApp::handleInput()
 
             if (event.key.code == sf::Keyboard::R)
                 ecology.Rain();
+
+            if (event.key.code == sf::Keyboard::W)
+            {
+                cont = true;
+                paused = false;
+            }
         }
     }
 

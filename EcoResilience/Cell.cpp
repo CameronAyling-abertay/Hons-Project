@@ -30,10 +30,10 @@ void EcoResilience::Cell::Update()
 
 		if (plants[plantNum].wantsFood)
 		{
-			if (waterLevel - plants[plantNum].stomachMax * 0.02 > 0)
+			if (waterLevel - plants[plantNum].stomachMax * 0.02f > 0)
 			{
-				plants[plantNum].Feed(plants[plantNum].stomachMax * 0.7);
-				SetWater(waterLevel - plants[plantNum].stomachMax * 0.1);
+				plants[plantNum].Feed(plants[plantNum].stomachMax * 0.7f);
+				SetWater(waterLevel - plants[plantNum].stomachMax * 0.3f);
 			}
 		}
 
