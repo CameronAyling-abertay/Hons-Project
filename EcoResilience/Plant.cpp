@@ -9,7 +9,7 @@ EcoResilience::Plant::Plant()
 
 	vigor = float(rand() % 9000) / 1000.f + 1.f;
 
-	maxAge = pow(static_cast<int>(vigor), 5);
+	maxAge = pow(vigor, 5) + 50;
 	age = 0;
 	stepsBeforeDeath = 0;
 
@@ -39,7 +39,7 @@ void EcoResilience::Plant::Update()
 	vigor += (9.f - vigor) * 0.001f;
 	age++;
 
-	if (stomach > 0.6f * stomachMax && rand() % 1000 < (50.f * 9.f / vigor))
+	if (stomach > 0.6f * stomachMax && rand() % 1000 < (50.f * 9.f / vigor) && age > 0.4f * maxAge)
 	{
 		wantsChild = true;
 	}
@@ -47,10 +47,15 @@ void EcoResilience::Plant::Update()
 	if (stomach < 0.2f * stomachMax && age < maxAge) 
 	{
 		wantsFood = true;
+	}
+
+	if(stomach < 0)
+	{
+		stomach = 0;
 		stepsBeforeDeath++;
 	}
 
-	if(stepsBeforeDeath == static_cast<int>(vigor) || stomach < 0)
+	if(stepsBeforeDeath == static_cast<int>(vigor))
 	{
 		Kill();
 	}
