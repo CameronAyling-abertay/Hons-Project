@@ -1,3 +1,4 @@
 ﻿  Plant.cpp
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Plant.cpp(12,25): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Plant.cpp(12,14): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Plant.cpp(13,33): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
   EcoResilience.vcxproj -> C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\x64\Debug\EcoResilience.lib

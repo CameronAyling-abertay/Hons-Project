@@ -10,7 +10,7 @@ DemoApp::DemoApp() :
 void DemoApp::init()
 {
     //Initialise window and starting variables
-    window = new sf::RenderWindow(sf::VideoMode(1600, 900), "Ecosystem Resilience Demonstration");
+    window = new sf::RenderWindow(sf::VideoMode(400, 300), "Ecosystem Resilience Demonstration");
 
     sf::Time currentTime = clock.getElapsedTime();
 
@@ -131,7 +131,7 @@ void DemoApp::render()
         for (auto plant : ecology.world[cellNum]->plants)
             mass += plant.mass;
 
-        repColor = sf::Color(86, 125 + int(mass * 60.f / DEFAULT_MASS), 70);
+        repColor = sf::Color(86, 125 + ecology.world[cellNum]->plants.size() * 5, 70);
 
         cellRep.setFillColor(repColor);
 

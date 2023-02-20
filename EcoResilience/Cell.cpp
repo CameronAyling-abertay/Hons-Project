@@ -32,7 +32,7 @@ void EcoResilience::Cell::Update()
 		{
 			if (waterLevel - plants[plantNum].stomachMax * 0.02 > 0)
 			{
-				plants[plantNum].Feed(plants[plantNum].stomachMax * 0.5);
+				plants[plantNum].Feed(plants[plantNum].stomachMax * 0.7);
 				SetWater(waterLevel - plants[plantNum].stomachMax * 0.02);
 			}
 		}

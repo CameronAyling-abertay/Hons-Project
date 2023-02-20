@@ -4,9 +4,9 @@ void EcoApp::Update(float dt)
 {
 	timebank += dt;
 
-	if (timebank > 0.1f)
+	if (timebank > 0.05f)
 	{
-		timebank -= 0.1f;
+		timebank -= 0.05f;
 		world.Update();
 	}
 }
