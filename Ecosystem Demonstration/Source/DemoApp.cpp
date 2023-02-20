@@ -10,7 +10,7 @@ DemoApp::DemoApp() :
 void DemoApp::init()
 {
     //Initialise window and starting variables
-    window = new sf::RenderWindow(sf::VideoMode(400, 300), "Ecosystem Resilience Demonstration");
+    window = new sf::RenderWindow(sf::VideoMode(900, 700), "Ecosystem Resilience Demonstration");
 
     sf::Time currentTime = clock.getElapsedTime();
 
@@ -55,7 +55,7 @@ void DemoApp::run()
 //Handle the user's inputs
 void DemoApp::handleInput()
 {
-    //Create an event to determine whether the user has done somthing noteworthy
+    //Create an event to determine whether the user has done something noteworthy
     //It will be used as a container to run through every event the user has triggered
     sf::Event event;
     while (window->pollEvent(event))
@@ -103,7 +103,7 @@ void DemoApp::render()
 
     sf::RectangleShape cellRep;
 
-    int sideSize = std::min(window->getSize().x, window->getSize().y) / DEFAULT_SIDE;
+    int sideSize = std::min(window->getSize().x * 0.5f, window->getSize().y * 0.5f) / DEFAULT_SIDE;
 
     cellRep.setSize(sf::Vector2f(sideSize, sideSize));
 
@@ -111,27 +111,67 @@ void DemoApp::render()
     for (int cellNum = 0; cellNum < ecology.world.size(); cellNum++)
     {
         sf::Vector2f pos;
-        pos.x = cellNum / ecology.world.GetHeight() * sideSize - (ecology.width / 2 * sideSize);
-        pos.y = cellNum % ecology.world.GetWidth() * sideSize - (ecology.height / 2 * sideSize);
+        pos.x = cellNum / ecology.world.GetHeight() * sideSize - (ecology.width / 2 * sideSize) - 225;
+        pos.y = cellNum % ecology.world.GetWidth() * sideSize - (ecology.height / 2 * sideSize) - 175;
         cellRep.setPosition(window->getView().getCenter() + pos);
 
         sf::Color repColor(0, 0, 0);
 
-        //int waterNum = float(ecology.world[cellNum]->GetWater() * 255.f);
+        repColor = sf::Color(86, 125 + ecology.world[cellNum]->plants.size() * 5, 70);
 
-        //if (ecology.world[cellNum]->cellType == EcoResilience::CellType::WATER)
-        //    repColor.b = waterNum;
-        //else
-        //{
-        //    
-        //    //repColor.r += ecology.world[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) * 15;
-        //}
+        cellRep.setFillColor(repColor);
+
+        window->draw(cellRep);
+    }
+
+    for (int cellNum = 0; cellNum < ecology.world.size(); cellNum++)
+    {
+        sf::Vector2f pos;
+        pos.x = cellNum / ecology.world.GetHeight() * sideSize - (ecology.width / 2 * sideSize) + 225;
+        pos.y = cellNum % ecology.world.GetWidth() * sideSize - (ecology.height / 2 * sideSize) - 175;
+        cellRep.setPosition(window->getView().getCenter() + pos);
+
+        sf::Color repColor(0, 0, 0);
 
         float mass = 0;
         for (auto plant : ecology.world[cellNum]->plants)
             mass += plant.mass;
 
-        repColor = sf::Color(86, 125 + ecology.world[cellNum]->plants.size() * 5, 70);
+        repColor = sf::Color(86, 125 + mass * 60.f / DEFAULT_MASS, 70);
+
+        cellRep.setFillColor(repColor);
+
+        window->draw(cellRep);
+    }
+
+    for (int cellNum = 0; cellNum < ecology.world.size(); cellNum++)
+    {
+        sf::Vector2f pos;
+        pos.x = cellNum / ecology.world.GetHeight() * sideSize - (ecology.width / 2 * sideSize) - 225;
+        pos.y = cellNum % ecology.world.GetWidth() * sideSize - (ecology.height / 2 * sideSize) + 175;
+        cellRep.setPosition(window->getView().getCenter() + pos);
+
+        sf::Color repColor(0, 0, 0);
+
+        int waterNum = float(ecology.world[cellNum]->GetWater() * 255.f);
+
+        repColor = sf::Color(0, 0, waterNum);
+
+        cellRep.setFillColor(repColor);
+
+        window->draw(cellRep);
+    }
+
+    for (int cellNum = 0; cellNum < ecology.world.size(); cellNum++)
+    {
+        sf::Vector2f pos;
+        pos.x = cellNum / ecology.world.GetHeight() * sideSize - (ecology.width / 2 * sideSize) + 225;
+        pos.y = cellNum % ecology.world.GetWidth() * sideSize - (ecology.height / 2 * sideSize) + 175;
+        cellRep.setPosition(window->getView().getCenter() + pos);
+
+        sf::Color repColor(0, 0, 0);
+
+        repColor = sf::Color(ecology.world[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) * 15, 0, 0);
 
         cellRep.setFillColor(repColor);
 

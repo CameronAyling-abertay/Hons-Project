@@ -144,8 +144,11 @@ void EcoResilience::World::Update()
 {
 	steps++;
 
-	if (steps == 100)
+	if (steps == 1000)
+	{
 		Rain();
+		steps = 0;
+	}
 
 	for (int cellNum = 0; cellNum < width * height; cellNum++)
 	{
