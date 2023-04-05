@@ -1,6 +1,9 @@
 #include "DemoApp.h"
 #include <random>
 
+#include "imgui.h"
+#include "imgui-SFML.h"
+
 DemoApp::DemoApp() :
     window(NULL)
 {
@@ -12,25 +15,9 @@ void DemoApp::init()
     //Initialise window and starting variables
     window = new sf::RenderWindow(sf::VideoMode(900, 700), "Ecosystem Resilience Demonstration");
 
-    sf::Time currentTime = clock.getElapsedTime();
+    ImGui::SFML::Init(*window);
 
     ecology.GenerateWorld();
-
-    if (!font.loadFromFile("media/arial.ttf"))
-    {
-        exit(0);
-    }
-
-    waterDiagnostic.setFont(font);
-    waterDiagnostic.setFillColor(sf::Color::White);
-    waterDiagnostic.setPosition(50, 50);
-    waterDiagnostic.setCharacterSize(24);
-    waterDiagnostic.setStyle(sf::Text::Regular);
-    plantDiagnostic.setFont(font);
-    plantDiagnostic.setFillColor(sf::Color::White);
-    plantDiagnostic.setPosition(50, 100);
-    plantDiagnostic.setCharacterSize(24);
-    plantDiagnostic.setStyle(sf::Text::Regular);
 }
 
 //Run the app until the window is closed
@@ -43,9 +30,7 @@ void DemoApp::run()
         handleInput();
 
         //Update Variables
-        float prevTime = currentTime.asSeconds();
-        currentTime = clock.getElapsedTime();
-        update(currentTime.asSeconds() - prevTime);
+        update(clock.restart());
 
         //Render to Screen
         render();
@@ -60,6 +45,8 @@ void DemoApp::handleInput()
     sf::Event event;
     while (window->pollEvent(event))
     {
+        ImGui::SFML::ProcessEvent(*window, event);
+
         //The user has closed the app
         if (event.type == sf::Event::Closed)
             window->close();
@@ -96,9 +83,11 @@ void DemoApp::handleInput()
 }
 
 //Update the application
-void DemoApp::update(float dt)
+void DemoApp::update(sf::Time dt)
 {
-    ecology.Update(dt);
+    ecology.Update(dt.asSeconds());
+
+    ImGui::SFML::Update(*window, dt);
 }
 
 //Render the application to the screen
@@ -190,18 +179,18 @@ void DemoApp::render()
         water += cell->GetWater();
     }
 
-    waterDiagnostic.setString("Global Water: " + std::to_string(water));
-    window->draw(waterDiagnostic);
-
     int numOfPlants = 0;
     for(auto cell : ecology.world)
     {
         numOfPlants += cell->plants.size();
     }
 
-    plantDiagnostic.setString("Global Plants: " + std::to_string(numOfPlants));
-    window->draw(plantDiagnostic);
+    ImGui::Begin("Diagnostics");
+    ImGui::Text("Water Level:\t%f", water);
+    ImGui::Text("Plant Population:\t%d", numOfPlants);
+    ImGui::End();
 
+    ImGui::SFML::Render(*window);
     //Send the drawn objects to the screen
     window->display();
 }
