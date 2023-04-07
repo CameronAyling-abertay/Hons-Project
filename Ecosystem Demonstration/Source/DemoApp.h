@@ -17,8 +17,9 @@ private:
 	EcoApp ecology;
 
 	int stepCount;
-	bool paused;
-	bool cont;
+	bool perlin;
+
+	bool viewSeparate;
 
 public:
 	DemoApp();

@@ -45,18 +45,17 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 
 				//Create plants
 				float plantMass = ((rand() % 1000) / 1000.f) * maxCellPlantMass;
-				float currentMass = 0;
 
 				int iterations = 0;
-				while(currentMass < plantMass * 0.85f && iterations < 50)
+				while(iterations < 100)
 				{
-					EcoResilience::Plant newPlant;
+					Plant newPlant;
+					newPlant.mass *= maxCellPlantMass;
 
-					if (currentMass + newPlant.mass < maxCellPlantMass && currentMass + newPlant.mass < plantMass * 1.15f)
+					if (newPlant.mass > std::max(plantMass - maxCellPlantMass * 0.05f, 0.f) && newPlant.mass < std::min(plantMass + maxCellPlantMass * 0.05f, maxCellPlantMass))
 					{
 						newCell->AddPlant(newPlant);
-						currentMass += newPlant.mass;
-						iterations = 0;
+						break;
 					}
 
 					iterations++;
@@ -95,18 +94,16 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 				float plantVec[2]{ (row + plantOffset) * 0.1f, (column + plantOffset) * 0.1f };
 				float plantMass = (CPerlinNoise::noise2(plantVec) + 0.5f) * maxCellPlantMass;
 
-				float currentMass = 0;
 				int iterations = 0;
-
-				while (currentMass < plantMass * 0.85f && iterations != 50)
+				while (iterations < 100)
 				{
-					EcoResilience::Plant newPlant;
+					Plant newPlant;
+					newPlant.mass *= maxCellPlantMass;
 
-					if (currentMass + newPlant.mass < maxCellPlantMass && currentMass + newPlant.mass < plantMass * 1.15f)
+					if (newPlant.mass > std::max(plantMass - maxCellPlantMass * 0.05f, 0.f) && newPlant.mass < std::min(plantMass + maxCellPlantMass * 0.05f, maxCellPlantMass))
 					{
 						newCell->AddPlant(newPlant);
-						currentMass += newPlant.mass;
-						iterations = 0;
+						break;
 					}
 
 					iterations++;

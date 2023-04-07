@@ -1,5 +1,2 @@
-﻿  Cell.cpp
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Cell.cpp(17,23): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Cell.cpp(19,24): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Cell.cpp(21): warning C4715: 'EcoResilience::Cell::GetPopulation': not all control paths return a value
+﻿  EcoApp.cpp
   EcoResilience.vcxproj -> C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\x64\Debug\EcoResilience.lib
