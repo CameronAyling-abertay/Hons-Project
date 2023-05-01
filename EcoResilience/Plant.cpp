@@ -4,7 +4,9 @@
 EcoResilience::Plant::Plant() :
 	wantsDeath(false),
 	wantsChild(false),
-	wantsFood(false)
+	wantsFood(false),
+	fire(false),
+	burnt(false)
 {
 	vigor = float(rand() % 1000) / 100.f;
 
@@ -15,11 +17,14 @@ EcoResilience::Plant::Plant() :
 	maxAge = 10000;
 	age = maxAge * vigor / 15 ;
 	stepsBeforeDeath = 0;
-
-	fire = false;
 }
 
-EcoResilience::Plant::Plant(float newVigor)
+EcoResilience::Plant::Plant(float newVigor) :
+	wantsDeath(false),
+	wantsChild(false),
+	wantsFood(false),
+	fire(false),
+	burnt(false)
 {
 	vigor = newVigor;
 
@@ -30,12 +35,6 @@ EcoResilience::Plant::Plant(float newVigor)
 	maxAge = 10000;
 	age = 0;
 	stepsBeforeDeath = 0;
-
-	wantsFood = false;
-	wantsChild = false;
-	wantsDeath = false;
-
-	fire = false;
 }
 
 void EcoResilience::Plant::Reproduce()
@@ -54,6 +53,13 @@ void EcoResilience::Plant::Feed(float food)
 
 void EcoResilience::Plant::Update()
 {
+	if (burnt)
+	{
+		burnCounter++;
+		if (burnCounter > 50)
+			burnt = false;
+	}
+
 	stomach -= 0.005f * stomachMax;
 	mass *= 1.001f;
 	vigor = std::min(10.f, vigor * 1.001f);

@@ -153,6 +153,44 @@ void EcoResilience::World::Update()
 {
 	for (int cellNum = 0; cellNum < width * height; cellNum++)
 	{
+		//Fire Spread
+		if (data()[cellNum]->plants)
+		{
+			if (data()[cellNum]->plants->fire)
+				if (rand() % 100 < 20)
+					data()[cellNum]->plants->Extinguish();
+
+			if (data()[cellNum]->plants->fire)
+			{
+				//Up
+				if (rand() % 100 < 80)
+					if (cellNum >= width)
+						if (data()[cellNum - width]->plants && data()[cellNum - width]->cellType == CellType::LAND)
+							data()[cellNum - width]->plants->SetFire();
+
+				//Left
+				if (rand() % 100 < 80)
+					if (cellNum % width > 0)
+						if (data()[cellNum - 1]->plants && data()[cellNum - 1]->cellType == CellType::LAND)
+							data()[cellNum - 1]->plants->SetFire();
+
+				//Right
+				if (rand() % 100 < 80)
+					if (cellNum % width < width - 1)
+						if (data()[cellNum + 1]->plants && data()[cellNum + 1]->cellType == CellType::LAND)
+							data()[cellNum + 1]->plants->SetFire();
+
+				//Down
+				if (rand() % 100 < 80)
+					if (cellNum < width * (height - 1))
+						if (data()[cellNum + width]->plants && data()[cellNum + width]->cellType == CellType::LAND)
+							data()[cellNum + width]->plants->SetFire();
+			}
+		}
+
+		//Plague Spread
+
+
 		//Plant child creation
 		if (data()[cellNum]->plantWantsChild && data()[cellNum]->plants)
 		{
@@ -280,7 +318,7 @@ void EcoResilience::World::Update()
 					break;
 
 				case 9:// Down 1, Left 1
-					if (cellNum + width < width * (height - 1) && cellNum % width > 0)
+					if (cellNum < width * (height - 1) && cellNum % width > 0)
 					{
 						if (!data()[cellNum + width - 1]->plants)
 						{
@@ -293,7 +331,7 @@ void EcoResilience::World::Update()
 					break;
 
 				case 10:// Down 1
-					if (cellNum + width < width * (height - 1))
+					if (cellNum < width * (height - 1))
 					{
 						if (!data()[cellNum + width]->plants)
 						{
@@ -306,7 +344,7 @@ void EcoResilience::World::Update()
 					break;
 
 				case 11:// Down 1, Right 1
-					if (cellNum + width < width * (height - 1) && cellNum % width < width - 1)
+					if (cellNum < width * (height - 1) && cellNum % width < width - 1)
 					{
 						if (!data()[cellNum + width + 1]->plants)
 						{
@@ -319,7 +357,7 @@ void EcoResilience::World::Update()
 					break;
 
 				case 12:// Down 2
-					if (cellNum + width * 2 < width * (height - 1))
+					if (cellNum + width < width * (height - 1))
 					{
 						if (!data()[cellNum + width * 2]->plants)
 						{
@@ -356,7 +394,7 @@ void EcoResilience::World::Update()
 				if (data()[cellNum + 1]->plants)
 					masses[2].first = data()[cellNum + 1]->plants->mass;
 
-			if (cellNum + width < width * (height - 1))
+			if (cellNum < width * (height - 1))
 				if (data()[cellNum + width]->plants)
 					masses[3].first = data()[cellNum + width]->plants->mass;
 
@@ -424,7 +462,7 @@ void EcoResilience::World::Update()
 					break;
 
 				case 4://Down 1
-					if (cellNum + width < width * (height - 1))
+					if (cellNum < width * (height - 1))
 					{
 						if (!data()[cellNum + width]->animal && data()[cellNum + width]->cellType == CellType::LAND)
 						{
@@ -462,7 +500,7 @@ void EcoResilience::World::Update()
 					if (data()[cellNum + 1]->animal->type == PopulationType::PREY)
 						preyPresence[2] = true;
 
-			if (cellNum + width < width * (height - 1))
+			if (cellNum < width * (height - 1))
 				if (data()[cellNum + width]->animal)
 					if (data()[cellNum + width]->animal->type == PopulationType::PREY)
 						preyPresence[3] = true;
@@ -538,7 +576,7 @@ void EcoResilience::World::Update()
 					if (data()[cellNum + 1]->animal->type == childType)
 						childBearers[2] = true;
 
-			if (cellNum + width < width * (height - 1))
+			if (cellNum < width * (height - 1))
 				if (data()[cellNum + width]->animalWantsChild && data()[cellNum + width]->animal)
 					if (data()[cellNum + width]->animal->type == childType)
 						childBearers[3] = true;

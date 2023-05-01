@@ -86,7 +86,7 @@ void EcoApp::Fire()
 	{
 		int cellStart = rand() % (width * height);
 
-		if(world[cellStart]->plants)
+		if(world[cellStart]->plants && world[cellStart]->cellType == EcoResilience::CellType::LAND)
 		{
 			world[cellStart]->plants->SetFire();
 			started = true;

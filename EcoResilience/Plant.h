@@ -27,6 +27,9 @@ namespace EcoResilience
 		void Feed(float food);
 
 		bool fire;
-		void SetFire() { fire = true; };
+		bool burnt;
+		int burnCounter;
+		void SetFire() { if (!burnt) { fire = true; burnCounter = 0; } };
+		void Extinguish() { fire = false; burnt = true; };
 	};
 }
