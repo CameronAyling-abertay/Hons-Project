@@ -8,7 +8,6 @@ namespace EcoResilience
 	class Animal
 	{
 	public:
-		void Move();
 		void Reproduce();
 
 		float stomach;

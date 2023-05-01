@@ -1,12 +1,68 @@
 ﻿  Animal.cpp
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(12,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(13,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(14,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(36,7): warning C4804: '>': unsafe use of type 'bool' in operation
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(52,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(77,18): warning C4244: '=': conversion from 'const _Ty' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(13,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(14,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(15,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(35,7): warning C4804: '>': unsafe use of type 'bool' in operation
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(51,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(76,18): warning C4244: '=': conversion from 'const _Ty' to 'float', possible loss of data
           with
           [
               _Ty=double
           ]
+  Cell.cpp
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(81,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(85,38): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(86,26): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  EcoApp.cpp
+  World.cpp
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\CPerlinNoise\CPerlinNoise.h(48,18): warning C4244: 'return': conversion from 'double' to 'const float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(82,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(82,27): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(83,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(83,27): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(84,32): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(84,26): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(85,36): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(85,30): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(95,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(101,21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(120,17): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(126,21): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(245,54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(258,54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(271,54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(284,54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(297,54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(310,54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(323,54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(336,54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(349,54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(362,54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(375,54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(388,54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(761,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(761,27): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(768,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.33.31629\include\utility(190,16): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              _Ty1=float
+          ]
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(407): message : see reference to function template instantiation 'std::pair<float,int>::pair<int,int,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=int
+          ]
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\World.cpp(407): message : see reference to function template instantiation 'std::pair<float,int>::pair<int,int,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=int
+          ]
+  Generating Code...
   EcoResilience.vcxproj -> \\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\x64\Debug\EcoResilience.lib

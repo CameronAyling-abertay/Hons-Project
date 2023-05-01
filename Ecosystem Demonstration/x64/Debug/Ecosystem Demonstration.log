@@ -1,1 +1,46 @@
-﻿  Ecosystem Demonstration.vcxproj -> \\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\x64\Debug\Ecosystem Demonstration.exe
+﻿  DemoApp.cpp
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(14,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(62,73): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(62,55): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(175,79): warning C4244: '=': conversion from '_Ty' to 'int', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(179,44): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(179,34): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(187,164): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(187,82): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(231,42): warning C4244: 'argument': conversion from 'float' to 'sf::Uint8', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(242,26): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(274,119): warning C4244: 'argument': conversion from 'float' to 'sf::Uint8', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(274,78): warning C4244: 'argument': conversion from 'float' to 'sf::Uint8', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(274,38): warning C4244: 'argument': conversion from 'float' to 'sf::Uint8', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(277,26): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  Main.cpp
+  Generating Code...
+  Ecosystem Demonstration.vcxproj -> \\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\x64\Debug\Ecosystem Demonstration.exe

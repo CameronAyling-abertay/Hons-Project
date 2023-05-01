@@ -2,10 +2,11 @@
 
 EcoResilience::Animal::Animal(PopulationType species) :
 	type(species),
-	wantsEat(false),
-	wantsDeath(false),
-	wantsMove(false),
 	stepsBeforeDeath(0),
+	wantsDeath(false),
+	wantsEat(false),
+	wantsMove(false),
+	wantsChild(false),
 	infected(false),
 	immune(false)
 {
@@ -23,9 +24,7 @@ EcoResilience::Animal::Animal(PopulationType species) :
 	case PopulationType::PREY:
 		speed = 1;
 		break;
-
 	}
-
 }
 
 void EcoResilience::Animal::Update()

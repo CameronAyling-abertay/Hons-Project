@@ -45,18 +45,20 @@ void EcoResilience::Cell::AddAnimal(Animal fauna)
 
 void EcoResilience::Cell::SetWater(float newWaterLevel)
 {
-	waterLevel = std::min(1.f, std::max(0.f, newWaterLevel));
-	if (waterLevel * 255.f > 150.f)
+	if (!(cellType == CellType::URBANISED))
 	{
-		cellType = CellType::WATER;
-		if (plants)
-			if (plants->fire)
-				plants->Extinguish();
+		waterLevel = std::min(1.f, std::max(0.f, newWaterLevel));
+		if (waterLevel * 255.f > 150.f)
+		{
+			cellType = CellType::WATER;
+			if (plants)
+				if (plants->fire)
+					plants->Extinguish();
+		}
+		else
+			cellType = CellType::LAND;
 	}
-	else
-		cellType = CellType::LAND;
 }
-
 
 void EcoResilience::Cell::Update()
 {
@@ -161,6 +163,8 @@ void EcoResilience::Cell::Update()
 	}
 	else
 	{
+		waterLevel = 0;
+
 		delete plants;
 		plants = 0;
 
