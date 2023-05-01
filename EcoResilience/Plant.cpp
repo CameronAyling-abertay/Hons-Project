@@ -60,6 +60,16 @@ void EcoResilience::Plant::Update()
 			burnt = false;
 	}
 
+	if (fire)
+	{
+		mass *= 0.8f;
+		if (mass <= 0.1f)
+			wantsDeath = true;
+
+		if (rand() % 100 < 20)
+			Extinguish();
+	}
+
 	stomach -= 0.005f * stomachMax;
 	mass *= 1.001f;
 	vigor = std::min(10.f, vigor * 1.001f);

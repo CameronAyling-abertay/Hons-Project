@@ -157,10 +157,6 @@ void EcoResilience::World::Update()
 		if (data()[cellNum]->plants)
 		{
 			if (data()[cellNum]->plants->fire)
-				if (rand() % 100 < 20)
-					data()[cellNum]->plants->Extinguish();
-
-			if (data()[cellNum]->plants->fire)
 			{
 				//Up
 				if (rand() % 100 < 80)
