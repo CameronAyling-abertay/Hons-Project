@@ -7,7 +7,8 @@ EcoResilience::Cell::Cell(int row, int column, float plantMass) :
 	plants(NULL),
 	plantWantsChild(false),
 	animalWantsMove(false),
-	maxPlantMass(plantMass)
+	maxPlantMass(plantMass),
+	flooded(false)
 {
 }
 
@@ -62,6 +63,14 @@ void EcoResilience::Cell::SetWater(float newWaterLevel)
 
 void EcoResilience::Cell::Update()
 {
+	if(flooded)
+	{
+		SetWater(waterLevel * 0.99);
+		floodCounter++;
+		if (floodCounter > 50)
+			flooded = false;
+	}
+
 	if (cellType == CellType::WATER)
 	{
 		if (animal)

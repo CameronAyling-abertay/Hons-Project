@@ -43,6 +43,7 @@ void EcoApp::Flood()
 		for (auto cell : world)
 		{
 			water += cell->GetWater();
+			cell->flooded = true;
 		}
 
 		if (water < width * height * 0.75f)

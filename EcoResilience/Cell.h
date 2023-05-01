@@ -27,6 +27,9 @@ namespace EcoResilience
 
 		CellType cellType;
 
+		bool flooded;
+		int floodCounter;
+
 		bool plantWantsChild;
 		void plantHadChild() { plants->Reproduce(); plantWantsChild = false; }
 
