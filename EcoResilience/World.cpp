@@ -185,7 +185,35 @@ void EcoResilience::World::Update()
 		}
 
 		//Plague Spread
+		if (data()[cellNum]->animal)
+		{
+			if (data()[cellNum]->animal->infected)
+			{
+				//Up
+				if (rand() % 100 < 80)
+					if (cellNum >= width)
+						if (data()[cellNum - width]->animal)
+							data()[cellNum - width]->animal->Infect();
 
+				//Left
+				if (rand() % 100 < 80)
+					if (cellNum % width > 0)
+						if (data()[cellNum - 1]->animal)
+							data()[cellNum - 1]->animal->Infect();
+
+				//Right
+				if (rand() % 100 < 80)
+					if (cellNum % width < width - 1)
+						if (data()[cellNum + 1]->animal)
+							data()[cellNum + 1]->animal->Infect();
+
+				//Down
+				if (rand() % 100 < 80)
+					if (cellNum < width * (height - 1))
+						if (data()[cellNum + width]->animal)
+							data()[cellNum + width]->animal->Infect();
+			}
+		}
 
 		//Plant child creation
 		if (data()[cellNum]->plantWantsChild && data()[cellNum]->plants)

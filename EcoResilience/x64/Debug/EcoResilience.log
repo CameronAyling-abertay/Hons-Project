@@ -1,6 +1,10 @@
-﻿  Plant.cpp
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Plant.cpp(18,23): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Plant.cpp(87,18): warning C4244: '=': conversion from 'const _Ty' to 'float', possible loss of data
+﻿  Animal.cpp
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(12,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(13,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(14,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(36,7): warning C4804: '>': unsafe use of type 'bool' in operation
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(52,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Animal.cpp(77,18): warning C4244: '=': conversion from 'const _Ty' to 'float', possible loss of data
           with
           [
               _Ty=double

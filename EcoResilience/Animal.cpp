@@ -6,7 +6,8 @@ EcoResilience::Animal::Animal(PopulationType species) :
 	wantsDeath(false),
 	wantsMove(false),
 	stepsBeforeDeath(0),
-	infected(false)
+	infected(false),
+	immune(false)
 {
 	vigor = rand() % 1000 / 100.;
 	mass = vigor / 10.;
@@ -29,6 +30,23 @@ EcoResilience::Animal::Animal(PopulationType species) :
 
 void EcoResilience::Animal::Update()
 {
+	if (immune)
+	{
+		immuneCounter++;
+		if (immuneCounter > 50)
+			immune = false;
+	}
+
+	if (infected)
+	{
+		mass *= 0.9f;
+		if (mass <= 0.1f)
+			wantsDeath = true;
+
+		if (rand() % 100 < 2)
+			Cure();
+	}
+
 	mass *= 1.001f;
 	vigor = std::min(10.f, vigor * 1.001f);
 	stomachMax = vigor / 10.;

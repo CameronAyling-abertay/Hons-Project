@@ -31,13 +31,16 @@ namespace EcoResilience
 
 		bool wantsChild;
 
-		bool infected;
 
 		void Update();
 		void Survey(bool ideal) { wantsMove = !ideal; };
 
 		void Feed(float food);
 
-		void Infect() { infected = true; };
+		bool infected;
+		bool immune;
+		bool immuneCounter;
+		void Infect() { if (!immune) { infected = true; immuneCounter = 0; } };
+		void Cure() { infected = false; immune = true; }
 	};
 }
