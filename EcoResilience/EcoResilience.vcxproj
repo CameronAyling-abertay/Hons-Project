@@ -135,7 +135,6 @@
     <ClInclude Include="Cell.h" />
     <ClInclude Include="CPerlinNoise\CPerlinNoise.h" />
     <ClInclude Include="EcoApp.h" />
-    <ClInclude Include="NewPlant.h" />
     <ClInclude Include="Plant.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
@@ -144,7 +143,6 @@
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="CPerlinNoise\CPerlinNoise.cpp" />
     <ClCompile Include="EcoApp.cpp" />
-    <ClCompile Include="NewPlant.cpp" />
     <ClCompile Include="Plant.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>

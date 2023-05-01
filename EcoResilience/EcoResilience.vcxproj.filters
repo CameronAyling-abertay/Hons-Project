@@ -33,9 +33,6 @@
     <ClInclude Include="EcoApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NewPlant.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="World.cpp">
@@ -54,9 +51,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EcoApp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NewPlant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

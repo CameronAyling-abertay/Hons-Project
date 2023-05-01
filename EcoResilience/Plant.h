@@ -15,15 +15,18 @@ namespace EcoResilience
 
 		int stepsBeforeDeath;
 		bool wantsDeath;
-		void Kill() { wantsDeath = true; };
 
 		bool wantsChild;
 		void Reproduce();
 
 		Plant();
+		Plant(float Vigor);
 		void Update();
 
 		bool wantsFood;
 		void Feed(float food);
+
+		bool fire;
+		void SetFire() { fire = true; };
 	};
 }

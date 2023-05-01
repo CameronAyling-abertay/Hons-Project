@@ -5,8 +5,7 @@
 
 namespace EcoResilience
 {
-	enum class PopulationType { PLANT, PREY, PREDATOR };
-	enum class CellType { WATER, LAND };
+	enum class CellType { WATER, LAND, URBANISED };
 
 	class Cell
 	{
@@ -20,26 +19,39 @@ namespace EcoResilience
 
 		float maxPlantMass;
 
+		bool fire;
+
 	public:
-		std::vector<Plant> plants;
-		std::vector<Animal> animals;
+		Plant* plants;
+		Animal* animal;
 
 		CellType cellType;
 
-		int desiredChildCount;
+		bool plantWantsChild;
+		void plantHadChild() { plants->Reproduce(); plantWantsChild = false; }
+
+		bool animalWantsMove;
+		void animalMoved() { animal = NULL; }
+
+		bool animalWantsChild;
+		void animalHadChild() { animal->Reproduce(); animalWantsChild = false; }
+
+		bool predatorWantsFood;
+		void feedPredator(float biomass) { animal->Feed(biomass); predatorWantsFood = false; }
+		void killPrey() { delete animal; animal = 0; }
 
 		Cell(int row, int column, float maxPlantMass);
 		~Cell() {};
 
 		void Update();
-		void AddPlant(Plant plant) { plants.push_back(plant); };
-		void AddAnimal(Animal animal) { animals.push_back(animal); };
+		void AddPlant(Plant plant);
+		void AddAnimal(Animal animal);
 
 		float GetWater() { return waterLevel; };
-		void SetWater(float newWaterLevel) { waterLevel = std::min(1.f, std::max(0.f, newWaterLevel)); (waterLevel * 255.f > 150.f) ? cellType = CellType::WATER : cellType = CellType::LAND; };
+		void SetWater(float newWaterLevel);
 
 		int GetPopulation(PopulationType type);
 
-		void ResetChildCount() { desiredChildCount = 0; };
+		void ResetChildCount() { plantWantsChild = false; };
 	};
 };

@@ -8,6 +8,7 @@ class DemoApp
 private:
 	sf::RenderWindow* window;
 
+	bool paused;
 	sf::Clock clock;
 
 	void handleInput();

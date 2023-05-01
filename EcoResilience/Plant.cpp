@@ -1,26 +1,46 @@
 #include "Plant.h"
 #include <random>
 
-EcoResilience::Plant::Plant()
+EcoResilience::Plant::Plant() :
+	wantsDeath(false),
+	wantsChild(false),
+	wantsFood(false)
 {
-	mass = float(rand() % 1000) / 1000.f;
-	stomach = mass * float(rand() % 1000) / 1000.f;
-	stomachMax = mass;
+	vigor = float(rand() % 1000) / 100.f;
 
-	vigor = float(rand() % 9000) / 1000.f + 1.f;
+	mass = vigor / 10.f;
+	stomachMax = vigor * 0.05f;
+	stomach = stomachMax * float(rand() % 1000) / 1000.f;
 
-	maxAge = pow(vigor + 1, 5);
-	age = maxAge * (rand() % 1000) / 1000.f;
+	maxAge = 10000;
+	age = maxAge * vigor / 15 ;
+	stepsBeforeDeath = 0;
+
+	fire = false;
+}
+
+EcoResilience::Plant::Plant(float newVigor)
+{
+	vigor = newVigor;
+
+	mass = vigor / 10.f;
+	stomachMax = vigor * 0.05f;
+	stomach = stomachMax * (rand() % 1000 / 1000.f);
+
+	maxAge = 10000;
+	age = 0;
 	stepsBeforeDeath = 0;
 
 	wantsFood = false;
 	wantsChild = false;
 	wantsDeath = false;
+
+	fire = false;
 }
 
 void EcoResilience::Plant::Reproduce()
 {
-	stomach -= 0.5f * stomachMax;
+	stomach -= 0.3f * stomachMax;
 	wantsChild = false;
 }
 
@@ -35,28 +55,26 @@ void EcoResilience::Plant::Feed(float food)
 void EcoResilience::Plant::Update()
 {
 	stomach -= 0.005f * stomachMax;
-	mass *= 1.f + (vigor * 0.001f);
-	vigor += (9.f - vigor) * 0.001f;
+	mass *= 1.001f;
+	vigor = std::min(10.f, vigor * 1.001f);
+	stomachMax = vigor * 0.05f;
 	age++;
 
-	if (stomach > 0.6f * stomachMax && age > 0.3f * maxAge)
-	{
-		wantsChild = true;
-	}
+	wantsChild = stomach > 0.4f * stomachMax && age > 0.3f * maxAge;
 
-	if (stomach < 0.2f * stomachMax && age < maxAge) 
-	{
-		wantsFood = true;
-	}
+	wantsFood = stomach < 0.2f * stomachMax && age < maxAge;
 
-	if(stomach < 0)
+	if (stomach <= 0)
 	{
 		stomach = 0;
 		stepsBeforeDeath++;
+		mass = std::max(mass * 0.9, 0.);
 	}
+	else
+		stepsBeforeDeath = 0;
 
-	if(stepsBeforeDeath == static_cast<int>(vigor))
+	if(stepsBeforeDeath == static_cast<int>(vigor) + 5)
 	{
-		Kill();
+		wantsDeath = true;
 	}
 }

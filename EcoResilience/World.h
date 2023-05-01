@@ -33,5 +33,7 @@ namespace EcoResilience
 		int GetPopulation(PopulationType type);
 
 		void Rain();
+
+		void UrbanDevelop();
 	};
 };
