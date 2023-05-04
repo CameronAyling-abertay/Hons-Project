@@ -4,7 +4,7 @@ void EcoApp::Update(float dt)
 {
 	timebank += dt;
 
-	world.Update();
+	world = world.Update();
 }
 
 void EcoApp::GenerateWorld(EcoResilience::GenerationType genType, int worldWidth, int worldHeight, float maxCellPlantMass)

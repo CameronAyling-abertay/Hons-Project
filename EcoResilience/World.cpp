@@ -138,98 +138,76 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 
 EcoResilience::World EcoResilience::World::Update()
 {
-	World newWorld;
-
-	for(int row = 0; row < height; row++)
-	{
-		for(int column = 0; column < width; column++)
-		{
-			Cell newCell(row, column, maxCellPlantMass);
-
-			newCell.SetWater(data()[row * width + column].GetWater());
-
-			if (data()[row * width + column].hasPlant)
-			{
-				Plant newPlant = data()[row * width + column].plants;
-				newCell.AddPlant(newPlant);
-			}
-
-			if (data()[row * width + column].hasAnimal)
-			{
-				Animal newAnimal = data()[row * width + column].animal;
-				newCell.AddAnimal(newAnimal);
-			}
-
-			newWorld.push_back(newCell);
-		}
-	}
+	World newWorld = *this;
 
 	for (int cellNum = 0; cellNum < width * height; cellNum++)
 	{
+		Cell currentCell = data()[cellNum];
+
 		//Fire Spread
-		if (data()[cellNum].hasPlant)
+		if (currentCell.hasPlant)
 		{
-			if (data()[cellNum].plants.fire)
+			if (currentCell.plants.fire)
 			{
 				//Up
 				if (rand() % 100 < 80)
 					if (cellNum >= width)
 						if (data()[cellNum - width].hasPlant && data()[cellNum - width].cellType == CellType::LAND)
-							data()[cellNum - width].plants.SetFire();
+							newWorld[cellNum - width].plants.SetFire();
 
 				//Left
 				if (rand() % 100 < 80)
 					if (cellNum % width > 0)
 						if (data()[cellNum - 1].hasPlant && data()[cellNum - 1].cellType == CellType::LAND)
-							data()[cellNum - 1].plants.SetFire();
+							newWorld[cellNum - 1].plants.SetFire();
 
 				//Right
 				if (rand() % 100 < 80)
 					if (cellNum % width < width - 1)
 						if (data()[cellNum + 1].hasPlant && data()[cellNum + 1].cellType == CellType::LAND)
-							data()[cellNum + 1].plants.SetFire();
+							newWorld[cellNum + 1].plants.SetFire();
 
 				//Down
 				if (rand() % 100 < 80)
 					if (cellNum < width * (height - 1))
 						if (data()[cellNum + width].hasPlant && data()[cellNum + width].cellType == CellType::LAND)
-							data()[cellNum + width].plants.SetFire();
+							newWorld[cellNum + width].plants.SetFire();
 			}
 		}
 
 		//Plague Spread
-		if (data()[cellNum].hasAnimal)
+		if (currentCell.hasAnimal)
 		{
-			if (data()[cellNum].animal.infected)
+			if (currentCell.animal.infected)
 			{
 				//Up
 				if (rand() % 100 < 80)
 					if (cellNum >= width)
 						if (data()[cellNum - width].hasAnimal)
-							data()[cellNum - width].animal.Infect();
+							newWorld[cellNum - width].animal.Infect();
 
 				//Left
 				if (rand() % 100 < 80)
 					if (cellNum % width > 0)
 						if (data()[cellNum - 1].hasAnimal)
-							data()[cellNum - 1].animal.Infect();
+							newWorld[cellNum - 1].animal.Infect();
 
 				//Right
 				if (rand() % 100 < 80)
 					if (cellNum % width < width - 1)
 						if (data()[cellNum + 1].hasAnimal)
-							data()[cellNum + 1].animal.Infect();
+							newWorld[cellNum + 1].animal.Infect();
 
 				//Down
 				if (rand() % 100 < 80)
 					if (cellNum < width * (height - 1))
 						if (data()[cellNum + width].hasAnimal)
-							data()[cellNum + width].animal.Infect();
+							newWorld[cellNum + width].animal.Infect();
 			}
 		}
 
 		//Plant child creation
-		if (data()[cellNum].plantWantsChild && data()[cellNum].hasPlant)
+		if (currentCell.plantWantsChild && currentCell.hasPlant)
 		{
 			std::vector<int> ints{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
 			std::vector<int> cellCheckOrder;
@@ -255,9 +233,9 @@ EcoResilience::World EcoResilience::World::Update()
 					{
 						if (!data()[cellNum - width * 2].hasPlant)
 						{
-							Plant newPlant(data()[cellNum].plants.vigor * 0.1);
-							data()[cellNum - width * 2].AddPlant(newPlant);
-							data()[cellNum].plantHadChild();
+							Plant newPlant(currentCell.plants.vigor * 0.1);
+							newWorld[cellNum - width * 2].AddPlant(newPlant);
+							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
 					}
@@ -268,9 +246,9 @@ EcoResilience::World EcoResilience::World::Update()
 					{
 						if (!data()[cellNum - width - 1].hasPlant)
 						{
-							Plant newPlant(data()[cellNum].plants.vigor * 0.1);
-							data()[cellNum - width - 1].AddPlant(newPlant);
-							data()[cellNum].plantHadChild();
+							Plant newPlant(currentCell.plants.vigor * 0.1);
+							newWorld[cellNum - width - 1].AddPlant(newPlant);
+							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
 					}
@@ -281,9 +259,9 @@ EcoResilience::World EcoResilience::World::Update()
 					{
 						if (!data()[cellNum - width].hasPlant)
 						{
-							Plant newPlant(data()[cellNum].plants.vigor * 0.1);
-							data()[cellNum - width].AddPlant(newPlant);
-							data()[cellNum].plantHadChild();
+							Plant newPlant(currentCell.plants.vigor * 0.1);
+							newWorld[cellNum - width].AddPlant(newPlant);
+							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
 					}
@@ -294,9 +272,9 @@ EcoResilience::World EcoResilience::World::Update()
 					{
 						if (!data()[cellNum - width + 1].hasPlant)
 						{
-							Plant newPlant(data()[cellNum].plants.vigor * 0.1);
-							data()[cellNum - width + 1].AddPlant(newPlant);
-							data()[cellNum].plantHadChild();
+							Plant newPlant(currentCell.plants.vigor * 0.1);
+							newWorld[cellNum - width + 1].AddPlant(newPlant);
+							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
 					}
@@ -307,9 +285,9 @@ EcoResilience::World EcoResilience::World::Update()
 					{
 						if (!data()[cellNum - 2].hasPlant)
 						{
-							Plant newPlant(data()[cellNum].plants.vigor * 0.1);
-							data()[cellNum - 2].AddPlant(newPlant);
-							data()[cellNum].plantHadChild();
+							Plant newPlant(currentCell.plants.vigor * 0.1);
+							newWorld[cellNum - 2].AddPlant(newPlant);
+							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
 					}
@@ -320,9 +298,9 @@ EcoResilience::World EcoResilience::World::Update()
 					{
 						if (!data()[cellNum - 1].hasPlant)
 						{
-							Plant newPlant(data()[cellNum].plants.vigor * 0.1);
-							data()[cellNum - 1].AddPlant(newPlant);
-							data()[cellNum].plantHadChild();
+							Plant newPlant(currentCell.plants.vigor * 0.1);
+							newWorld[cellNum - 1].AddPlant(newPlant);
+							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
 					}
@@ -333,9 +311,9 @@ EcoResilience::World EcoResilience::World::Update()
 					{
 						if (!data()[cellNum + 1].hasPlant)
 						{
-							Plant newPlant(data()[cellNum].plants.vigor * 0.1);
-							data()[cellNum + 1].AddPlant(newPlant);
-							data()[cellNum].plantHadChild();
+							Plant newPlant(currentCell.plants.vigor * 0.1);
+							newWorld[cellNum + 1].AddPlant(newPlant);
+							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
 					}
@@ -346,9 +324,9 @@ EcoResilience::World EcoResilience::World::Update()
 					{
 						if (!data()[cellNum + 2].hasPlant)
 						{
-							Plant newPlant(data()[cellNum].plants.vigor * 0.1);
-							data()[cellNum + 2].AddPlant(newPlant);
-							data()[cellNum].plantHadChild();
+							Plant newPlant(currentCell.plants.vigor * 0.1);
+							newWorld[cellNum + 2].AddPlant(newPlant);
+							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
 					}
@@ -359,9 +337,9 @@ EcoResilience::World EcoResilience::World::Update()
 					{
 						if (!data()[cellNum + width - 1].hasPlant)
 						{
-							Plant newPlant(data()[cellNum].plants.vigor * 0.1);
-							data()[cellNum + width - 1].AddPlant(newPlant);
-							data()[cellNum].plantHadChild();
+							Plant newPlant(currentCell.plants.vigor * 0.1);
+							newWorld[cellNum + width - 1].AddPlant(newPlant);
+							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
 					}
@@ -372,9 +350,9 @@ EcoResilience::World EcoResilience::World::Update()
 					{
 						if (!data()[cellNum + width].hasPlant)
 						{
-							Plant newPlant(data()[cellNum].plants.vigor * 0.1);
-							data()[cellNum + width].AddPlant(newPlant);
-							data()[cellNum].plantHadChild();
+							Plant newPlant(currentCell.plants.vigor * 0.1);
+							newWorld[cellNum + width].AddPlant(newPlant);
+							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
 					}
@@ -385,9 +363,9 @@ EcoResilience::World EcoResilience::World::Update()
 					{
 						if (!data()[cellNum + width + 1].hasPlant)
 						{
-							Plant newPlant(data()[cellNum].plants.vigor * 0.1);
-							data()[cellNum + width + 1].AddPlant(newPlant);
-							data()[cellNum].plantHadChild();
+							Plant newPlant(currentCell.plants.vigor * 0.1);
+							newWorld[cellNum + width + 1].AddPlant(newPlant);
+							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
 					}
@@ -398,9 +376,9 @@ EcoResilience::World EcoResilience::World::Update()
 					{
 						if (!data()[cellNum + width * 2].hasPlant)
 						{
-							Plant newPlant(data()[cellNum].plants.vigor * 0.1);
-							data()[cellNum + width * 2].AddPlant(newPlant);
-							data()[cellNum].plantHadChild();
+							Plant newPlant(currentCell.plants.vigor * 0.1);
+							newWorld[cellNum + width * 2].AddPlant(newPlant);
+							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
 					}
@@ -409,10 +387,10 @@ EcoResilience::World EcoResilience::World::Update()
 			}
 		}
 
-		data()[cellNum].ResetChildCount();
+		currentCell.ResetChildCount();
 
 		//Animal Movement
-		if (data()[cellNum].animalWantsMove && data()[cellNum].hasAnimal)
+		if (currentCell.animalWantsMove && currentCell.hasAnimal)
 		{
 			std::vector<std::pair<float, int>> masses;
 			masses.resize(4);
@@ -462,10 +440,10 @@ EcoResilience::World EcoResilience::World::Update()
 				case 1://Up 1
 					if (cellNum >= width)
 					{
-						if (!data()[cellNum - width].hasAnimal && data()[cellNum - width].cellType == CellType::LAND)
+						if (!newWorld[cellNum - width].hasAnimal && data()[cellNum - width].cellType == CellType::LAND)
 						{
-							data()[cellNum - width].AddAnimal(data()[cellNum].animal);
-							data()[cellNum].animalMoved();
+							newWorld[cellNum - width].AddAnimal(currentCell.animal);
+							newWorld[cellNum].animalMoved();
 							moved = true;
 						}
 					}
@@ -475,10 +453,10 @@ EcoResilience::World EcoResilience::World::Update()
 				case 2://Left 1
 					if (cellNum % width > 0)
 					{
-						if (!data()[cellNum - 1].hasAnimal && data()[cellNum - 1].cellType == CellType::LAND)
+						if (!newWorld[cellNum - 1].hasAnimal && data()[cellNum - 1].cellType == CellType::LAND)
 						{
-							data()[cellNum - 1].AddAnimal(data()[cellNum].animal);
-							data()[cellNum].animalMoved();
+							newWorld[cellNum - 1].AddAnimal(currentCell.animal);
+							newWorld[cellNum].animalMoved();
 							moved = true;
 						}
 					}
@@ -488,10 +466,10 @@ EcoResilience::World EcoResilience::World::Update()
 				case 3://Right 1
 					if (cellNum % width < width - 1)
 					{
-						if (!data()[cellNum + 1].hasAnimal && data()[cellNum + 1].cellType == CellType::LAND)
+						if (!newWorld[cellNum + 1].hasAnimal && data()[cellNum + 1].cellType == CellType::LAND)
 						{
-							data()[cellNum + 1].AddAnimal(data()[cellNum].animal);
-							data()[cellNum].animalMoved();
+							newWorld[cellNum + 1].AddAnimal(currentCell.animal);
+							newWorld[cellNum].animalMoved();
 							moved = true;
 						}
 					}
@@ -501,10 +479,10 @@ EcoResilience::World EcoResilience::World::Update()
 				case 4://Down 1
 					if (cellNum < width * (height - 1))
 					{
-						if (!data()[cellNum + width].hasAnimal && data()[cellNum + width].cellType == CellType::LAND)
+						if (!newWorld[cellNum + width].hasAnimal && data()[cellNum + width].cellType == CellType::LAND)
 						{
-							data()[cellNum + width].AddAnimal(data()[cellNum].animal);
-							data()[cellNum].animalMoved();
+							newWorld[cellNum + width].AddAnimal(currentCell.animal);
+							newWorld[cellNum].animalMoved();
 							moved = true;
 						}
 					}
@@ -517,7 +495,7 @@ EcoResilience::World EcoResilience::World::Update()
 		}
 
 		//Predator Eating
-		if(data()[cellNum].predatorWantsFood && data()[cellNum].hasAnimal)
+		if(currentCell.predatorWantsFood && currentCell.hasAnimal)
 		{
 			bool preyPresence[4]{ false };
 			int preyNum = 0;
@@ -563,44 +541,39 @@ EcoResilience::World EcoResilience::World::Update()
 				switch(preyIndex)
 				{
 				case 0:
-					data()[cellNum].feedPredator(data()[cellNum - width].animal.mass);
-					data()[cellNum - width].killPrey();
+					newWorld[cellNum].feedPredator(data()[cellNum - width].animal.mass);
+					newWorld[cellNum - width].killPrey();
 					break;
 
 				case 1:
-					data()[cellNum].feedPredator(data()[cellNum - 1].animal.mass);
-					data()[cellNum - 1].killPrey();
+					newWorld[cellNum].feedPredator(data()[cellNum - 1].animal.mass);
+					newWorld[cellNum - 1].killPrey();
 					break;
 
 				case 2:
-					data()[cellNum].feedPredator(data()[cellNum + 1].animal.mass);
-					data()[cellNum + 1].killPrey();
+					newWorld[cellNum].feedPredator(data()[cellNum + 1].animal.mass);
+					newWorld[cellNum + 1].killPrey();
 					break;
 
 				case 3:
-					data()[cellNum].feedPredator(data()[cellNum + width].animal.mass);
-					data()[cellNum + width].killPrey();
+					newWorld[cellNum].feedPredator(data()[cellNum + width].animal.mass);
+					newWorld[cellNum + width].killPrey();
 					break;
 				}
 			}
 		}
 
-		data()[cellNum].Update();
-	}
-
-	//Animal child creation
-	for(int cellNum = 0; cellNum < width * height; cellNum++)
-	{
-		if (data()[cellNum].animalWantsChild && data()[cellNum].hasAnimal)
+		//Animal Reproduction
+		if (currentCell.animalWantsChild && currentCell.hasAnimal)
 		{
-			PopulationType childType = data()[cellNum].animal.type;
+			PopulationType childType = currentCell.animal.type;
 
 			bool childBearers[4]{ false };
 			int bearerNum = 0;
 
 			if (cellNum >= width)
 				if (data()[cellNum - width].animalWantsChild && data()[cellNum - width].hasAnimal)
-					if(data()[cellNum - width].animal.type == childType)
+					if (data()[cellNum - width].animal.type == childType)
 						childBearers[0] = true;
 
 			if (cellNum % width > 0)
@@ -622,12 +595,12 @@ EcoResilience::World EcoResilience::World::Update()
 				if (cell)
 					bearerNum++;
 
-			if(bearerNum > 0)
+			if (bearerNum > 0)
 			{
 				int bearerDir = rand() % bearerNum + 1;
 
 				int bearerIndex = -1;
-				while(bearerDir > 0)
+				while (bearerDir > 0)
 				{
 					bearerIndex++;
 					if (childBearers[bearerIndex])
@@ -638,28 +611,28 @@ EcoResilience::World EcoResilience::World::Update()
 
 				bool bearer = rand() % 2;
 
-				switch(bearerIndex)
+				switch (bearerIndex)
 				{
 				case 0://Up
-					if(bearer)//Children spawn next to this cell
+					if (bearer)//Children spawn next to this cell
 					{
 						if (cellNum % width > 0)
-							if(!data()[cellNum - 1].hasAnimal && data()[cellNum - 1].cellType == CellType::LAND)
-								data()[cellNum - 1].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum - 1].hasAnimal && data()[cellNum - 1].cellType == CellType::LAND)
+								newWorld[cellNum - 1].AddAnimal(Animal(childType));
 
 						if (cellNum % width < width - 1)
-							if (!data()[cellNum + 1].hasAnimal && data()[cellNum + 1].cellType == CellType::LAND)
-								data()[cellNum + 1].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum + 1].hasAnimal && data()[cellNum + 1].cellType == CellType::LAND)
+								newWorld[cellNum + 1].AddAnimal(Animal(childType));
 					}
 					else
 					{
 						if (cellNum % width > 0)
-							if (!data()[cellNum - width - 1].hasAnimal && data()[cellNum - width - 1].cellType == CellType::LAND)
-								data()[cellNum - width - 1].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum - width - 1].hasAnimal && data()[cellNum - width - 1].cellType == CellType::LAND)
+								newWorld[cellNum - width - 1].AddAnimal(Animal(childType));
 
 						if (cellNum % width < width - 1)
-							if (!data()[cellNum - width + 1].hasAnimal && data()[cellNum - width + 1].cellType == CellType::LAND)
-								data()[cellNum - width + 1].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum - width + 1].hasAnimal && data()[cellNum - width + 1].cellType == CellType::LAND)
+								newWorld[cellNum - width + 1].AddAnimal(Animal(childType));
 					}
 
 					break;
@@ -668,22 +641,22 @@ EcoResilience::World EcoResilience::World::Update()
 					if (bearer)//Children spawn next to this cell
 					{
 						if (cellNum >= width)
-							if (!data()[cellNum - width].hasAnimal && data()[cellNum - width].cellType == CellType::LAND)
-								data()[cellNum - width].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum - width].hasAnimal && data()[cellNum - width].cellType == CellType::LAND)
+								newWorld[cellNum - width].AddAnimal(Animal(childType));
 
 						if (cellNum + width < width * (height - 1))
-							if (!data()[cellNum + width].hasAnimal && data()[cellNum + width].cellType == CellType::LAND)
-								data()[cellNum + width].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum + width].hasAnimal && data()[cellNum + width].cellType == CellType::LAND)
+								newWorld[cellNum + width].AddAnimal(Animal(childType));
 					}
 					else
 					{
 						if (cellNum >= width)
-							if (!data()[cellNum - 1 - width].hasAnimal && data()[cellNum - 1 - width].cellType == CellType::LAND)
-								data()[cellNum - 1 - width].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum - 1 - width].hasAnimal && data()[cellNum - 1 - width].cellType == CellType::LAND)
+								newWorld[cellNum - 1 - width].AddAnimal(Animal(childType));
 
 						if (cellNum + width < width * (height - 1))
-							if (!data()[cellNum - 1 + width].hasAnimal && data()[cellNum - 1 + width].cellType == CellType::LAND)
-								data()[cellNum - 1 + width].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum - 1 + width].hasAnimal && data()[cellNum - 1 + width].cellType == CellType::LAND)
+								newWorld[cellNum - 1 + width].AddAnimal(Animal(childType));
 					}
 
 					break;
@@ -692,22 +665,22 @@ EcoResilience::World EcoResilience::World::Update()
 					if (bearer)//Children spawn next to this cell
 					{
 						if (cellNum >= width)
-							if (!data()[cellNum - width].hasAnimal && data()[cellNum - width].cellType == CellType::LAND)
-								data()[cellNum - width].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum - width].hasAnimal && data()[cellNum - width].cellType == CellType::LAND)
+								newWorld[cellNum - width].AddAnimal(Animal(childType));
 
 						if (cellNum + width < width * (height - 1))
-							if (!data()[cellNum + width].hasAnimal && data()[cellNum + width].cellType == CellType::LAND)
-								data()[cellNum + width].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum + width].hasAnimal && data()[cellNum + width].cellType == CellType::LAND)
+								newWorld[cellNum + width].AddAnimal(Animal(childType));
 					}
 					else
 					{
 						if (cellNum >= width)
-							if (!data()[cellNum + 1 - width].hasAnimal && data()[cellNum + 1 - width].cellType == CellType::LAND)
-								data()[cellNum + 1 - width].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum + 1 - width].hasAnimal && data()[cellNum + 1 - width].cellType == CellType::LAND)
+								newWorld[cellNum + 1 - width].AddAnimal(Animal(childType));
 
 						if (cellNum + width < width * (height - 1))
-							if (!data()[cellNum + 1 + width].hasAnimal && data()[cellNum + 1 + width].cellType == CellType::LAND)
-								data()[cellNum + 1 + width].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum + 1 + width].hasAnimal && data()[cellNum + 1 + width].cellType == CellType::LAND)
+								newWorld[cellNum + 1 + width].AddAnimal(Animal(childType));
 					}
 
 					break;
@@ -716,30 +689,32 @@ EcoResilience::World EcoResilience::World::Update()
 					if (bearer)//Children spawn next to this cell
 					{
 						if (cellNum % width > 0)
-							if (!data()[cellNum - 1].hasAnimal && data()[cellNum - 1].cellType == CellType::LAND)
-								data()[cellNum - 1].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum - 1].hasAnimal && data()[cellNum - 1].cellType == CellType::LAND)
+								newWorld[cellNum - 1].AddAnimal(Animal(childType));
 
 						if (cellNum % width < width - 1)
-							if (!data()[cellNum + 1].hasAnimal && data()[cellNum + 1].cellType == CellType::LAND)
-								data()[cellNum + 1].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum + 1].hasAnimal && data()[cellNum + 1].cellType == CellType::LAND)
+								newWorld[cellNum + 1].AddAnimal(Animal(childType));
 					}
 					else
 					{
 						if (cellNum % width > 0)
-							if (!data()[cellNum + width - 1].hasAnimal && data()[cellNum + width - 1].cellType == CellType::LAND)
-								data()[cellNum + width - 1].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum + width - 1].hasAnimal && data()[cellNum + width - 1].cellType == CellType::LAND)
+								newWorld[cellNum + width - 1].AddAnimal(Animal(childType));
 
 						if (cellNum % width < width - 1)
-							if (!data()[cellNum + width + 1].hasAnimal && data()[cellNum + width + 1].cellType == CellType::LAND)
-								data()[cellNum + width + 1].AddAnimal(Animal(childType));
+							if (!newWorld[cellNum + width + 1].hasAnimal && data()[cellNum + width + 1].cellType == CellType::LAND)
+								newWorld[cellNum + width + 1].AddAnimal(Animal(childType));
 					}
 
 					break;
 				}
 
-				data()[cellNum].animalHadChild();
+				newWorld[cellNum].animalHadChild();
 			}
 		}
+
+		newWorld[cellNum].Update();
 	}
 
 	return newWorld;
