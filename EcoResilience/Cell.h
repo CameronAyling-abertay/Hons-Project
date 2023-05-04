@@ -13,17 +13,19 @@ namespace EcoResilience
 
 		//Unique properties
 		float waterLevel;
-		
-		int cellRow;
-		int cellColumn;
 
 		float maxPlantMass;
 
 		bool fire;
 
 	public:
-		Plant* plants;
-		Animal* animal;
+		int cellRow;
+		int cellColumn;
+
+		bool hasPlant;
+		Plant plants;
+		bool hasAnimal;
+		Animal animal;
 
 		CellType cellType;
 
@@ -31,17 +33,17 @@ namespace EcoResilience
 		int floodCounter;
 
 		bool plantWantsChild;
-		void plantHadChild() { plants->Reproduce(); plantWantsChild = false; }
+		void plantHadChild() { plants.Reproduce(); plantWantsChild = false; }
 
 		bool animalWantsMove;
-		void animalMoved() { animal = NULL; }
+		void animalMoved() { hasAnimal = false; }
 
 		bool animalWantsChild;
-		void animalHadChild() { animal->Reproduce(); animalWantsChild = false; }
+		void animalHadChild() { animal.Reproduce(); animalWantsChild = false; }
 
 		bool predatorWantsFood;
-		void feedPredator(float biomass) { animal->Feed(biomass); predatorWantsFood = false; }
-		void killPrey() { delete animal; animal = 0; }
+		void feedPredator(float biomass) { animal.Feed(biomass); predatorWantsFood = false; }
+		void killPrey() { hasAnimal = false; }
 
 		Cell(int row, int column, float maxPlantMass);
 		~Cell() {};

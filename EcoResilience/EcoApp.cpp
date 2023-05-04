@@ -4,15 +4,14 @@ void EcoApp::Update(float dt)
 {
 	timebank += dt;
 
-	world->Update();
+	world.Update();
 }
 
 void EcoApp::GenerateWorld(EcoResilience::GenerationType genType, int worldWidth, int worldHeight, float maxCellPlantMass)
 {
 	worldGenType = genType;
-
-	world = new EcoResilience::World();
-	world->Generate(worldWidth, worldHeight, genType, maxCellPlantMass);
+	
+	world.Generate(worldWidth, worldHeight, genType, maxCellPlantMass);
 	width = worldWidth;
 	height = worldHeight;
 
@@ -25,14 +24,14 @@ void EcoApp::Rain()
 {
 	float water = 0;
 
-	for (auto cell : *world)
-		water += cell->GetWater();
+	for (auto cell : world)
+		water += cell.GetWater();
 
 	if (water < width * height * 0.1f)
 		drought = false;
 
 	if (!drought)
-		world->Rain();
+		world.Rain();
 }
 
 void EcoApp::Flood()
@@ -41,10 +40,10 @@ void EcoApp::Flood()
 	{
 		float water = 0;
 
-		for (auto cell : *world)
+		for (auto cell : world)
 		{
-			water += cell->GetWater();
-			cell->flooded = true;
+			water += cell.GetWater();
+			cell.flooded = true;
 		}
 
 		if (water < width * height * 0.75f)
@@ -57,24 +56,24 @@ void EcoApp::Flood()
 void EcoApp::Plague()
 {
 	int population = 0;
-	for(auto cell : *world)
+	for(auto cell : world)
 	{
-		if (cell->animal)
+		if (cell.hasAnimal)
 			population++;
 	}
 
 	int zero = rand() % population;
 
-	for(auto cell : *world)
+	for(auto cell : world)
 	{
-		if(cell->animal)
+		if(cell.hasAnimal)
 		{
 			zero--;
 		}
 
 		if(zero == 0)
 		{
-			cell->animal->Infect();
+			cell.animal.Infect();
 			break;
 		}
 	}
@@ -88,9 +87,9 @@ void EcoApp::Fire()
 	{
 		int cellStart = rand() % (width * height);
 
-		if((*world)[cellStart]->plants && (*world)[cellStart]->cellType == EcoResilience::CellType::LAND)
+		if((world)[cellStart].hasPlant && (world)[cellStart].cellType == EcoResilience::CellType::LAND)
 		{
-			(*world)[cellStart]->plants->SetFire();
+			(world)[cellStart].plants.SetFire();
 			started = true;
 		}
 	}

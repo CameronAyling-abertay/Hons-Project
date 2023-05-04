@@ -6,7 +6,7 @@ namespace EcoResilience
 {
 	enum class GenerationType { RANDOM, PERLIN };
 
-	class World : public std::vector<Cell*>
+	class World : public std::vector<Cell>
 	{
 	private:
 		int width;
@@ -24,8 +24,7 @@ namespace EcoResilience
 		~World();
 
 		void Generate(int width, int height, GenerationType type, float maxCellPlantMass);
-		void Clear();
-		void Update();
+		World Update();
 
 		int GetWidth() { return width; };
 		int GetHeight() { return height; };

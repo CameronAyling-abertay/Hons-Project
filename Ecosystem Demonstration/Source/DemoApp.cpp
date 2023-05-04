@@ -81,14 +81,14 @@ void DemoApp::update(sf::Time dt)
     float plantMass = 0;
     int prey = 0;
     int predator = 0;
-    for(auto cell : (*ecology.GetWorld()))
+    for(auto cell : ecology.GetWorld())
     {
-        water += cell->GetWater();
-        if(cell->plants)
-			plantMass += cell->plants->mass;
+        water += cell.GetWater();
+        if(cell.hasPlant)
+			plantMass += cell.plants.mass;
 
-        prey += cell->GetPopulation(EcoResilience::PopulationType::PREY);
-        predator += cell->GetPopulation(EcoResilience::PopulationType::PREDATOR);
+        prey += cell.GetPopulation(EcoResilience::PopulationType::PREY);
+        predator += cell.GetPopulation(EcoResilience::PopulationType::PREDATOR);
     }
 
     //Create ImGui window
@@ -180,11 +180,11 @@ void DemoApp::render()
     const sf::Vector2f screenCentre = window->getView().getCenter();
 
     //Render anything needed
-    for (int cellNum = 0; cellNum < ecology.GetWorld()->size(); cellNum++)
+    for (EcoResilience::Cell currentCell : ecology.GetWorld())
     {
         sf::Vector2f pos;
 
-        const sf::Vector2f cellPos(cellNum % ecology.GetWorld()->GetWidth() * sideSize - (ecology.height / 2 * sideSize), cellNum / ecology.GetWorld()->GetHeight() * sideSize - (ecology.width / 2 * sideSize));
+        const sf::Vector2f cellPos(currentCell.cellColumn * sideSize - (ecology.height / 2 * sideSize), currentCell.cellRow * sideSize - (ecology.width / 2 * sideSize));
         const sf::Vector2f worldPos(window->getSize().x * 0.25f, window->getSize().y * 0.25f);
 
         sf::Color repColor(0, 0, 0);
@@ -197,23 +197,23 @@ void DemoApp::render()
             cellRep.setPosition(screenCentre + pos);
 
             //Plague
-            if ((*ecology.GetWorld())[cellNum]->animal)
+            if (currentCell.hasAnimal)
             {
-                if ((*ecology.GetWorld())[cellNum]->animal->infected)
+                if (currentCell.animal.infected)
                 {
-                    repColor.r = (*ecology.GetWorld())[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) ? 128 : 238;
-                    repColor.g = (*ecology.GetWorld())[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) ? 0 : 130;
-                    repColor.b = (*ecology.GetWorld())[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) ? 128 : 238;
+                    repColor.r = currentCell.GetPopulation(EcoResilience::PopulationType::PREY) ? 128 : 238;
+                    repColor.g = currentCell.GetPopulation(EcoResilience::PopulationType::PREY) ? 0 : 130;
+                    repColor.b = currentCell.GetPopulation(EcoResilience::PopulationType::PREY) ? 128 : 238;
                 }
             }
 
             //Urban Development
-            if ((*ecology.GetWorld())[cellNum]->cellType == EcoResilience::CellType::URBANISED)
+            if (currentCell.cellType == EcoResilience::CellType::URBANISED)
                 repColor = sf::Color(100, 100, 100);
 
             //Fire
-            if ((*ecology.GetWorld())[cellNum]->plants)
-                if ((*ecology.GetWorld())[cellNum]->plants->fire)
+            if (currentCell.hasPlant)
+                if (currentCell.plants.fire)
                     repColor = sf::Color(204, 85, 0);
 
             cellRep.setFillColor(repColor);
@@ -225,8 +225,8 @@ void DemoApp::render()
             cellRep.setPosition(screenCentre + pos);
 
             float mass = 0;
-            if ((*ecology.GetWorld())[cellNum]->plants)
-                mass = (*ecology.GetWorld())[cellNum]->plants->mass;
+            if (currentCell.hasPlant)
+                mass = currentCell.plants.mass;
 
             repColor = sf::Color(86, 125 + mass * 60.f / DEFAULT_MASS, 70);
 
@@ -239,7 +239,7 @@ void DemoApp::render()
             pos.y = cellPos.y + worldPos.y;
             cellRep.setPosition(screenCentre + pos);
 
-            int waterNum = float((*ecology.GetWorld())[cellNum]->GetWater() * 255.f);
+            int waterNum = float(currentCell.GetWater() * 255.f);
 
             repColor = sf::Color(0, 0, waterNum);
 
@@ -252,9 +252,9 @@ void DemoApp::render()
             pos.y = cellPos.y + worldPos.y;
             cellRep.setPosition(screenCentre + pos);
 
-            int red = (*ecology.GetWorld())[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) * 255;
-            int green = (*ecology.GetWorld())[cellNum]->GetPopulation(EcoResilience::PopulationType::PREDATOR) * 255;
-            int blue = (*ecology.GetWorld())[cellNum]->GetPopulation(EcoResilience::PopulationType::PREDATOR) * 255;
+            int red = currentCell.GetPopulation(EcoResilience::PopulationType::PREY) * 255;
+            int green = currentCell.GetPopulation(EcoResilience::PopulationType::PREDATOR) * 255;
+            int blue = currentCell.GetPopulation(EcoResilience::PopulationType::PREDATOR) * 255;
 
             repColor = sf::Color(red, green, blue);
 
@@ -268,41 +268,41 @@ void DemoApp::render()
             cellRep.setPosition(screenCentre + cellPos);
 
             float mass = 0;
-            if ((*ecology.GetWorld())[cellNum]->plants)
-                mass = (*ecology.GetWorld())[cellNum]->plants->mass;
+            if (currentCell.hasPlant)
+                mass = currentCell.plants.mass;
 
             sf::Color baseColour(209 - (209 - 86) * mass / DEFAULT_MASS, 189 - (189 - 125) * mass / DEFAULT_MASS, 100 - (100 - 70) * mass / DEFAULT_MASS);
 
             //Water
-            int waterNum = float((*ecology.GetWorld())[cellNum]->GetWater() * 255.f);
+            int waterNum = float(currentCell.GetWater() * 255.f);
             sf::Color waterColour(0, 0, waterNum);
 
             //Animals
             sf::Color animalColour(
-                (*ecology.GetWorld())[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) == 1 ? 255 : 0,
-                (*ecology.GetWorld())[cellNum]->GetPopulation(EcoResilience::PopulationType::PREDATOR) == 1 ? 255 : 0,
-                (*ecology.GetWorld())[cellNum]->GetPopulation(EcoResilience::PopulationType::PREDATOR) == 1 ? 255 : 0
+                currentCell.GetPopulation(EcoResilience::PopulationType::PREY) == 1 ? 255 : 0,
+                currentCell.GetPopulation(EcoResilience::PopulationType::PREDATOR) == 1 ? 255 : 0,
+                currentCell.GetPopulation(EcoResilience::PopulationType::PREDATOR) == 1 ? 255 : 0
             );
 
-            if ((*ecology.GetWorld())[cellNum]->animal)
+            if (currentCell.hasAnimal)
             {
-                if ((*ecology.GetWorld())[cellNum]->animal->infected)
+                if (currentCell.animal.infected)
                 {
-                    animalColour.r = (*ecology.GetWorld())[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) ? 128 : 238;
-                    animalColour.g = (*ecology.GetWorld())[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) ? 0 : 130;
-                    animalColour.b = (*ecology.GetWorld())[cellNum]->GetPopulation(EcoResilience::PopulationType::PREY) ? 128 : 238;
+                    animalColour.r = currentCell.GetPopulation(EcoResilience::PopulationType::PREY) ? 128 : 238;
+                    animalColour.g = currentCell.GetPopulation(EcoResilience::PopulationType::PREY) ? 0 : 130;
+                    animalColour.b = currentCell.GetPopulation(EcoResilience::PopulationType::PREY) ? 128 : 238;
                 }
             }
 
-            if ((*ecology.GetWorld())[cellNum]->animal)
+            if (currentCell.hasAnimal)
                 baseColour = animalColour;
 
             //Cell type
-            repColor = (*ecology.GetWorld())[cellNum]->cellType == EcoResilience::CellType::WATER ? waterColour : baseColour;
-            repColor = (*ecology.GetWorld())[cellNum]->cellType == EcoResilience::CellType::URBANISED ? sf::Color(100, 100, 100) : repColor;
+            repColor = currentCell.cellType == EcoResilience::CellType::WATER ? waterColour : baseColour;
+            repColor = currentCell.cellType == EcoResilience::CellType::URBANISED ? sf::Color(100, 100, 100) : repColor;
 
-            if ((*ecology.GetWorld())[cellNum]->plants)
-                if ((*ecology.GetWorld())[cellNum]->plants->fire)
+            if (currentCell.hasPlant)
+                if (currentCell.plants.fire)
                     repColor = sf::Color(204, 85, 0);
 
             cellRep.setFillColor(repColor);

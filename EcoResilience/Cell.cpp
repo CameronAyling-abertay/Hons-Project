@@ -8,23 +8,25 @@ EcoResilience::Cell::Cell(int row, int column, float plantMass) :
 	plantWantsChild(false),
 	animalWantsMove(false),
 	maxPlantMass(plantMass),
-	flooded(false)
+	flooded(false),
+	hasPlant(false),
+	hasAnimal(false)
 {
 }
 
 int EcoResilience::Cell::GetPopulation(PopulationType type)
 {
-	if (animal)
+	if (hasAnimal)
 	{
 		switch (type)
 		{
 		case PopulationType::PREY:
-			if (animal->type == PopulationType::PREY)
+			if (animal.type == PopulationType::PREY)
 				return 1;
 			return 0;
 
 		case PopulationType::PREDATOR:
-			if (animal->type == PopulationType::PREDATOR)
+			if (animal.type == PopulationType::PREDATOR)
 				return 1;
 			return 0;
 		}
@@ -34,14 +36,14 @@ int EcoResilience::Cell::GetPopulation(PopulationType type)
 
 void EcoResilience::Cell::AddPlant(Plant plant)
 {
-	plants = new Plant();
-	*plants = plant;
+	plants = plant;
+	hasPlant = true;
 }
 
 void EcoResilience::Cell::AddAnimal(Animal fauna)
 {
-	animal = new Animal(PopulationType::PREY);
-	*animal = fauna;
+	animal = fauna;
+	hasAnimal = true;
 }
 
 void EcoResilience::Cell::SetWater(float newWaterLevel)
@@ -52,9 +54,9 @@ void EcoResilience::Cell::SetWater(float newWaterLevel)
 		if (waterLevel * 255.f > 150.f)
 		{
 			cellType = CellType::WATER;
-			if (plants)
-				if (plants->fire)
-					plants->Extinguish();
+			if (hasPlant)
+				if (plants.fire)
+					plants.Extinguish();
 		}
 		else
 			cellType = CellType::LAND;
@@ -73,37 +75,32 @@ void EcoResilience::Cell::Update()
 
 	if (cellType == CellType::WATER)
 	{
-		if (animal)
-		{
-			delete animal;
-			animal = 0;
-		}
+		hasAnimal = false;
 	}
 	else if (cellType == CellType::LAND)
 	{
-		if (plants)
+		if (hasPlant)
 		{
-			plants->Update();
+			plants.Update();
 
-			if (plants->wantsFood)
+			if (plants.wantsFood)
 			{
 				float mod = -0.5 + rand() % 1000 / 1000.f;
 
-				if (waterLevel - plants->stomachMax * (0.02 + 0.02 * mod) > 0)
+				if (waterLevel - plants.stomachMax * (0.02 + 0.02 * mod) > 0)
 				{
-					plants->Feed(plants->stomachMax * (0.6 + 0.2 * mod));
-					SetWater(waterLevel - plants->stomachMax * (0.02 + 0.02 * mod));
+					plants.Feed(plants.stomachMax * (0.6 + 0.2 * mod));
+					SetWater(waterLevel - plants.stomachMax * (0.02 + 0.02 * mod));
 				}
 			}
 
-			plantWantsChild = plants->wantsChild;
+			plantWantsChild = plants.wantsChild;
 
-			plants->mass = std::min(maxPlantMass, plants->mass);
+			plants.mass = std::min(maxPlantMass, plants.mass);
 
-			if (plants->wantsDeath)
+			if (plants.wantsDeath)
 			{
-				delete plants;
-				plants = 0;
+				hasPlant = false;
 			}
 		}
 		else
@@ -111,42 +108,41 @@ void EcoResilience::Cell::Update()
 			plantWantsChild = false;
 		}
 
-		if (animal)
+		if (hasAnimal)
 		{
-			if (animal->type == PopulationType::PREY)
+			if (animal.type == PopulationType::PREY)
 			{
-				if (plants)
+				if (hasPlant)
 				{
-					if (plants->mass <= 0.2 * maxPlantMass)
-						animal->Survey(false);
+					if (plants.mass <= 0.2 * maxPlantMass)
+						animal.Survey(false);
 					else
-						animal->Survey(true);
+						animal.Survey(true);
 				}
 				else
-					animal->Survey(false);
+					animal.Survey(false);
 			}
 
 			//Update the animal
-			animal->Update();
+			animal.Update();
 
-			if (animal->wantsEat)
+			if (animal.wantsEat)
 			{
-				if (animal->type == PopulationType::PREY)
+				if (animal.type == PopulationType::PREY)
 				{
-					if (plants)
+					if (hasPlant)
 					{
-						float neededFood = (animal->stomachMax - animal->stomach) * 0.4f;
-						if (plants->mass >= neededFood * 0.4f)
+						float neededFood = (animal.stomachMax - animal.stomach) * 0.4f;
+						if (plants.mass >= neededFood * 0.4f)
 						{
-							plants->mass -= neededFood * 0.4f;
-							animal->Feed(neededFood);
+							plants.mass -= neededFood * 0.4f;
+							animal.Feed(neededFood);
 						}
 						else
 						{
-							animal->Feed(plants->mass);
+							animal.Feed(plants.mass);
 
-							delete plants;
-							plants = 0;
+							hasPlant = false;
 						}
 					}
 				}
@@ -154,13 +150,12 @@ void EcoResilience::Cell::Update()
 					predatorWantsFood = true;
 			}
 
-			animalWantsMove = animal->wantsMove;
-			animalWantsChild = animal->wantsChild;
+			animalWantsMove = animal.wantsMove;
+			animalWantsChild = animal.wantsChild;
 
-			if (animal->wantsDeath)
+			if (animal.wantsDeath)
 			{
-				delete animal;
-				animal = 0;
+				hasAnimal = false;
 			}
 		}
 		else
@@ -174,10 +169,8 @@ void EcoResilience::Cell::Update()
 	{
 		waterLevel = 0;
 
-		delete plants;
-		plants = 0;
+		hasAnimal = false;
 
-		delete animal;
-		animal = 0;
+		hasPlant = false;
 	}
 }

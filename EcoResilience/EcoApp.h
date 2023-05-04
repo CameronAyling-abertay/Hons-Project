@@ -9,8 +9,8 @@ class EcoApp
 public:
 	int width;
 	int height;
-	EcoResilience::World* world;
-	EcoResilience::World* backWorld;
+	EcoResilience::World world;
+	EcoResilience::World backWorld;
 	EcoResilience::GenerationType worldGenType;
 
 	float timebank;
@@ -21,11 +21,11 @@ public:
 	void GenerateWorld(EcoResilience::GenerationType genType = EcoResilience::GenerationType::RANDOM, int worldWidth = DEFAULT_SIDE, int worldHeight = DEFAULT_SIDE, float maxCellPlantMass = DEFAULT_MASS);
 
 	void Rain();
-	void Urbanise() { world->UrbanDevelop(); }
+	void Urbanise() { world.UrbanDevelop(); }
 	void Flood();
 	void Drought() { drought = true; };
 	void Plague();
 	void Fire();
 
-	EcoResilience::World* GetWorld() { return world; };
+	EcoResilience::World GetWorld() { return world; };
 };

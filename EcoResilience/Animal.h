@@ -16,7 +16,7 @@ namespace EcoResilience
 		float vigor;
 		float speed;
 
-		Animal(PopulationType species);
+		Animal(PopulationType species = PopulationType::PREY);
 		~Animal() {};
 
 		PopulationType type;
