@@ -1,6 +1,2 @@
-﻿  Cell.cpp
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(68,23): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(90,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(94,38): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-\\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\EcoResilience\Cell.cpp(95,26): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  EcoResilience.vcxproj -> \\StuHomeOdd\HomeDrive7$\1900067\GitHub\Hons-Project\Ecosystem Demonstration\x64\Debug\EcoResilience.lib
+﻿  EcoApp.cpp
+  EcoResilience.vcxproj -> C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\x64\Debug\EcoResilience.lib

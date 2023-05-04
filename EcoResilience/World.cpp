@@ -139,13 +139,10 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 
 void EcoResilience::World::Clear()
 {
-	for (int row = 0; row < height; row++)
+	while (!empty())
 	{
-		for (int column = 0; column < width; column++)
-		{
-			delete back();
-			pop_back();
-		}
+		delete back();
+		pop_back();
 	}
 }
 
