@@ -11,8 +11,7 @@ namespace EcoResilience
 	private:
 		int width;
 		int height;
-
-		float sunTime;
+		
 		float maxCellPlantMass;
 
 		GenerationType genType;

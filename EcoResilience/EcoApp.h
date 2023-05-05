@@ -10,7 +10,6 @@ public:
 	int width;
 	int height;
 	EcoResilience::World world;
-	EcoResilience::World backWorld;
 	EcoResilience::GenerationType worldGenType;
 
 	float timebank;

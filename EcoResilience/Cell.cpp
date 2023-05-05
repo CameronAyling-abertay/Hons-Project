@@ -76,6 +76,7 @@ void EcoResilience::Cell::Update()
 	if (cellType == CellType::WATER)
 	{
 		hasAnimal = false;
+		hasPlant = false;
 	}
 	else if (cellType == CellType::LAND)
 	{
@@ -110,19 +111,6 @@ void EcoResilience::Cell::Update()
 
 		if (hasAnimal)
 		{
-			if (animal.type == PopulationType::PREY)
-			{
-				if (hasPlant)
-				{
-					if (plants.mass <= 0.2 * maxPlantMass)
-						animal.Survey(false);
-					else
-						animal.Survey(true);
-				}
-				else
-					animal.Survey(false);
-			}
-
 			//Update the animal
 			animal.Update();
 

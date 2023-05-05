@@ -6,8 +6,7 @@
 
 EcoResilience::World::World() :
 	width(0),
-	height(0),
-	sunTime(0)
+	height(0)
 {}
 
 EcoResilience::World::~World()
@@ -142,7 +141,7 @@ EcoResilience::World EcoResilience::World::Update()
 
 	for (int cellNum = 0; cellNum < width * height; cellNum++)
 	{
-		Cell currentCell = data()[cellNum];
+		Cell currentCell = at(cellNum);
 
 		//Fire Spread
 		if (currentCell.hasPlant)
@@ -387,58 +386,508 @@ EcoResilience::World EcoResilience::World::Update()
 			}
 		}
 
-		currentCell.ResetChildCount();
-
 		//Animal Movement
 		if (currentCell.animalWantsMove && currentCell.hasAnimal)
 		{
-			std::vector<std::pair<float, int>> masses;
-			masses.resize(4);
-			for (int i = 0; i < 4; i++)
-				masses[i] = std::pair<float, int>(0, i + 1);
+			//Weigh directions
+			//Form weight directory
+			std::vector<std::pair<float, int>> weights;
+			for (int i = 0; i < 5; i++)
+				weights.push_back(std::pair<float, int>(0, i));
 
-			if (cellNum >= width)
-				if (data()[cellNum - width].hasPlant)
-					masses[0].first = data()[cellNum - width].plants.mass;
-
-			if (cellNum % width > 0)
-				if (data()[cellNum - 1].hasPlant)
-					masses[1].first = data()[cellNum - 1].plants.mass;
-
-			if (cellNum % width < width - 1)
-				if (data()[cellNum + 1].hasPlant)
-					masses[2].first = data()[cellNum + 1].plants.mass;
-
-			if (cellNum < width * (height - 1))
-				if (data()[cellNum + width].hasPlant)
-					masses[3].first = data()[cellNum + width].plants.mass;
-
-			for (int i = 1; i < masses.size(); i++)
+			//Create the weights
+			//Prey weights
+			if (currentCell.animal.type == PopulationType::PREY)
 			{
-				std::pair<float, int> key = masses[i];
+				//Plant mass
+				{
+					//Up 2
+					if (currentCell.cellRow >= 2)
+						if (data()[cellNum - width * 2].hasPlant)
+							weights[1].first += data()[cellNum - width * 2].plants.mass;
+
+					//Up 1, Left 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
+						if (data()[cellNum - width - 1].hasPlant)
+						{
+							weights[1].first += data()[cellNum - width - 1].plants.mass;
+							weights[2].first += data()[cellNum - width - 1].plants.mass;
+						}
+
+					//Up 1
+					if (currentCell.cellRow >= 1)
+						if (data()[cellNum - width].hasPlant)
+							weights[1].first += data()[cellNum - width].plants.mass;
+
+					//Up 1, Right 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
+						if (data()[cellNum - width + 1].hasPlant)
+						{
+							weights[1].first += data()[cellNum - width + 1].plants.mass;
+							weights[3].first += data()[cellNum - width + 1].plants.mass;
+						}
+
+					//Left 2
+					if (currentCell.cellColumn >= 2)
+						if (data()[cellNum - 2].hasPlant)
+							weights[2].first += data()[cellNum - 2].plants.mass;
+
+					//Left 1
+					if (currentCell.cellColumn >= 1)
+						if (data()[cellNum - 1].hasPlant)
+							weights[2].first += data()[cellNum - 1].plants.mass;
+
+					//This cell
+					if (currentCell.hasPlant)
+						weights[0].first += currentCell.plants.mass;
+
+					//Right 1
+					if (currentCell.cellColumn < width - 1)
+						if (data()[cellNum + 1].hasPlant)
+							weights[3].first += data()[cellNum + 1].plants.mass;
+
+					//Right 2
+					if (currentCell.cellColumn < width - 2)
+						if (data()[cellNum + 2].hasPlant)
+							weights[3].first += data()[cellNum + 2].plants.mass;
+
+					//Down 1, Left 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
+						if (data()[cellNum + width - 1].hasPlant)
+						{
+							weights[2].first += data()[cellNum + width - 1].plants.mass;
+							weights[4].first += data()[cellNum + width - 1].plants.mass;
+						}
+
+					//Down 1
+					if (currentCell.cellRow < height - 1)
+						if (data()[cellNum + width].hasPlant)
+							weights[4].first += data()[cellNum + width].plants.mass;
+
+					//Down 1, Right 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
+						if (data()[cellNum + width + 1].hasPlant)
+						{
+							weights[3].first += data()[cellNum + width + 1].plants.mass;
+							weights[4].first += data()[cellNum + width + 1].plants.mass;
+						}
+
+					//Down 2
+					if (currentCell.cellRow < height - 1)
+						if (data()[cellNum + width * 2].hasPlant)
+							weights[4].first += data()[cellNum + width * 2].plants.mass;
+				}
+
+				//Predator presence
+				{
+					//Up 2
+					if (currentCell.cellRow >= 2)
+						if (data()[cellNum - width * 2].hasAnimal && data()[cellNum - width * 2].animal.type == PopulationType::PREDATOR)
+						{
+							weights[0].first -= 1;
+							weights[1].first -= 2;
+							weights[4].first += 2;
+						}
+
+					//Up 1, Left 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
+						if (data()[cellNum - width - 1].hasAnimal && data()[cellNum - width - 1].animal.type == PopulationType::PREDATOR)
+						{
+							weights[0].first -= 1;
+							weights[1].first -= 2;
+							weights[2].first -= 2;
+							weights[3].first += 2;
+							weights[4].first += 2;
+						}
+
+					//Up 1
+					if (currentCell.cellRow >= 1)
+						if (data()[cellNum - width].hasAnimal && data()[cellNum - width].animal.type == PopulationType::PREDATOR)
+						{
+							weights[0].first -= 1;
+							weights[1].first -= 2;
+							weights[4].first += 2;
+						}
+
+					//Up 1, Right 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
+						if (data()[cellNum - width + 1].hasAnimal && data()[cellNum - width + 1].animal.type == PopulationType::PREDATOR)
+						{
+							weights[0].first -= 1;
+							weights[1].first -= 2;
+							weights[3].first -= 2;
+							weights[2].first += 2;
+							weights[4].first += 2;
+						}
+
+					//Left 2
+					if (currentCell.cellColumn >= 2)
+						if (data()[cellNum - 2].hasAnimal && data()[cellNum - 2].animal.type == PopulationType::PREDATOR)
+						{
+							weights[0].first -= 1;
+							weights[2].first -= 2;
+							weights[3].first += 2;
+						}
+
+					//Left 1
+					if (currentCell.cellColumn >= 1)
+						if (data()[cellNum - 1].hasAnimal && data()[cellNum - 1].animal.type == PopulationType::PREDATOR)
+						{
+							weights[0].first -= 1;
+							weights[2].first -= 2;
+							weights[3].first += 2;
+						}
+
+					//Right 1
+					if (currentCell.cellColumn < width - 1)
+						if (data()[cellNum + 1].hasAnimal && data()[cellNum + 1].animal.type == PopulationType::PREDATOR)
+						{
+							weights[0].first -= 1;
+							weights[3].first -= 2;
+							weights[2].first += 2;
+						}
+
+					//Right 2
+					if (currentCell.cellColumn < width - 2)
+						if (data()[cellNum + 2].hasAnimal && data()[cellNum + 2].animal.type == PopulationType::PREDATOR)
+						{
+							weights[0].first -= 1;
+							weights[3].first -= 2;
+							weights[2].first += 2;
+						}
+
+					//Down 1, Left 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
+						if (data()[cellNum + width - 1].hasAnimal && data()[cellNum + width - 1].animal.type == PopulationType::PREDATOR)
+						{
+							weights[0].first -= 1;
+							weights[2].first -= 2;
+							weights[4].first -= 2;
+							weights[1].first += 2;
+							weights[3].first += 2;
+						}
+
+					//Down 1
+					if (currentCell.cellRow < height - 1)
+						if (data()[cellNum + width].hasAnimal && data()[cellNum + width].animal.type == PopulationType::PREDATOR)
+						{
+							weights[0].first -= 1;
+							weights[4].first -= 2;
+							weights[1].first += 2;
+						}
+
+					//Down 1, Right 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
+						if (data()[cellNum + width + 1].hasAnimal && data()[cellNum + width + 1].animal.type == PopulationType::PREDATOR)
+						{
+							weights[0].first -= 1;
+							weights[3].first -= 2;
+							weights[4].first -= 2;
+							weights[1].first += 2;
+							weights[2].first += 2;
+						}
+
+					//Down 2
+					if (currentCell.cellRow < height - 2)
+						if (data()[cellNum + width * 2].hasAnimal && data()[cellNum + width * 2].animal.type == PopulationType::PREDATOR)
+						{
+							weights[0].first -= 1;
+							weights[4].first -= 2;
+							weights[1].first += 2;
+						}
+				}
+
+				//Childbearers
+				if(currentCell.animal.wantsChild)
+				{
+					//Up 2
+					if (currentCell.cellRow >= 2)
+						if (data()[cellNum - width * 2].hasAnimal && data()[cellNum - width * 2].animal.type == PopulationType::PREY && data()[cellNum - width * 2].animal.wantsChild)
+							weights[1].first += 1;
+
+					//Up 1, Left 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
+						if (data()[cellNum - width - 1].hasAnimal && data()[cellNum - width - 1].animal.type == PopulationType::PREY && data()[cellNum - width - 1].animal.wantsChild)
+						{
+							weights[1].first += 1;
+							weights[2].first += 1;
+						}
+
+					//Up 1
+					if (currentCell.cellRow >= 1)
+						if (data()[cellNum - width].hasAnimal && data()[cellNum - width].animal.type == PopulationType::PREY && data()[cellNum - width].animal.wantsChild)
+							weights[0].first += 2;
+
+					//Up 1, Right 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
+						if (data()[cellNum - width + 1].hasAnimal && data()[cellNum - width + 1].animal.type == PopulationType::PREY && data()[cellNum - width + 1].animal.wantsChild)
+						{
+							weights[1].first += 1;
+							weights[3].first += 1;
+						}
+
+					//Left 2
+					if (currentCell.cellColumn >= 2)
+						if (data()[cellNum - 2].hasAnimal && data()[cellNum - 2].animal.type == PopulationType::PREY && data()[cellNum - 2].animal.wantsChild)
+							weights[2].first += 1;
+
+					//Left 1
+					if (currentCell.cellColumn >= 1)
+						if (data()[cellNum - 1].hasAnimal && data()[cellNum - 1].animal.type == PopulationType::PREY && data()[cellNum - 1].animal.wantsChild)
+							weights[0].first += 2;
+
+					//Right 1
+					if (currentCell.cellColumn < width - 1)
+						if (data()[cellNum + 1].hasAnimal && data()[cellNum + 1].animal.type == PopulationType::PREY && data()[cellNum + 1].animal.wantsChild)
+							weights[0].first += 2;
+
+					//Right 2
+					if (currentCell.cellColumn < width - 2)
+						if (data()[cellNum + 2].hasAnimal && data()[cellNum + 2].animal.type == PopulationType::PREY && data()[cellNum + 2].animal.wantsChild)
+							weights[3].first += 1;
+
+					//Down 1, Left 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
+						if (data()[cellNum + width - 1].hasAnimal && data()[cellNum + width - 1].animal.type == PopulationType::PREY && data()[cellNum + width - 1].animal.wantsChild)
+						{
+							weights[2].first += 1;
+							weights[4].first += 1;
+						}
+
+					//Down 1
+					if (currentCell.cellRow < height - 1)
+						if (data()[cellNum + width].hasAnimal && data()[cellNum + width].animal.type == PopulationType::PREY && data()[cellNum + width].animal.wantsChild)
+							weights[0].first += 2;
+
+					//Down 1, Right 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
+						if (data()[cellNum + width + 1].hasAnimal && data()[cellNum + width + 1].animal.type == PopulationType::PREY && data()[cellNum + width + 1].animal.wantsChild)
+						{
+							weights[3].first += 1;
+							weights[4].first += 1;
+						}
+
+					//Down 2
+					if (currentCell.cellRow < height - 2)
+						if (data()[cellNum + width * 2].hasAnimal && data()[cellNum + width * 2].animal.type == PopulationType::PREY && data()[cellNum + width * 2].animal.wantsChild)
+							weights[4].first += 1;
+				}
+			}
+
+			//Predator weights
+			if(currentCell.animal.type == PopulationType::PREDATOR)
+			{
+				//Prey presence
+				{
+					//Up 2
+					if (currentCell.cellRow >= 2)
+						if (data()[cellNum - width * 2].hasAnimal && data()[cellNum - width * 2].animal.type == PopulationType::PREY)
+						{
+							weights[0].first += 1;
+							weights[1].first += 2;
+						}
+
+					//Up 1, Left 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
+						if (data()[cellNum - width - 1].hasAnimal && data()[cellNum - width - 1].animal.type == PopulationType::PREY)
+						{
+							weights[0].first += 1;
+							weights[1].first += 2;
+							weights[2].first += 2;
+						}
+
+					//Up 1
+					if (currentCell.cellRow >= 1)
+						if (data()[cellNum - width].hasAnimal && data()[cellNum - width].animal.type == PopulationType::PREY)
+						{
+							weights[0].first += 1;
+							weights[1].first += 2;
+						}
+
+					//Up 1, Right 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
+						if (data()[cellNum - width + 1].hasAnimal && data()[cellNum - width + 1].animal.type == PopulationType::PREY)
+						{
+							weights[0].first += 1;
+							weights[1].first += 2;
+							weights[3].first += 2;
+						}
+
+					//Left 2
+					if (currentCell.cellColumn >= 2)
+						if (data()[cellNum - 2].hasAnimal && data()[cellNum - 2].animal.type == PopulationType::PREY)
+						{
+							weights[0].first += 1;
+							weights[2].first += 2;
+						}
+
+					//Left 1
+					if (currentCell.cellColumn >= 1)
+						if (data()[cellNum - 1].hasAnimal && data()[cellNum - 1].animal.type == PopulationType::PREY)
+						{
+							weights[0].first += 1;
+							weights[2].first += 2;
+						}
+
+					//Right 1
+					if (currentCell.cellColumn < width - 1)
+						if (data()[cellNum + 1].hasAnimal && data()[cellNum + 1].animal.type == PopulationType::PREY)
+						{
+							weights[0].first += 1;
+							weights[3].first += 2;
+						}
+
+					//Right 2
+					if (currentCell.cellColumn < width - 2)
+						if (data()[cellNum + 2].hasAnimal && data()[cellNum + 2].animal.type == PopulationType::PREY)
+						{
+							weights[0].first += 1;
+							weights[3].first += 2;
+						}
+
+					//Down 1, Left 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
+						if (data()[cellNum + width - 1].hasAnimal && data()[cellNum + width - 1].animal.type == PopulationType::PREY)
+						{
+							weights[0].first += 1;
+							weights[2].first += 2;
+							weights[4].first += 2;
+						}
+
+					//Down 1
+					if (currentCell.cellRow < height - 1)
+						if (data()[cellNum + width].hasAnimal && data()[cellNum + width].animal.type == PopulationType::PREY)
+						{
+							weights[0].first += 1;
+							weights[4].first += 2;
+						}
+
+					//Down 1, Right 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
+						if (data()[cellNum + width + 1].hasAnimal && data()[cellNum + width + 1].animal.type == PopulationType::PREY)
+						{
+							weights[0].first += 1;
+							weights[3].first += 2;
+							weights[4].first += 2;
+						}
+
+					//Down 2
+					if (currentCell.cellRow < height - 2)
+						if (data()[cellNum + width * 2].hasAnimal && data()[cellNum + width * 2].animal.type == PopulationType::PREY)
+						{
+							weights[0].first += 1;
+							weights[4].first += 2;
+						}
+				}
+
+				//Childbearers
+				if (currentCell.animal.wantsChild)
+				{
+					//Up 2
+					if (currentCell.cellRow >= 2)
+						if (data()[cellNum - width * 2].hasAnimal && data()[cellNum - width * 2].animal.type == PopulationType::PREDATOR && data()[cellNum - width * 2].animal.wantsChild)
+							weights[1].first += 1;
+
+					//Up 1, Left 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
+						if (data()[cellNum - width - 1].hasAnimal && data()[cellNum - width - 1].animal.type == PopulationType::PREDATOR && data()[cellNum - width - 1].animal.wantsChild)
+						{
+							weights[1].first += 1;
+							weights[2].first += 1;
+						}
+
+					//Up 1
+					if (currentCell.cellRow >= 1)
+						if (data()[cellNum - width].hasAnimal && data()[cellNum - width].animal.type == PopulationType::PREDATOR && data()[cellNum - width].animal.wantsChild)
+							weights[0].first += 2;
+
+					//Up 1, Right 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
+						if (data()[cellNum - width + 1].hasAnimal && data()[cellNum - width + 1].animal.type == PopulationType::PREDATOR && data()[cellNum - width + 1].animal.wantsChild)
+						{
+							weights[1].first += 1;
+							weights[3].first += 1;
+						}
+
+					//Left 2
+					if (currentCell.cellColumn >= 2)
+						if (data()[cellNum - 2].hasAnimal && data()[cellNum - 2].animal.type == PopulationType::PREDATOR && data()[cellNum - 2].animal.wantsChild)
+							weights[2].first += 1;
+
+					//Left 1
+					if (currentCell.cellColumn >= 1)
+						if (data()[cellNum - 1].hasAnimal && data()[cellNum - 1].animal.type == PopulationType::PREDATOR && data()[cellNum - 1].animal.wantsChild)
+							weights[0].first += 2;
+
+					//Right 1
+					if (currentCell.cellColumn < width - 1)
+						if (data()[cellNum + 1].hasAnimal && data()[cellNum + 1].animal.type == PopulationType::PREDATOR && data()[cellNum + 1].animal.wantsChild)
+							weights[0].first += 2;
+
+					//Right 2
+					if (currentCell.cellColumn < width - 2)
+						if (data()[cellNum + 2].hasAnimal && data()[cellNum + 2].animal.type == PopulationType::PREDATOR && data()[cellNum + 2].animal.wantsChild)
+							weights[3].first += 1;
+
+					//Down 1, Left 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
+						if (data()[cellNum + width - 1].hasAnimal && data()[cellNum + width - 1].animal.type == PopulationType::PREDATOR && data()[cellNum + width - 1].animal.wantsChild)
+						{
+							weights[2].first += 1;
+							weights[4].first += 1;
+						}
+
+					//Down 1
+					if (currentCell.cellRow < height - 1)
+						if (data()[cellNum + width].hasAnimal && data()[cellNum + width].animal.type == PopulationType::PREDATOR && data()[cellNum + width].animal.wantsChild)
+							weights[0].first += 2;
+
+					//Down 1, Right 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
+						if (data()[cellNum + width + 1].hasAnimal && data()[cellNum + width + 1].animal.type == PopulationType::PREDATOR && data()[cellNum + width + 1].animal.wantsChild)
+						{
+							weights[3].first += 1;
+							weights[4].first += 1;
+						}
+
+					//Down 2
+					if (currentCell.cellRow < height - 2)
+						if (data()[cellNum + width * 2].hasAnimal && data()[cellNum + width * 2].animal.type == PopulationType::PREDATOR && data()[cellNum + width * 2].animal.wantsChild)
+							weights[4].first += 1;
+				}
+			}
+
+			//Sort in descending order of weight
+			for (int i = 1; i < weights.size(); i++)
+			{
+				std::pair<float, int> key = weights[i];
 				int j = i - 1;
 
 				while (j >= 0)
 				{
-					if (key.first < masses[j].first)
+					if (key.first < weights[j].first)
 					{
-						masses[j + 1] = masses[j];
+						weights[j + 1] = weights[j];
 						j--;
 					}
 					else
 						break;
 				}
 
-				masses[j + 1] = key;
+				weights[j + 1] = key;
 			}
 
+			//Actual movement
 			bool moved = false;
-			while (!moved && !masses.empty())
+			while (!moved && !weights.empty())
 			{
-				switch (masses.back().second)
+				switch (weights.back().second)
 				{
+				case 0://No movement
+					moved = true;
+
 				case 1://Up 1
-					if (cellNum >= width)
+					if (currentCell.cellRow >= 1)
 					{
 						if (!newWorld[cellNum - width].hasAnimal && data()[cellNum - width].cellType == CellType::LAND)
 						{
@@ -451,7 +900,7 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 2://Left 1
-					if (cellNum % width > 0)
+					if (currentCell.cellColumn >= 1)
 					{
 						if (!newWorld[cellNum - 1].hasAnimal && data()[cellNum - 1].cellType == CellType::LAND)
 						{
@@ -464,7 +913,7 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 3://Right 1
-					if (cellNum % width < width - 1)
+					if (currentCell.cellColumn < width - 1)
 					{
 						if (!newWorld[cellNum + 1].hasAnimal && data()[cellNum + 1].cellType == CellType::LAND)
 						{
@@ -477,7 +926,7 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 4://Down 1
-					if (cellNum < width * (height - 1))
+					if (currentCell.cellRow < height - 1)
 					{
 						if (!newWorld[cellNum + width].hasAnimal && data()[cellNum + width].cellType == CellType::LAND)
 						{
@@ -490,7 +939,7 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 				}
 
-				masses.pop_back();
+				weights.pop_back();
 			}
 		}
 
@@ -726,7 +1175,7 @@ int EcoResilience::World::GetPopulation(PopulationType type)
 
 	for (int cellNum = 0; cellNum < size(); cellNum++)
 	{
-		population += data()[cellNum].GetPopulation(type);
+		population += at(cellNum).GetPopulation(type);
 	}
 
 	return population;
@@ -769,7 +1218,7 @@ void EcoResilience::World::UrbanDevelop()
 	{
 		if(cellNum % width < width / 3)
 		{
-			data()[cellNum].cellType = CellType::URBANISED;
+			at(cellNum).cellType = CellType::URBANISED;
 		}
 	}
 }

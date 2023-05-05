@@ -18,11 +18,11 @@ EcoResilience::Animal::Animal(PopulationType species) :
 	switch(type)
 	{
 	case PopulationType::PREDATOR:
-		speed = 3;
+		moveCounter = 3;
 		break;
 
 	case PopulationType::PREY:
-		speed = 1;
+		moveCounter = 5;
 		break;
 	}
 }
@@ -50,6 +50,9 @@ void EcoResilience::Animal::Update()
 	vigor = std::min(10.f, vigor * 1.001f);
 	stomachMax = vigor / 10.;
 
+	moveCounter--;
+	wantsMove = moveCounter == 0;
+
 	switch(type)
 	{
 	case PopulationType::PREDATOR:
@@ -59,6 +62,9 @@ void EcoResilience::Animal::Update()
 
 		wantsEat = stomach <= stomachMax * 0.1f;
 
+		if (moveCounter == 0)
+			moveCounter = 3;
+
 		break;
 
 	case PopulationType::PREY:
@@ -67,6 +73,9 @@ void EcoResilience::Animal::Update()
 		wantsChild = stomach >= stomachMax * 0.5f;
 
 		wantsEat = stomach <= stomachMax * 0.2f;
+
+		if (moveCounter == 0)
+			moveCounter = 5;
 	}
 
 	if (stomach <= 0)

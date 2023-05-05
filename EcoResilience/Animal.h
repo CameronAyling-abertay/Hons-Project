@@ -14,7 +14,6 @@ namespace EcoResilience
 		float stomachMax;
 		float mass;
 		float vigor;
-		float speed;
 
 		Animal(PopulationType species = PopulationType::PREY);
 		~Animal() {};
@@ -27,12 +26,12 @@ namespace EcoResilience
 		bool wantsEat;
 		
 		bool wantsMove;
+		int moveCounter;
 
 		bool wantsChild;
 
 
 		void Update();
-		void Survey(bool ideal) { wantsMove = !ideal; };
 
 		void Feed(float food);
 

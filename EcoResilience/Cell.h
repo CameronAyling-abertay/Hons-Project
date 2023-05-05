@@ -56,7 +56,5 @@ namespace EcoResilience
 		void SetWater(float newWaterLevel);
 
 		int GetPopulation(PopulationType type);
-
-		void ResetChildCount() { plantWantsChild = false; };
 	};
 };

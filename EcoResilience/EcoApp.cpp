@@ -64,16 +64,16 @@ void EcoApp::Plague()
 
 	int zero = rand() % population;
 
-	for(auto cell : world)
+	for(int i = 0; i < width * height; i++)
 	{
-		if(cell.hasAnimal)
+		if(world[i].hasAnimal)
 		{
 			zero--;
 		}
 
 		if(zero == 0)
 		{
-			cell.animal.Infect();
+			world[i].animal.Infect();
 			break;
 		}
 	}
@@ -87,9 +87,9 @@ void EcoApp::Fire()
 	{
 		int cellStart = rand() % (width * height);
 
-		if((world)[cellStart].hasPlant && (world)[cellStart].cellType == EcoResilience::CellType::LAND)
+		if(world[cellStart].hasPlant && world[cellStart].cellType == EcoResilience::CellType::LAND)
 		{
-			(world)[cellStart].plants.SetFire();
+			world[cellStart].plants.SetFire();
 			started = true;
 		}
 	}
