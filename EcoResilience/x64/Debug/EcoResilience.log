@@ -1,59 +1,11 @@
-﻿  Plant.cpp
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Plant.cpp(19,23): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Plant.cpp(97,18): warning C4244: '=': conversion from 'const _Ty' to 'float', possible loss of data
+﻿  Animal.cpp
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Animal.cpp(15,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Animal.cpp(16,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Animal.cpp(17,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Animal.cpp(37,7): warning C4804: '>': unsafe use of type 'bool' in operation
+C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\Animal.cpp(109,18): warning C4244: '=': conversion from 'const _Ty' to 'float', possible loss of data
           with
           [
               _Ty=double
           ]
-  World.cpp
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\CPerlinNoise\CPerlinNoise.h(48,18): warning C4244: 'return': conversion from 'double' to 'const float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(73,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(73,27): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(74,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(74,27): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(75,32): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(75,26): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(76,36): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(76,30): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(86,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(92,21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(111,17): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(117,21): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(228,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(241,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(254,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(267,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(280,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(293,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(306,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(319,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(332,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(345,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(358,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(371,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(1193,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(1193,27): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(1200,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.35.32215\include\utility(172,16): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
-          and
-          [
-              _Ty1=float
-          ]
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(389,49): message : see reference to function template instantiation 'std::pair<float,int>::pair<int,int&,0>(_Other1 &&,_Other2) noexcept' being compiled
-          with
-          [
-              _Other1=int,
-              _Other2=int &
-          ]
-C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\EcoResilience\World.cpp(389,22): message : see reference to function template instantiation 'std::pair<float,int>::pair<int,int&,0>(_Other1 &&,_Other2) noexcept' being compiled
-          with
-          [
-              _Other1=int,
-              _Other2=int &
-          ]
-  Generating Code...
   EcoResilience.vcxproj -> C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\x64\Debug\EcoResilience.lib

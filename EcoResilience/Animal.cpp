@@ -64,7 +64,7 @@ void EcoResilience::Animal::Update()
 
 		burnCounter++;
 
-		if (burnCounter >= static_cast<int>(vigor) + 1)
+		if (burnCounter >= static_cast<int>(vigor) - 5)
 			wantsDeath = true;
 	}
 	else

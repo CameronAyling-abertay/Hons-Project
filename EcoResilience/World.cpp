@@ -1,7 +1,7 @@
 #include "World.h"
 #include <random>
-#include <set>
 #include <vector>
+#include <chrono>
 #include "CPerlinNoise/CPerlinNoise.h"
 
 EcoResilience::World::World() :
@@ -849,6 +849,9 @@ EcoResilience::World EcoResilience::World::Update()
 							weights[4].first += 1;
 				}
 			}
+
+			//Randomise the order for the instances where they're all bad
+			std::random_shuffle(weights.begin(), weights.end());
 
 			//Sort in descending order of weight
 			for (int i = 1; i < weights.size(); i++)
