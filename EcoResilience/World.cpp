@@ -9,10 +9,6 @@ EcoResilience::World::World() :
 	height(0)
 {}
 
-EcoResilience::World::~World()
-{
-}
-
 void EcoResilience::World::Generate(int w, int h, GenerationType type, float plantMassMax)
 {
 	clear();
@@ -30,8 +26,6 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 	switch (genType)
 	{
 	case GenerationType::RANDOM:
-		sunTime = float(rand() % 1000) / 24.f;
-
 		for (int row = 0; row < height; row++)
 		{
 			for (int column = 0; column < width; column++)
@@ -76,7 +70,6 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 		break;
 
 	case GenerationType::PERLIN:
-		sunTime = float(rand() % 1000) / 24.f;
 		const float waterOffset = rand();
 		const float plantOffset = rand();
 		const float preyOffset = rand();
@@ -473,7 +466,7 @@ EcoResilience::World EcoResilience::World::Update()
 						}
 
 					//Down 2
-					if (currentCell.cellRow < height - 1)
+					if (currentCell.cellRow < height - 2)
 						if (data()[cellNum + width * 2].hasPlant)
 							weights[4].first += data()[cellNum + width * 2].plants.mass;
 				}
@@ -889,7 +882,7 @@ EcoResilience::World EcoResilience::World::Update()
 				case 1://Up 1
 					if (currentCell.cellRow >= 1)
 					{
-						if (!newWorld[cellNum - width].hasAnimal && data()[cellNum - width].cellType == CellType::LAND)
+						if (!newWorld[cellNum - width].hasAnimal && (data()[cellNum - width].cellType == CellType::LAND || currentCell.cellType != CellType::LAND))
 						{
 							newWorld[cellNum - width].AddAnimal(currentCell.animal);
 							newWorld[cellNum].animalMoved();
@@ -902,7 +895,7 @@ EcoResilience::World EcoResilience::World::Update()
 				case 2://Left 1
 					if (currentCell.cellColumn >= 1)
 					{
-						if (!newWorld[cellNum - 1].hasAnimal && data()[cellNum - 1].cellType == CellType::LAND)
+						if (!newWorld[cellNum - 1].hasAnimal && (data()[cellNum - 1].cellType == CellType::LAND || currentCell.cellType != CellType::LAND))
 						{
 							newWorld[cellNum - 1].AddAnimal(currentCell.animal);
 							newWorld[cellNum].animalMoved();
@@ -915,7 +908,7 @@ EcoResilience::World EcoResilience::World::Update()
 				case 3://Right 1
 					if (currentCell.cellColumn < width - 1)
 					{
-						if (!newWorld[cellNum + 1].hasAnimal && data()[cellNum + 1].cellType == CellType::LAND)
+						if (!newWorld[cellNum + 1].hasAnimal && (data()[cellNum + 1].cellType == CellType::LAND || currentCell.cellType != CellType::LAND))
 						{
 							newWorld[cellNum + 1].AddAnimal(currentCell.animal);
 							newWorld[cellNum].animalMoved();
@@ -928,7 +921,7 @@ EcoResilience::World EcoResilience::World::Update()
 				case 4://Down 1
 					if (currentCell.cellRow < height - 1)
 					{
-						if (!newWorld[cellNum + width].hasAnimal && data()[cellNum + width].cellType == CellType::LAND)
+						if (!newWorld[cellNum + width].hasAnimal && (data()[cellNum + width].cellType == CellType::LAND || currentCell.cellType != CellType::LAND))
 						{
 							newWorld[cellNum + width].AddAnimal(currentCell.animal);
 							newWorld[cellNum].animalMoved();

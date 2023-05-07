@@ -31,5 +31,9 @@ namespace EcoResilience
 		int burnCounter;
 		void SetFire() { if (!burnt) { fire = true; burnCounter = 0; } };
 		void Extinguish() { fire = false; burnt = true; };
+
+		void Drown() { drowning = true; };
+		void Resuscitate() { drowning = false; };
+		bool drowning;
 	};
 }

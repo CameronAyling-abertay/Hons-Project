@@ -55,6 +55,8 @@ namespace EcoResilience
 		float GetWater() { return waterLevel; };
 		void SetWater(float newWaterLevel);
 
+		void Flood() { flooded = true; floodCounter = 0; }
+
 		int GetPopulation(PopulationType type);
 	};
 };

@@ -8,7 +8,9 @@ EcoResilience::Animal::Animal(PopulationType species) :
 	wantsMove(false),
 	wantsChild(false),
 	infected(false),
-	immune(false)
+	immune(false),
+	burnCounter(0),
+	drownCounter(0)
 {
 	vigor = rand() % 1000 / 100.;
 	mass = vigor / 10.;
@@ -46,9 +48,31 @@ void EcoResilience::Animal::Update()
 			Cure();
 	}
 
+	if(drowning)
+	{
+		drownCounter++;
+
+		if (drownCounter >= static_cast<int>(vigor) + 1)
+			wantsDeath = true;
+	}
+	else
+		drownCounter = std::max(0, drownCounter - 1);
+
+	if(burning)
+	{
+		mass *= 0.8f + 0.1f * vigor / 10.f;
+
+		burnCounter++;
+
+		if (burnCounter >= static_cast<int>(vigor) + 1)
+			wantsDeath = true;
+	}
+	else
+		burnCounter = std::max(0, burnCounter - 1);
+
 	mass *= 1.001f;
 	vigor = std::min(10.f, vigor * 1.001f);
-	stomachMax = vigor / 10.;
+	stomachMax = vigor / 10.f;
 
 	moveCounter--;
 	wantsMove = moveCounter == 0;

@@ -70,20 +70,40 @@ void EcoResilience::Cell::Update()
 		SetWater(waterLevel * 0.99);
 		floodCounter++;
 		if (floodCounter > 50)
+		{
 			flooded = false;
+			floodCounter = 0;
+		}
 	}
+
+	if (hasPlant)
+	{
+		fire = plants.fire;
+	}
+	else
+		fire = false;
+
+	if(hasAnimal)
+	{
+		if (fire)
+			animal.Burn();
+		else
+			animal.RecoverBurn();
+	}
+
 
 	if (cellType == CellType::WATER)
 	{
-		hasAnimal = false;
-		hasPlant = false;
+		if (hasAnimal)
+			animal.Drown();
+
+		if (hasPlant)
+			plants.Drown();
 	}
 	else if (cellType == CellType::LAND)
 	{
 		if (hasPlant)
 		{
-			plants.Update();
-
 			if (plants.wantsFood)
 			{
 				float mod = -0.5 + rand() % 1000 / 1000.f;
@@ -111,8 +131,7 @@ void EcoResilience::Cell::Update()
 
 		if (hasAnimal)
 		{
-			//Update the animal
-			animal.Update();
+			animal.Resuscitate();
 
 			if (animal.wantsEat)
 			{
@@ -140,11 +159,6 @@ void EcoResilience::Cell::Update()
 
 			animalWantsMove = animal.wantsMove;
 			animalWantsChild = animal.wantsChild;
-
-			if (animal.wantsDeath)
-			{
-				hasAnimal = false;
-			}
 		}
 		else
 		{
@@ -156,9 +170,23 @@ void EcoResilience::Cell::Update()
 	else
 	{
 		waterLevel = 0;
-
 		hasAnimal = false;
-
 		hasPlant = false;
+	}
+
+	if (hasAnimal)
+	{
+		animal.Update();
+
+		if (animal.wantsDeath)
+			hasAnimal = false;
+	}
+
+	if (hasPlant)
+	{
+		plants.Update();
+
+		if (plants.wantsDeath)
+			hasPlant = false;
 	}
 }

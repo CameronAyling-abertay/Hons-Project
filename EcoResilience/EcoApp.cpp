@@ -40,10 +40,10 @@ void EcoApp::Flood()
 	{
 		float water = 0;
 
-		for (auto cell : world)
+		for (int cellNum = 0; cellNum < width * height; cellNum++)
 		{
-			water += cell.GetWater();
-			cell.flooded = true;
+			water += world.at(cellNum).GetWater();
+			world.at(cellNum).Flood();
 		}
 
 		if (water < width * height * 0.75f)

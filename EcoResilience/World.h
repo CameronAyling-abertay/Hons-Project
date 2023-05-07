@@ -20,7 +20,6 @@ namespace EcoResilience
 
 	public:
 		World();
-		~World();
 
 		void Generate(int width, int height, GenerationType type, float maxCellPlantMass);
 		World Update();

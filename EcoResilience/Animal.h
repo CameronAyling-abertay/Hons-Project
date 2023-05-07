@@ -40,5 +40,15 @@ namespace EcoResilience
 		bool immuneCounter;
 		void Infect() { if (!immune) { infected = true; immuneCounter = 0; } };
 		void Cure() { infected = false; immune = true; }
+
+		void Burn() { burning = true; };
+		void RecoverBurn() { burning = false; };
+		bool burning;
+		int burnCounter;
+
+		void Drown() { drowning = true; };
+		void Resuscitate() { drowning = false; };
+		bool drowning;
+		int drownCounter;
 	};
 }

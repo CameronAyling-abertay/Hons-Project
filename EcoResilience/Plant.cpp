@@ -6,7 +6,8 @@ EcoResilience::Plant::Plant() :
 	wantsChild(false),
 	wantsFood(false),
 	fire(false),
-	burnt(false)
+	burnt(false),
+	drowning(false)
 {
 	vigor = float(rand() % 1000) / 100.f;
 
@@ -24,7 +25,8 @@ EcoResilience::Plant::Plant(float newVigor) :
 	wantsChild(false),
 	wantsFood(false),
 	fire(false),
-	burnt(false)
+	burnt(false),
+	drowning(false)
 {
 	vigor = newVigor;
 
@@ -63,11 +65,19 @@ void EcoResilience::Plant::Update()
 	if (fire)
 	{
 		mass *= 0.8f;
-		if (mass <= 0.1f)
+		if (mass <= 0.1f - vigor / 10.f)
 			wantsDeath = true;
 
 		if (rand() % 100 < 20)
 			Extinguish();
+	}
+
+	if (drowning)
+	{
+		mass *= std::min(1.f, 0.9f + 0.1f * vigor / 10.f);
+
+		if (mass <= 0.1f - vigor / 10.f)
+			wantsDeath = true;
 	}
 
 	stomach -= 0.005f * stomachMax;
