@@ -15,7 +15,7 @@ EcoResilience::Plant::Plant() :
 	stomachMax = vigor * 0.05f;
 	stomach = stomachMax * float(rand() % 1000) / 1000.f;
 
-	maxAge = 10000;
+	maxAge = vigor * 500;
 	age = maxAge * vigor / 15 ;
 	stepsBeforeDeath = 0;
 }

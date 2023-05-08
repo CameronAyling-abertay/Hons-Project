@@ -851,7 +851,7 @@ EcoResilience::World EcoResilience::World::Update()
 
 			//Randomise the order for the instances where they're all bad
 			unsigned seed = rand();
-			auto rng = std::default_random_engine{ seed };
+			std::default_random_engine rng(seed);
 			std::shuffle(weights.begin(), weights.end(), rng);
 
 			//Sort in descending order of weight

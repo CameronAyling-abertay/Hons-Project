@@ -30,6 +30,8 @@ namespace EcoResilience
 
 		bool wantsChild;
 
+		int age;
+		int maxAge;
 
 		void Update();
 
