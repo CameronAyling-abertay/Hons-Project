@@ -1201,7 +1201,7 @@ void EcoResilience::World::Rain()
 			for (int column = 0; column < width; column++)
 			{
 				float waterVec[2]{ (row + waterOffset) * 0.1f, (column + waterOffset) * 0.1f };
-				float water = (CPerlinNoise::noise2(waterVec) + 0.5f) * 0.4;
+				float water = (CPerlinNoise::noise2(waterVec) + 0.5f) * 0.6;
 
 				at(row * width + column).SetWater(std::min(1.f, water + at(row * width + column).GetWater()));
 			}
@@ -1211,11 +1211,7 @@ void EcoResilience::World::Rain()
 
 void EcoResilience::World::UrbanDevelop()
 {
-	for(int cellNum = 0; cellNum < width * height; cellNum++)
-	{
-		if(cellNum % width < width / 3)
-		{
-			at(cellNum).cellType = CellType::URBANISED;
-		}
-	}
+	for(auto cell : *this)
+		if(std::pow(cell.cellColumn, 2) + std::pow(cell.cellRow, 2) <= std::pow(width / 2, 2))
+			at(cell.cellRow * width + cell.cellColumn).cellType = CellType::URBANISED;
 }

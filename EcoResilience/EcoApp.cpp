@@ -1,10 +1,16 @@
 #include "EcoApp.h"
 
-void EcoApp::Update(float dt)
+void EcoApp::Update()
 {
-	timebank += dt;
-
 	world = world.Update();
+
+	float water = 0;
+
+	for (auto cell : world)
+		water += cell.GetWater();
+
+	if (water < width * height * 0.25f)
+		drought = false;
 }
 
 void EcoApp::GenerateWorld(EcoResilience::GenerationType genType, int worldWidth, int worldHeight, float maxCellPlantMass)
@@ -22,14 +28,6 @@ void EcoApp::GenerateWorld(EcoResilience::GenerationType genType, int worldWidth
 
 void EcoApp::Rain()
 {
-	float water = 0;
-
-	for (auto cell : world)
-		water += cell.GetWater();
-
-	if (water < width * height * 0.1f)
-		drought = false;
-
 	if (!drought)
 		world.Rain();
 }

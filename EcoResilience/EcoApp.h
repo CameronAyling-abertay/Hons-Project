@@ -16,7 +16,7 @@ public:
 
 	bool drought;
 
-	void Update(float deltaTime);
+	void Update();
 	void GenerateWorld(EcoResilience::GenerationType genType = EcoResilience::GenerationType::RANDOM, int worldWidth = DEFAULT_SIDE, int worldHeight = DEFAULT_SIDE, float maxCellPlantMass = DEFAULT_MASS);
 
 	void Rain();

@@ -80,7 +80,7 @@ void EcoResilience::Plant::Update()
 			wantsDeath = true;
 	}
 
-	stomach -= 0.005f * stomachMax;
+	stomach -= 0.02f * stomachMax;
 	mass *= 1.001f;
 	vigor = std::min(10.f, vigor * 1.001f);
 	stomachMax = vigor * 0.05f;

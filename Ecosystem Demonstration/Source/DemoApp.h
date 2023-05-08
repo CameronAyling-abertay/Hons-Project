@@ -1,6 +1,5 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <World.h>
 #include <EcoApp.h>
 
 class DemoApp
@@ -17,6 +16,8 @@ private:
 
 	EcoApp ecology;
 
+	float timebank;
+	float speed;
 	int stepCount;
 	bool perlin;
 

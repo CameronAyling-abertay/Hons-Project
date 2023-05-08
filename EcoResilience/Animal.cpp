@@ -14,7 +14,7 @@ EcoResilience::Animal::Animal(PopulationType species) :
 {
 	vigor = rand() % 1000 / 100.;
 	mass = vigor / 10.;
-	maxAge = vigor * 300;
+	maxAge = vigor * 100;
 	age = maxAge * vigor / 15;
 	stomachMax = vigor / 10.;
 	stomach = stomachMax * (rand() % 1000 / 1000.f);
@@ -23,10 +23,12 @@ EcoResilience::Animal::Animal(PopulationType species) :
 	{
 	case PopulationType::PREDATOR:
 		moveCounter = 3;
+		childCounter = 50;
 		break;
 
 	case PopulationType::PREY:
 		moveCounter = 5;
+		childCounter = 20;
 		break;
 	}
 }
@@ -76,6 +78,7 @@ void EcoResilience::Animal::Update()
 	vigor = std::min(10.f, vigor * 1.001f);
 	stomachMax = vigor / 10.f;
 	age++;
+	childCounter--;
 
 	moveCounter--;
 	wantsMove = moveCounter == 0;
@@ -83,9 +86,9 @@ void EcoResilience::Animal::Update()
 	switch(type)
 	{
 	case PopulationType::PREDATOR:
-		stomach -= 0.001f / vigor;
+		stomach -= 0.005f / vigor;
 
-		wantsChild = stomach >= stomachMax * 0.5f && age > 0.3f * maxAge;
+		wantsChild = stomach >= stomachMax * 0.5f && age > 0.3f * maxAge && childCounter <= 0;
 
 		wantsEat = stomach <= stomachMax * 0.1f && age < maxAge;
 
@@ -95,9 +98,9 @@ void EcoResilience::Animal::Update()
 		break;
 
 	case PopulationType::PREY:
-		stomach -= 0.003f / vigor;
+		stomach -= 0.015f / vigor;
 
-		wantsChild = stomach >= stomachMax * 0.5f;
+		wantsChild = stomach >= stomachMax * 0.5f && childCounter <= 0;
 
 		wantsEat = stomach <= stomachMax * 0.2f;
 
@@ -130,4 +133,15 @@ void EcoResilience::Animal::Reproduce()
 {
 	wantsChild = false;
 	stomach -= stomachMax * 0.5f;
+
+	switch (type)
+	{
+	case PopulationType::PREDATOR:
+		childCounter = 50;
+		break;
+
+	case PopulationType::PREY:
+		childCounter = 20;
+		break;
+	}
 }

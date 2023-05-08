@@ -29,6 +29,7 @@ namespace EcoResilience
 		int moveCounter;
 
 		bool wantsChild;
+		int childCounter;
 
 		int age;
 		int maxAge;

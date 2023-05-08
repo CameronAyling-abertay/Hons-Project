@@ -6,10 +6,12 @@
 
 DemoApp::DemoApp() :
     window(NULL),
+	speed(1),
     stepCount(0),
+	timebank(0),
     perlin(false),
-    viewSeparate(false),
-	paused(false)
+    paused(false),
+    viewSeparate(false)
 {
     srand(time(0));
 }
@@ -70,8 +72,13 @@ void DemoApp::update(sf::Time dt)
 {
     if (!paused)
     {
-        ecology.Update(dt.asSeconds());
-        stepCount++;
+        timebank += dt.asSeconds();
+        if (timebank >= speed)
+        {
+            ecology.Update();
+            stepCount++;
+            timebank -= speed;
+        }
     }
 
     //Construct diagnostic data
@@ -149,6 +156,8 @@ void DemoApp::update(sf::Time dt)
     //Viewing
     ImGui::Text("\nViewing");
     ImGui::Checkbox("View Separate layers", &viewSeparate);
+
+    ImGui::SliderFloat("Speed", &speed, 0.001f, 2, "%.3f");
 
     if (paused)
     {

@@ -65,7 +65,7 @@ void EcoResilience::Cell::SetWater(float newWaterLevel)
 
 void EcoResilience::Cell::Update()
 {
-	SetWater(waterLevel * 0.999f);
+	SetWater(waterLevel * 0.9999f);
 
 	if(flooded)
 	{
