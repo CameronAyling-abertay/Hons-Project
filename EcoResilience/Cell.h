@@ -9,8 +9,6 @@ namespace EcoResilience
 
 	class Cell
 	{
-	private:
-
 		//Unique properties
 		float waterLevel;
 
@@ -26,6 +24,8 @@ namespace EcoResilience
 		Plant plants;
 		bool hasAnimal;
 		Animal animal;
+
+		float altitude;
 
 		CellType cellType;
 

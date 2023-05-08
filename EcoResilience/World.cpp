@@ -35,6 +35,10 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 				float water = float((rand() % 1000)) / 1000.f;
 				newCell.SetWater(water);
 
+				//Set Altitude
+				float altitude = float(rand() % 1000 / 1000.f) * 0.6 + 0.4;
+				newCell.altitude = altitude;
+
 				//Create plants
 				float plantMass = ((rand() % 1000) / 1000.f) * maxCellPlantMass;
 
@@ -70,6 +74,7 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 
 	case GenerationType::PERLIN:
 		const float waterOffset = rand();
+		const float altOffset = rand();
 		const float plantOffset = rand();
 		const float preyOffset = rand();
 		const float predatorOffset = rand();
@@ -85,6 +90,12 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 				float water = CPerlinNoise::noise2(waterVec) + 0.5f;
 
 				newCell.SetWater(water);
+
+				//Set altitude
+				float altVec[2]{ (row + altOffset) * 0.1f, (column + altOffset) * 0.1f };
+				float altitude = (CPerlinNoise::noise2(altVec) + 0.5f) * 0.6 + 0.4;
+
+				newCell.altitude = altitude;
 
 				//Create the plants
 				float plantVec[2]{ (row + plantOffset) * 0.1f, (column + plantOffset) * 0.1f };
@@ -1201,9 +1212,9 @@ void EcoResilience::World::Rain()
 			for (int column = 0; column < width; column++)
 			{
 				float waterVec[2]{ (row + waterOffset) * 0.1f, (column + waterOffset) * 0.1f };
-				float water = (CPerlinNoise::noise2(waterVec) + 0.5f) * 0.6;
+				float water = (CPerlinNoise::noise2(waterVec) + 0.5f) * 0.1f;
 
-				at(row * width + column).SetWater(std::min(1.f, water + at(row * width + column).GetWater()));
+				at(row * width + column).SetWater(water + at(row * width + column).GetWater());
 			}
 		}
 	}

@@ -51,7 +51,7 @@ void EcoResilience::Cell::SetWater(float newWaterLevel)
 	if (!(cellType == CellType::URBANISED))
 	{
 		waterLevel = std::min(1.f, std::max(0.f, newWaterLevel));
-		if (waterLevel * 255.f > 150.f)
+		if (waterLevel > altitude)
 		{
 			cellType = CellType::WATER;
 			if (hasPlant)
@@ -65,8 +65,6 @@ void EcoResilience::Cell::SetWater(float newWaterLevel)
 
 void EcoResilience::Cell::Update()
 {
-	SetWater(waterLevel * 0.9999f);
-
 	if(flooded)
 	{
 		SetWater(waterLevel * 0.99);
@@ -96,6 +94,8 @@ void EcoResilience::Cell::Update()
 
 	if (cellType == CellType::WATER)
 	{
+		SetWater(waterLevel * 0.99999f);
+
 		if (hasAnimal)
 			animal.Drown();
 
@@ -110,10 +110,10 @@ void EcoResilience::Cell::Update()
 			{
 				float mod = -0.5 + rand() % 1000 / 1000.f;
 
-				if (waterLevel - plants.stomachMax * (0.02 + 0.02 * mod) > 0)
+				if (waterLevel - plants.stomachMax * (0.005 + 0.005 * mod) > 0)
 				{
 					plants.Feed(plants.stomachMax * (0.6 + 0.2 * mod));
-					SetWater(waterLevel - plants.stomachMax * (0.02 + 0.02 * mod));
+					SetWater(waterLevel - plants.stomachMax * (0.005 + 0.005 * mod));
 				}
 			}
 

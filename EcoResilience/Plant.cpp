@@ -14,9 +14,7 @@ EcoResilience::Plant::Plant() :
 	mass = vigor / 10.f;
 	stomachMax = vigor * 0.05f;
 	stomach = stomachMax * float(rand() % 1000) / 1000.f;
-
-	maxAge = vigor * 500;
-	age = maxAge * vigor / 15 ;
+	
 	stepsBeforeDeath = 0;
 }
 
@@ -33,9 +31,7 @@ EcoResilience::Plant::Plant(float newVigor) :
 	mass = vigor / 10.f;
 	stomachMax = vigor * 0.05f;
 	stomach = stomachMax * (rand() % 1000 / 1000.f);
-
-	maxAge = 10000;
-	age = 0;
+	
 	stepsBeforeDeath = 0;
 }
 
@@ -81,14 +77,13 @@ void EcoResilience::Plant::Update()
 	}
 
 	stomach -= 0.02f * stomachMax;
-	mass *= 1.001f;
+	mass *= 1 + 0.001f * vigor;
 	vigor = std::min(10.f, vigor * 1.001f);
 	stomachMax = vigor * 0.05f;
-	age++;
 
-	wantsChild = stomach > 0.4f * stomachMax && age > 0.3f * maxAge;
+	wantsChild = stomach > 0.4f * stomachMax;
 
-	wantsFood = stomach < 0.2f * stomachMax && age < maxAge;
+	wantsFood = stomach < 0.2f * stomachMax;
 
 	if (stomach <= 0)
 	{

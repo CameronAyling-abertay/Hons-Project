@@ -78,6 +78,17 @@ void DemoApp::update(sf::Time dt)
             ecology.Update();
             stepCount++;
             timebank -= speed;
+
+            float water = 0;
+
+            for (int cellNum = 0; cellNum < ecology.width * ecology.height; cellNum++)
+            {
+                water += ecology.world.at(cellNum).GetWater();
+                ecology.world.at(cellNum).Flood();
+            }
+
+            if (water < ecology.width * ecology.height * 0.6f)
+                ecology.Rain();
         }
     }
 
@@ -248,7 +259,7 @@ void DemoApp::render()
             pos.y = cellPos.y + worldPos.y;
             cellRep.setPosition(screenCentre + pos);
 
-            int waterNum = float(currentCell.GetWater() * 255.f);
+            int waterNum = (currentCell.altitude - currentCell.GetWater()) * 150.f + 105.f;
 
             repColor = sf::Color(0, 0, waterNum);
 
@@ -283,7 +294,7 @@ void DemoApp::render()
             sf::Color baseColour(209 - (209 - 86) * mass / DEFAULT_MASS, 189 - (189 - 125) * mass / DEFAULT_MASS, 100 - (100 - 70) * mass / DEFAULT_MASS);
 
             //Water
-            int waterNum = float(currentCell.GetWater() * 255.f);
+            int waterNum = (currentCell.altitude - currentCell.GetWater()) * 150.f + 105.f;
             sf::Color waterColour(0, 0, waterNum);
 
             //Animals

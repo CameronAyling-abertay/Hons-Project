@@ -10,9 +10,6 @@ namespace EcoResilience
 		float stomach;
 		float stomachMax;
 
-		int maxAge;
-		int age;
-
 		int stepsBeforeDeath;
 		bool wantsDeath;
 
