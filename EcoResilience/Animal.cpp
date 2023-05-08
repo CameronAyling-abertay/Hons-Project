@@ -14,7 +14,7 @@ EcoResilience::Animal::Animal(PopulationType species) :
 {
 	vigor = rand() % 1000 / 100.;
 	mass = vigor / 10.;
-	maxAge = vigor * 100;
+	maxAge = vigor * 40;
 	age = maxAge * vigor / 15;
 	stomachMax = vigor / 10.;
 	stomach = stomachMax * (rand() % 1000 / 1000.f);
@@ -27,8 +27,8 @@ EcoResilience::Animal::Animal(PopulationType species) :
 		break;
 
 	case PopulationType::PREY:
-		moveCounter = 5;
-		childCounter = 20;
+		moveCounter = 7;
+		childCounter = 10;
 		break;
 	}
 }
@@ -74,7 +74,7 @@ void EcoResilience::Animal::Update()
 	else
 		burnCounter = std::max(0, burnCounter - 1);
 
-	mass *= 1.001f;
+	mass *= 1.f + 0.001f * vigor;
 	vigor = std::min(10.f, vigor * 1.001f);
 	stomachMax = vigor / 10.f;
 	age++;
@@ -86,7 +86,7 @@ void EcoResilience::Animal::Update()
 	switch(type)
 	{
 	case PopulationType::PREDATOR:
-		stomach -= 0.005f / vigor;
+		stomach -= 0.004f / vigor;
 
 		wantsChild = stomach >= stomachMax * 0.5f && age > 0.3f * maxAge && childCounter <= 0;
 
@@ -98,14 +98,14 @@ void EcoResilience::Animal::Update()
 		break;
 
 	case PopulationType::PREY:
-		stomach -= 0.015f / vigor;
+		stomach -= 0.008f / vigor;
 
-		wantsChild = stomach >= stomachMax * 0.5f && childCounter <= 0;
+		wantsChild = stomach >= stomachMax * 0.5f && age > 0.3f * maxAge && childCounter <= 0;
 
-		wantsEat = stomach <= stomachMax * 0.2f;
+		wantsEat = stomach <= stomachMax * 0.25f;
 
 		if (moveCounter == 0)
-			moveCounter = 5;
+			moveCounter = 7;
 	}
 
 	if (stomach <= 0)
@@ -117,7 +117,7 @@ void EcoResilience::Animal::Update()
 	else
 		stepsBeforeDeath = 0;
 
-	if (stepsBeforeDeath == static_cast<int>(vigor) + 5)
+	if (stepsBeforeDeath == static_cast<int>(vigor))
 	{
 		wantsDeath = true;
 	}
@@ -132,6 +132,7 @@ void EcoResilience::Animal::Feed(float food)
 void EcoResilience::Animal::Reproduce()
 {
 	wantsChild = false;
+
 	stomach -= stomachMax * 0.5f;
 
 	switch (type)
@@ -141,7 +142,7 @@ void EcoResilience::Animal::Reproduce()
 		break;
 
 	case PopulationType::PREY:
-		childCounter = 20;
+		childCounter = 10;
 		break;
 	}
 }

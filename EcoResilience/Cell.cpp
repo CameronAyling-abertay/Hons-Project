@@ -171,7 +171,6 @@ void EcoResilience::Cell::Update()
 	}
 	else
 	{
-		waterLevel = 0;
 		hasAnimal = false;
 		hasPlant = false;
 	}
