@@ -406,25 +406,467 @@ EcoResilience::World EcoResilience::World::Update()
 			if (currentCell.GetAnimal().type == PopulationType::PREY)
 			{
 				//Plant mass
-				FindPlantMassWeight(currentCell, &weights);
+				{
+					float prio = currentCell.GetAnimal().GetNeededFood();
+
+					//Up 2
+					if (currentCell.cellRow >= 2)
+						if (at((currentCell.cellRow - 2) * width + currentCell.cellColumn).hasPlant)
+							weights.at(1).first += at((currentCell.cellRow - 2) * width + currentCell.cellColumn).GetPlant().GetMass() * prio;
+
+					//Up 1, Left 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
+						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).hasPlant)
+						{
+							weights.at(1).first += at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
+							weights.at(2).first += at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
+						}
+
+					//Up 1
+					if (currentCell.cellRow >= 1)
+						if (at((currentCell.cellRow - 1) * width + currentCell.cellColumn).hasPlant)
+							weights.at(1).first += at((currentCell.cellRow - 1) * width + currentCell.cellColumn).GetPlant().GetMass() * prio;
+
+					//Up 1, Right 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
+						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).hasPlant)
+						{
+							weights.at(1).first += at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
+							weights.at(3).first += at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
+						}
+
+					//Left 2
+					if (currentCell.cellColumn >= 2)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).hasPlant)
+							weights.at(2).first += at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).GetPlant().GetMass() * prio;
+
+					//Left 1
+					if (currentCell.cellColumn >= 1)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).hasPlant)
+							weights.at(2).first += at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
+
+					//This cell
+					if (currentCell.hasPlant)
+						weights.at(0).first += currentCell.GetPlant().GetMass() * prio;
+
+					//Right 1
+					if (currentCell.cellColumn < width - 1)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).hasPlant)
+							weights.at(3).first += at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
+
+					//Right 2
+					if (currentCell.cellColumn < width - 2)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).hasPlant)
+							weights.at(3).first += at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).GetPlant().GetMass() * prio;
+
+					//Down 1, Left 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
+						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).hasPlant)
+						{
+							weights.at(2).first += at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
+							weights.at(4).first += at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
+						}
+
+					//Down 1
+					if (currentCell.cellRow < height - 1)
+						if (at((currentCell.cellRow + 1) * width + currentCell.cellColumn).hasPlant)
+							weights.at(4).first += at((currentCell.cellRow + 1) * width).GetPlant().GetMass() * prio;
+
+					//Down 1, Right 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
+						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).hasPlant)
+						{
+							weights.at(3).first += at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
+							weights.at(4).first += at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
+						}
+
+					//Down 2
+					if (currentCell.cellRow < height - 2)
+						if (at((currentCell.cellRow + 2) * width + currentCell.cellColumn).hasPlant)
+							weights.at(4).first += at((currentCell.cellRow + 2) * width).GetPlant().GetMass() * prio;
+				}
 
 				//Predator presence
-				FindPredatorWeight(currentCell, &weights, PopulationType::PREDATOR);
+				{
+					PopulationType predatorType = PopulationType::PREDATOR;
+
+					//Up 2
+					if (currentCell.cellRow >= 2)
+						if (at((currentCell.cellRow - 2) * width + currentCell.cellColumn).GetPopulation(predatorType))
+						{
+							weights.at(0).first -= 1;
+							weights.at(1).first -= 2;
+							weights.at(4).first += 2;
+						}
+
+					//Up 1, Left 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
+						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPopulation(predatorType))
+						{
+							weights.at(0).first -= 1;
+							weights.at(1).first -= 2;
+							weights.at(2).first -= 2;
+							weights.at(3).first += 2;
+							weights.at(4).first += 2;
+						}
+
+					//Up 1
+					if (currentCell.cellRow >= 1)
+						if (at((currentCell.cellRow - 1) * width + currentCell.cellColumn).GetPopulation(predatorType))
+						{
+							weights.at(0).first -= 1;
+							weights.at(1).first -= 2;
+							weights.at(4).first += 2;
+						}
+
+					//Up 1, Right 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
+						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPopulation(predatorType))
+						{
+							weights.at(0).first -= 1;
+							weights.at(1).first -= 2;
+							weights.at(3).first -= 2;
+							weights.at(2).first += 2;
+							weights.at(4).first += 2;
+						}
+
+					//Left 2
+					if (currentCell.cellColumn >= 2)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).GetPopulation(predatorType))
+						{
+							weights.at(0).first -= 1;
+							weights.at(2).first -= 2;
+							weights.at(3).first += 2;
+						}
+
+					//Left 1
+					if (currentCell.cellColumn >= 1)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).GetPopulation(predatorType))
+						{
+							weights.at(0).first -= 1;
+							weights.at(2).first -= 2;
+							weights.at(3).first += 2;
+						}
+
+					//Right 1
+					if (currentCell.cellColumn < width - 1)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).GetPopulation(predatorType))
+						{
+							weights.at(0).first -= 1;
+							weights.at(3).first -= 2;
+							weights.at(2).first += 2;
+						}
+
+					//Right 2
+					if (currentCell.cellColumn < width - 2)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).GetPopulation(predatorType))
+						{
+							weights.at(0).first -= 1;
+							weights.at(3).first -= 2;
+							weights.at(2).first += 2;
+						}
+
+					//Down 1, Left 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
+						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPopulation(predatorType))
+						{
+							weights.at(0).first -= 1;
+							weights.at(2).first -= 2;
+							weights.at(4).first -= 2;
+							weights.at(1).first += 2;
+							weights.at(3).first += 2;
+						}
+
+					//Down 1
+					if (currentCell.cellRow < height - 1)
+						if (at((currentCell.cellRow + 1) * width + currentCell.cellColumn).GetPopulation(predatorType))
+						{
+							weights.at(0).first -= 1;
+							weights.at(4).first -= 2;
+							weights.at(1).first += 2;
+						}
+
+					//Down 1, Right 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
+						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPopulation(predatorType))
+						{
+							weights.at(0).first -= 1;
+							weights.at(3).first -= 2;
+							weights.at(4).first -= 2;
+							weights.at(1).first += 2;
+							weights.at(2).first += 2;
+						}
+
+					//Down 2
+					if (currentCell.cellRow < height - 2)
+						if (at((currentCell.cellRow + 2) * width + currentCell.cellColumn).GetPopulation(predatorType))
+						{
+							weights.at(0).first -= 1;
+							weights.at(4).first -= 2;
+							weights.at(1).first += 2;
+						}
+				}
 
 				//Childbearers
 				if (currentCell.GetAnimal().wantsChild)
-					FindChildbearerWeight(currentCell, &weights, 1);
+
+				{
+					float prio = currentCell.GetAnimal().GetFullness();
+					PopulationType animalType = currentCell.GetAnimal().type;
+
+					//Up 2
+					if (currentCell.cellRow >= 2)
+						if (at((currentCell.cellRow - 2) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow - 2) * width + currentCell.cellColumn).animalWantsChild)
+							weights.at(1).first += 1 * prio;
+
+					//Up 1, Left 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
+						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).animalWantsChild)
+						{
+							weights.at(1).first += 1 * prio;
+							weights.at(2).first += 1 * prio;
+						}
+
+					//Up 1
+					if (currentCell.cellRow >= 1)
+						if (at((currentCell.cellRow - 1) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow - 1) * width + currentCell.cellColumn).animalWantsChild)
+							weights.at(0).first += 2 * prio;
+
+					//Up 1, Right 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
+						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).animalWantsChild)
+						{
+							weights.at(1).first += 1 * prio;
+							weights.at(3).first += 1 * prio;
+						}
+
+					//Left 2
+					if (currentCell.cellColumn >= 2)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).animalWantsChild)
+							weights.at(2).first += 1 * prio;
+
+					//Left 1
+					if (currentCell.cellColumn >= 1)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).animalWantsChild)
+							weights.at(0).first += 2 * prio;
+
+					//Right 1
+					if (currentCell.cellColumn < width - 1)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).animalWantsChild)
+							weights.at(0).first += 2 * prio;
+
+					//Right 2
+					if (currentCell.cellColumn < width - 2)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).animalWantsChild)
+							weights.at(3).first += 1 * prio;
+
+					//Down 1, Left 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
+						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).animalWantsChild)
+						{
+							weights.at(2).first += 1 * prio;
+							weights.at(4).first += 1 * prio;
+						}
+
+					//Down 1
+					if (currentCell.cellRow < height - 1)
+						if (at((currentCell.cellRow + 1) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow + 1) * width + currentCell.cellColumn).animalWantsChild)
+							weights.at(0).first += 2 * prio;
+
+					//Down 1, Right 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
+						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).animalWantsChild)
+						{
+							weights.at(3).first += 1 * prio;
+							weights.at(4).first += 1 * prio;
+						}
+
+					//Down 2
+					if (currentCell.cellRow < height - 2)
+						if (at((currentCell.cellRow + 2) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow + 2) * width + currentCell.cellColumn).animalWantsChild)
+							weights.at(4).first += 1 * prio;
+				}
 			}
 
 			//Predator weights
 			if(currentCell.GetAnimal().type == PopulationType::PREDATOR)
 			{
 				//Prey presence
-				FindPreyWeight(currentCell, &weights, PopulationType::PREY);
+				{
+					float prio = currentCell.GetAnimal().GetNeededFood();
+					PopulationType preyType = PopulationType::PREY;
+
+					//Up 2
+					if (currentCell.cellRow >= 2)
+						if (at((currentCell.cellRow - 2) * width + currentCell.cellColumn).GetPopulation(preyType))
+						{
+							weights.at(1).first += 2 * prio;
+						}
+
+					//Up 1, Left 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
+						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPopulation(preyType))
+						{
+							weights.at(1).first += 2 * prio;
+							weights.at(2).first += 2 * prio;
+						}
+
+					//Up 1
+					if (currentCell.cellRow >= 1)
+						if (at((currentCell.cellRow - 1) * width + currentCell.cellColumn).GetPopulation(preyType))
+						{
+							weights.at(0).first += 1 * prio;
+							weights.at(1).first += 2 * prio;
+						}
+
+					//Up 1, Right 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
+						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPopulation(preyType))
+						{
+							weights.at(1).first += 2 * prio;
+							weights.at(3).first += 2 * prio;
+						}
+
+					//Left 2
+					if (currentCell.cellColumn >= 2)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).GetPopulation(preyType))
+						{
+							weights.at(2).first += 2 * prio;
+						}
+
+					//Left 1
+					if (currentCell.cellColumn >= 1)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).GetPopulation(preyType))
+						{
+							weights.at(0).first += 1 * prio;
+							weights.at(2).first += 2 * prio;
+						}
+
+					//Right 1
+					if (currentCell.cellColumn < width - 1)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).GetPopulation(preyType))
+						{
+							weights.at(0).first += 1 * prio;
+							weights.at(3).first += 2 * prio;
+						}
+
+					//Right 2
+					if (currentCell.cellColumn < width - 2)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).GetPopulation(preyType))
+						{
+							weights.at(3).first += 2 * prio;
+						}
+
+					//Down 1, Left 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
+						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPopulation(preyType))
+						{
+							weights.at(2).first += 2 * prio;
+							weights.at(4).first += 2 * prio;
+						}
+
+					//Down 1
+					if (currentCell.cellRow < height - 1)
+						if (at((currentCell.cellRow + 1) * width + currentCell.cellColumn).GetPopulation(preyType))
+						{
+							weights.at(4).first += 2 * prio;
+						}
+
+					//Down 1, Right 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
+						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPopulation(preyType))
+						{
+							weights.at(3).first += 2 * prio;
+							weights.at(4).first += 2 * prio;
+						}
+
+					//Down 2
+					if (currentCell.cellRow < height - 2)
+						if (at((currentCell.cellRow + 2) * width + currentCell.cellColumn).GetPopulation(preyType))
+						{
+							weights.at(4).first += 2 * prio;
+						}
+				}
 
 				//Childbearers
 				if (currentCell.GetAnimal().wantsChild)
-					FindChildbearerWeight(currentCell, &weights, 2);
+
+				{
+					float prio = currentCell.GetAnimal().GetFullness() * 2;
+					PopulationType animalType = currentCell.GetAnimal().type;
+
+					//Up 2
+					if (currentCell.cellRow >= 2)
+						if (at((currentCell.cellRow - 2) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow - 2) * width + currentCell.cellColumn).animalWantsChild)
+							weights.at(1).first += 1 * prio;
+
+					//Up 1, Left 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
+						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).animalWantsChild)
+						{
+							weights.at(1).first += 1 * prio;
+							weights.at(2).first += 1 * prio;
+						}
+
+					//Up 1
+					if (currentCell.cellRow >= 1)
+						if (at((currentCell.cellRow - 1) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow - 1) * width + currentCell.cellColumn).animalWantsChild)
+							weights.at(0).first += 2 * prio;
+
+					//Up 1, Right 1
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
+						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).animalWantsChild)
+						{
+							weights.at(1).first += 1 * prio;
+							weights.at(3).first += 1 * prio;
+						}
+
+					//Left 2
+					if (currentCell.cellColumn >= 2)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).animalWantsChild)
+							weights.at(2).first += 1 * prio;
+
+					//Left 1
+					if (currentCell.cellColumn >= 1)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).animalWantsChild)
+							weights.at(0).first += 2 * prio;
+
+					//Right 1
+					if (currentCell.cellColumn < width - 1)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).animalWantsChild)
+							weights.at(0).first += 2 * prio;
+
+					//Right 2
+					if (currentCell.cellColumn < width - 2)
+						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).animalWantsChild)
+							weights.at(3).first += 1 * prio;
+
+					//Down 1, Left 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
+						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).animalWantsChild)
+						{
+							weights.at(2).first += 1 * prio;
+							weights.at(4).first += 1 * prio;
+						}
+
+					//Down 1
+					if (currentCell.cellRow < height - 1)
+						if (at((currentCell.cellRow + 1) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow + 1) * width + currentCell.cellColumn).animalWantsChild)
+							weights.at(0).first += 2 * prio;
+
+					//Down 1, Right 1
+					if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
+						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).animalWantsChild)
+						{
+							weights.at(3).first += 1 * prio;
+							weights.at(4).first += 1 * prio;
+						}
+
+					//Down 2
+					if (currentCell.cellRow < height - 2)
+						if (at((currentCell.cellRow + 2) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow + 2) * width + currentCell.cellColumn).animalWantsChild)
+							weights.at(4).first += 1 * prio;
+				}
 
 				weights[0] = weights[0];
 			}
@@ -799,378 +1241,4 @@ void EcoResilience::World::UrbanDevelop()
 	for(auto cell : *this)
 		if(std::pow(cell.cellColumn, 2) + std::pow(cell.cellRow, 2) <= std::pow(width / 2, 2))
 			at(cell.cellRow * width + cell.cellColumn).cellType = CellType::URBANISED;
-}
-
-void EcoResilience::World::FindPlantMassWeight(Cell currentCell, std::vector<std::pair<float, int>>* weights) const
-{
-	float prio = currentCell.GetAnimal().GetNeededFood();
-
-	//Up 2
-	if (currentCell.cellRow >= 2)
-		if (at((currentCell.cellRow - 2) * width + currentCell.cellColumn).hasPlant)
-			weights->at(1).first += at((currentCell.cellRow - 2) * width + currentCell.cellColumn).GetPlant().GetMass() * prio;
-
-	//Up 1, Left 1
-	if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
-		if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).hasPlant)
-		{
-			weights->at(1).first += at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
-			weights->at(2).first += at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
-		}
-
-	//Up 1
-	if (currentCell.cellRow >= 1)
-		if (at((currentCell.cellRow - 1) * width + currentCell.cellColumn).hasPlant)
-			weights->at(1).first += at((currentCell.cellRow - 1) * width + currentCell.cellColumn).GetPlant().GetMass() * prio;
-
-	//Up 1, Right 1
-	if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
-		if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).hasPlant)
-		{
-			weights->at(1).first += at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
-			weights->at(3).first += at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
-		}
-
-	//Left 2
-	if (currentCell.cellColumn >= 2)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).hasPlant)
-			weights->at(2).first += at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).GetPlant().GetMass() * prio;
-
-	//Left 1
-	if (currentCell.cellColumn >= 1)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).hasPlant)
-			weights->at(2).first += at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
-
-	//This cell
-	if (currentCell.hasPlant)
-		weights->at(0).first += currentCell.GetPlant().GetMass() * prio;
-
-	//Right 1
-	if (currentCell.cellColumn < width - 1)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).hasPlant)
-			weights->at(3).first += at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
-
-	//Right 2
-	if (currentCell.cellColumn < width - 2)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).hasPlant)
-			weights->at(3).first += at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).GetPlant().GetMass() * prio;
-
-	//Down 1, Left 1
-	if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
-		if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).hasPlant)
-		{
-			weights->at(2).first += at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
-			weights->at(4).first += at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
-		}
-
-	//Down 1
-	if (currentCell.cellRow < height - 1)
-		if (at((currentCell.cellRow + 1) * width + currentCell.cellColumn).hasPlant)
-			weights->at(4).first += at((currentCell.cellRow + 1) * width).GetPlant().GetMass() * prio;
-
-	//Down 1, Right 1
-	if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
-		if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).hasPlant)
-		{
-			weights->at(3).first += at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
-			weights->at(4).first += at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
-		}
-
-	//Down 2
-	if (currentCell.cellRow < height - 2)
-		if (at((currentCell.cellRow + 2) * width + currentCell.cellColumn).hasPlant)
-			weights->at(4).first += at((currentCell.cellRow + 2) * width).GetPlant().GetMass() * prio;
-}
-
-void EcoResilience::World::FindPredatorWeight(Cell currentCell, std::vector<std::pair<float, int>>* weights, PopulationType predatorType)
-{
-	//Up 2
-	if (currentCell.cellRow >= 2)
-		if (at((currentCell.cellRow - 2) * width + currentCell.cellColumn).GetPopulation(predatorType))
-		{
-			weights->at(0).first -= 1;
-			weights->at(1).first -= 2;
-			weights->at(4).first += 2;
-		}
-
-	//Up 1, Left 1
-	if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
-		if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPopulation(predatorType))
-		{
-			weights->at(0).first -= 1;
-			weights->at(1).first -= 2;
-			weights->at(2).first -= 2;
-			weights->at(3).first += 2;
-			weights->at(4).first += 2;
-		}
-
-	//Up 1
-	if (currentCell.cellRow >= 1)
-		if (at((currentCell.cellRow - 1) * width + currentCell.cellColumn).GetPopulation(predatorType))
-		{
-			weights->at(0).first -= 1;
-			weights->at(1).first -= 2;
-			weights->at(4).first += 2;
-		}
-
-	//Up 1, Right 1
-	if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
-		if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPopulation(predatorType))
-		{
-			weights->at(0).first -= 1;
-			weights->at(1).first -= 2;
-			weights->at(3).first -= 2;
-			weights->at(2).first += 2;
-			weights->at(4).first += 2;
-		}
-
-	//Left 2
-	if (currentCell.cellColumn >= 2)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).GetPopulation(predatorType))
-		{
-			weights->at(0).first -= 1;
-			weights->at(2).first -= 2;
-			weights->at(3).first += 2;
-		}
-
-	//Left 1
-	if (currentCell.cellColumn >= 1)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).GetPopulation(predatorType))
-		{
-			weights->at(0).first -= 1;
-			weights->at(2).first -= 2;
-			weights->at(3).first += 2;
-		}
-
-	//Right 1
-	if (currentCell.cellColumn < width - 1)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).GetPopulation(predatorType))
-		{
-			weights->at(0).first -= 1;
-			weights->at(3).first -= 2;
-			weights->at(2).first += 2;
-		}
-
-	//Right 2
-	if (currentCell.cellColumn < width - 2)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).GetPopulation(predatorType))
-		{
-			weights->at(0).first -= 1;
-			weights->at(3).first -= 2;
-			weights->at(2).first += 2;
-		}
-
-	//Down 1, Left 1
-	if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
-		if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPopulation(predatorType))
-		{
-			weights->at(0).first -= 1;
-			weights->at(2).first -= 2;
-			weights->at(4).first -= 2;
-			weights->at(1).first += 2;
-			weights->at(3).first += 2;
-		}
-
-	//Down 1
-	if (currentCell.cellRow < height - 1)
-		if (at((currentCell.cellRow + 1) * width + currentCell.cellColumn).GetPopulation(predatorType))
-		{
-			weights->at(0).first -= 1;
-			weights->at(4).first -= 2;
-			weights->at(1).first += 2;
-		}
-
-	//Down 1, Right 1
-	if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
-		if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPopulation(predatorType))
-		{
-			weights->at(0).first -= 1;
-			weights->at(3).first -= 2;
-			weights->at(4).first -= 2;
-			weights->at(1).first += 2;
-			weights->at(2).first += 2;
-		}
-
-	//Down 2
-	if (currentCell.cellRow < height - 2)
-		if (at((currentCell.cellRow + 2) * width + currentCell.cellColumn).GetPopulation(predatorType))
-		{
-			weights->at(0).first -= 1;
-			weights->at(4).first -= 2;
-			weights->at(1).first += 2;
-		}
-}
-
-void EcoResilience::World::FindChildbearerWeight(Cell currentCell, std::vector<std::pair<float, int>>* weights, float multiplier)
-{
-	float prio = currentCell.GetAnimal().GetFullness() * multiplier;
-	PopulationType animalType = currentCell.GetAnimal().type;
-
-	//Up 2
-	if (currentCell.cellRow >= 2)
-		if (at((currentCell.cellRow - 2) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow - 2) * width + currentCell.cellColumn).animalWantsChild)
-			weights->at(1).first += 1 * prio;
-
-	//Up 1, Left 1
-	if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
-		if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).animalWantsChild)
-		{
-			weights->at(1).first += 1 * prio;
-			weights->at(2).first += 1 * prio;
-		}
-
-	//Up 1
-	if (currentCell.cellRow >= 1)
-		if (at((currentCell.cellRow - 1) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow - 1) * width + currentCell.cellColumn).animalWantsChild)
-			weights->at(0).first += 2 * prio;
-
-	//Up 1, Right 1
-	if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
-		if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).animalWantsChild)
-		{
-			weights->at(1).first += 1 * prio;
-			weights->at(3).first += 1 * prio;
-		}
-
-	//Left 2
-	if (currentCell.cellColumn >= 2)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).animalWantsChild)
-			weights->at(2).first += 1 * prio;
-
-	//Left 1
-	if (currentCell.cellColumn >= 1)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).animalWantsChild)
-			weights->at(0).first += 2 * prio;
-
-	//Right 1
-	if (currentCell.cellColumn < width - 1)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).animalWantsChild)
-			weights->at(0).first += 2 * prio;
-
-	//Right 2
-	if (currentCell.cellColumn < width - 2)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).animalWantsChild)
-			weights->at(3).first += 1 * prio;
-
-	//Down 1, Left 1
-	if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
-		if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).animalWantsChild)
-		{
-			weights->at(2).first += 1 * prio;
-			weights->at(4).first += 1 * prio;
-		}
-
-	//Down 1
-	if (currentCell.cellRow < height - 1)
-		if (at((currentCell.cellRow + 1) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow + 1) * width + currentCell.cellColumn).animalWantsChild)
-			weights->at(0).first += 2 * prio;
-
-	//Down 1, Right 1
-	if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
-		if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).animalWantsChild)
-		{
-			weights->at(3).first += 1 * prio;
-			weights->at(4).first += 1 * prio;
-		}
-
-	//Down 2
-	if (currentCell.cellRow < height - 2)
-		if (at((currentCell.cellRow + 2) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow + 2) * width + currentCell.cellColumn).animalWantsChild)
-			weights->at(4).first += 1 * prio;
-}
-
-void EcoResilience::World::FindPreyWeight(Cell currentCell, std::vector<std::pair<float, int>>* weights, PopulationType preyType)
-{
-	float prio = currentCell.GetAnimal().GetNeededFood();
-
-	//Up 2
-	if (currentCell.cellRow >= 2)
-		if (at((currentCell.cellRow - 2) * width + currentCell.cellColumn).GetPopulation(preyType))
-		{
-			weights->at(1).first += 2 * prio;
-		}
-
-	//Up 1, Left 1
-	if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
-		if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPopulation(preyType))
-		{
-			weights->at(1).first += 2 * prio;
-			weights->at(2).first += 2 * prio;
-		}
-
-	//Up 1
-	if (currentCell.cellRow >= 1)
-		if (at((currentCell.cellRow - 1) * width + currentCell.cellColumn).GetPopulation(preyType))
-		{
-			weights->at(0).first += 1 * prio;
-			weights->at(1).first += 2 * prio;
-		}
-
-	//Up 1, Right 1
-	if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
-		if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPopulation(preyType))
-		{
-			weights->at(1).first += 2 * prio;
-			weights->at(3).first += 2 * prio;
-		}
-
-	//Left 2
-	if (currentCell.cellColumn >= 2)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).GetPopulation(preyType))
-		{
-			weights->at(2).first += 2 * prio;
-		}
-
-	//Left 1
-	if (currentCell.cellColumn >= 1)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).GetPopulation(preyType))
-		{
-			weights->at(0).first += 1 * prio;
-			weights->at(2).first += 2 * prio;
-		}
-
-	//Right 1
-	if (currentCell.cellColumn < width - 1)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).GetPopulation(preyType))
-		{
-			weights->at(0).first += 1 * prio;
-			weights->at(3).first += 2 * prio;
-		}
-
-	//Right 2
-	if (currentCell.cellColumn < width - 2)
-		if (at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).GetPopulation(preyType))
-		{
-			weights->at(3).first += 2 * prio;
-		}
-
-	//Down 1, Left 1
-	if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
-		if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPopulation(preyType))
-		{
-			weights->at(2).first += 2 * prio;
-			weights->at(4).first += 2 * prio;
-		}
-
-	//Down 1
-	if (currentCell.cellRow < height - 1)
-		if (at((currentCell.cellRow + 1) * width + currentCell.cellColumn).GetPopulation(preyType))
-		{
-			weights->at(4).first += 2 * prio;
-		}
-
-	//Down 1, Right 1
-	if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
-		if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPopulation(preyType))
-		{
-			weights->at(3).first += 2 * prio;
-			weights->at(4).first += 2 * prio;
-		}
-
-	//Down 2
-	if (currentCell.cellRow < height - 2)
-		if (at((currentCell.cellRow + 2) * width + currentCell.cellColumn).GetPopulation(preyType))
-		{
-			weights->at(4).first += 2 * prio;
-		}
 }

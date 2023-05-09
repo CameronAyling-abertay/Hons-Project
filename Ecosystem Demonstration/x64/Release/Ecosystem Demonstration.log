@@ -44,8 +44,8 @@ C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosy
 C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\Source\DemoApp.cpp(311,26): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
   Main.cpp
   Generating code
-  2 of 2048 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    22 functions had inline decision re-evaluated but remain unchanged
+  101 of 2043 functions ( 4.9%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    69 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Ecosystem Demonstration.vcxproj -> C:\Users\The Dark Tower\Documents\Abertay\Honours project\C++\Hons-Project\Ecosystem Demonstration\x64\Release\Ecosystem Demonstration.exe

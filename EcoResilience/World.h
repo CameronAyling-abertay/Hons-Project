@@ -19,12 +19,7 @@ namespace EcoResilience
 
 		//How many steps have been taken
 		int steps;
-
-		void FindPlantMassWeight(Cell currentCell, std::vector<std::pair<float, int>>* weights) const;
-		void FindPredatorWeight(Cell currentCell, std::vector<std::pair<float, int>>* weights, PopulationType predatorType);
-		void FindPreyWeight(Cell currentCell, std::vector<std::pair<float, int>>* weights, PopulationType preyType);
-		void FindChildbearerWeight(Cell currentCell, std::vector<std::pair<float, int>>* weights, float multiplier);
-
+		
 	public:
 		//Constructor
 		World();
