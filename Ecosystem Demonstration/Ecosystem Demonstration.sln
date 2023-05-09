@@ -5,8 +5,6 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ecosystem Demonstration", "Ecosystem Demonstration.vcxproj", "{0824134E-1807-42AB-865D-CC640509316A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EcoResilience", "..\EcoResilience\EcoResilience.vcxproj", "{55168B4E-34F8-4F40-B6D4-37CA7C41AF58}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -23,14 +21,6 @@ Global
 		{0824134E-1807-42AB-865D-CC640509316A}.Release|x64.Build.0 = Release|x64
 		{0824134E-1807-42AB-865D-CC640509316A}.Release|x86.ActiveCfg = Release|Win32
 		{0824134E-1807-42AB-865D-CC640509316A}.Release|x86.Build.0 = Release|Win32
-		{55168B4E-34F8-4F40-B6D4-37CA7C41AF58}.Debug|x64.ActiveCfg = Debug|x64
-		{55168B4E-34F8-4F40-B6D4-37CA7C41AF58}.Debug|x64.Build.0 = Debug|x64
-		{55168B4E-34F8-4F40-B6D4-37CA7C41AF58}.Debug|x86.ActiveCfg = Debug|Win32
-		{55168B4E-34F8-4F40-B6D4-37CA7C41AF58}.Debug|x86.Build.0 = Debug|Win32
-		{55168B4E-34F8-4F40-B6D4-37CA7C41AF58}.Release|x64.ActiveCfg = Release|x64
-		{55168B4E-34F8-4F40-B6D4-37CA7C41AF58}.Release|x64.Build.0 = Release|x64
-		{55168B4E-34F8-4F40-B6D4-37CA7C41AF58}.Release|x86.ActiveCfg = Release|Win32
-		{55168B4E-34F8-4F40-B6D4-37CA7C41AF58}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

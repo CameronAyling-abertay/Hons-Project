@@ -123,15 +123,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);SFML_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\EcoResilience;$(SolutionDir)\imgui-sfml;$(SolutionDir)\imgui;$(SolutionDir)\SFML\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\imgui-sfml;$(SolutionDir)\imgui;$(SolutionDir)\SFML\include;$(SolutionDir)\EcoResilience\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\SFML\lib;..\EcoResilience;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);winmm.lib;sfml-system-s.lib;sfml-window-s.lib;sfml-graphics-s.lib;opengl32.lib;gdi32.lib;freetype.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\SFML\lib;$(SolutionDir)\EcoResilience\lib;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);winmm.lib;sfml-system-s.lib;sfml-window-s.lib;sfml-graphics-s.lib;opengl32.lib;gdi32.lib;freetype.lib;EcoResilience.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -146,11 +146,6 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Source\DemoApp.cpp" />
     <ClCompile Include="Source\Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\EcoResilience\EcoResilience.vcxproj">
-      <Project>{55168b4e-34f8-4f40-b6d4-37ca7c41af58}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
