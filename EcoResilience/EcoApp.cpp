@@ -1,5 +1,13 @@
 #include "EcoApp.h"
 
+EcoApp::EcoApp() :
+	drought(false),
+	timebank(0),
+	worldGenType(EcoResilience::GenerationType::RANDOM),
+	width(DEFAULT_SIDE),
+	height(DEFAULT_SIDE)
+{}
+
 void EcoApp::Update()
 {
 	world = world.Update();
@@ -71,7 +79,7 @@ void EcoApp::Plague()
 
 		if(zero == 0)
 		{
-			world[i].animal.Infect();
+			world[i].InfectAnimal();
 			break;
 		}
 	}
@@ -87,7 +95,7 @@ void EcoApp::Fire()
 
 		if(world[cellStart].hasPlant && world[cellStart].cellType == EcoResilience::CellType::LAND)
 		{
-			world[cellStart].plants.SetFire();
+			world[cellStart].SetFire();
 			started = true;
 		}
 	}

@@ -6,7 +6,7 @@
 
 DemoApp::DemoApp() :
     window(NULL),
-	speed(1),
+	speed(0.1),
     stepCount(0),
 	timebank(0),
     perlin(false),
@@ -70,6 +70,7 @@ void DemoApp::handleInput()
 //Update the application
 void DemoApp::update(sf::Time dt)
 {
+    //Run the ecology
     if (!paused)
     {
         timebank += dt.asSeconds();
@@ -79,12 +80,12 @@ void DemoApp::update(sf::Time dt)
             stepCount++;
             timebank -= speed;
 
+            //Manage rain
             float water = 0;
 
             for (int cellNum = 0; cellNum < ecology.width * ecology.height; cellNum++)
             {
                 water += ecology.world.at(cellNum).GetWater();
-                ecology.world.at(cellNum).Flood();
             }
 
             if (water < ecology.width * ecology.height * 0.6f)
@@ -99,11 +100,11 @@ void DemoApp::update(sf::Time dt)
     float plantMass = 0;
     int prey = 0;
     int predator = 0;
-    for(auto cell : ecology.GetWorld())
+    for(auto cell : ecology.world)
     {
         water += cell.GetWater();
         if(cell.hasPlant)
-			plantMass += cell.plants.mass;
+			plantMass += cell.GetPlant().GetMass();
 
         prey += cell.GetPopulation(EcoResilience::PopulationType::PREY);
         predator += cell.GetPopulation(EcoResilience::PopulationType::PREDATOR);
@@ -134,7 +135,7 @@ void DemoApp::update(sf::Time dt)
 
     //Natural events
     ImGui::Text("\nNatural Events");
-    if (!ecology.drought)
+    if (!ecology.GetDrought())
     {
         if (ImGui::Button("Rain", ImVec2(250, 20)))
             ecology.Rain();
@@ -144,7 +145,7 @@ void DemoApp::update(sf::Time dt)
 
     //Disturbance events
     ImGui::Text("\nDisturbance Events");
-    if (!ecology.drought)
+    if (!ecology.GetDrought())
     {
         if (ImGui::Button("Flood", ImVec2(250, 20)))
             ecology.Flood();
@@ -200,7 +201,7 @@ void DemoApp::render()
     const sf::Vector2f screenCentre = window->getView().getCenter();
 
     //Render anything needed
-    for (EcoResilience::Cell currentCell : ecology.GetWorld())
+    for (EcoResilience::Cell currentCell : ecology.world)
     {
         sf::Vector2f pos;
 
@@ -219,7 +220,7 @@ void DemoApp::render()
             //Plague
             if (currentCell.hasAnimal)
             {
-                if (currentCell.animal.infected)
+                if (currentCell.GetAnimal().infected)
                 {
                     repColor.r = currentCell.GetPopulation(EcoResilience::PopulationType::PREY) ? 128 : 238;
                     repColor.g = currentCell.GetPopulation(EcoResilience::PopulationType::PREY) ? 0 : 130;
@@ -233,7 +234,7 @@ void DemoApp::render()
 
             //Fire
             if (currentCell.hasPlant)
-                if (currentCell.plants.fire)
+                if (currentCell.GetPlant().fire)
                     repColor = sf::Color(204, 85, 0);
 
             cellRep.setFillColor(repColor);
@@ -246,7 +247,7 @@ void DemoApp::render()
 
             float mass = 0;
             if (currentCell.hasPlant)
-                mass = currentCell.plants.mass;
+                mass = currentCell.GetPlant().GetMass();
 
             repColor = sf::Color(86, 125 + mass * 60.f / DEFAULT_MASS, 70);
 
@@ -259,7 +260,7 @@ void DemoApp::render()
             pos.y = cellPos.y + worldPos.y;
             cellRep.setPosition(screenCentre + pos);
 
-            int waterNum = (currentCell.altitude - currentCell.GetWater()) * 150.f + 105.f;
+            int waterNum = (currentCell.GetAltitude() - currentCell.GetWater()) * 75.f + 185.f;
 
             repColor = sf::Color(0, 0, waterNum);
 
@@ -289,24 +290,24 @@ void DemoApp::render()
 
             float mass = 0;
             if (currentCell.hasPlant)
-                mass = currentCell.plants.mass;
+                mass = currentCell.GetPlant().GetMass();
 
             sf::Color baseColour(209 - (209 - 86) * mass / DEFAULT_MASS, 189 - (189 - 125) * mass / DEFAULT_MASS, 100 - (100 - 70) * mass / DEFAULT_MASS);
 
             //Water
-            int waterNum = (currentCell.altitude - currentCell.GetWater()) * 150.f + 105.f;
+            int waterNum = (currentCell.GetAltitude() - currentCell.GetWater()) * 75.f + 185.f;
             sf::Color waterColour(0, 0, waterNum);
 
             //Animals
             sf::Color animalColour(
-                currentCell.GetPopulation(EcoResilience::PopulationType::PREY) == 1 ? 255 : 0,
-                currentCell.GetPopulation(EcoResilience::PopulationType::PREDATOR) == 1 ? 255 : 0,
-                currentCell.GetPopulation(EcoResilience::PopulationType::PREDATOR) == 1 ? 255 : 0
+                currentCell.GetPopulation(EcoResilience::PopulationType::PREY) * 255,
+                currentCell.GetPopulation(EcoResilience::PopulationType::PREDATOR) * 255,
+                currentCell.GetPopulation(EcoResilience::PopulationType::PREDATOR) * 255
             );
 
             if (currentCell.hasAnimal)
             {
-                if (currentCell.animal.infected)
+                if (currentCell.GetAnimal().infected)
                 {
                     animalColour.r = currentCell.GetPopulation(EcoResilience::PopulationType::PREY) ? 128 : 238;
                     animalColour.g = currentCell.GetPopulation(EcoResilience::PopulationType::PREY) ? 0 : 130;
@@ -320,10 +321,9 @@ void DemoApp::render()
             //Cell type
             repColor = currentCell.cellType == EcoResilience::CellType::WATER ? waterColour : baseColour;
             repColor = currentCell.cellType == EcoResilience::CellType::URBANISED ? sf::Color(100, 100, 100) : repColor;
-
-            if (currentCell.hasPlant)
-                if (currentCell.plants.fire)
-                    repColor = sf::Color(204, 85, 0);
+            
+        	if (currentCell.fire)
+        		repColor = sf::Color(204, 85, 0);
 
             cellRep.setFillColor(repColor);
 

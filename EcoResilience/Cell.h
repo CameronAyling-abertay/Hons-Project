@@ -1,5 +1,4 @@
 #pragma once
-#include <vector>
 #include "Animal.h"
 #include "Plant.h"
 
@@ -12,25 +11,24 @@ namespace EcoResilience
 		//Unique properties
 		float waterLevel;
 
-		float maxPlantMass;
+		float maxMass;
 
-		bool fire;
+		Plant plants;
+		Animal animal;
+
+		bool flooded;
+		int floodCounter;
+
+		float altitude;
 
 	public:
 		int cellRow;
 		int cellColumn;
 
 		bool hasPlant;
-		Plant plants;
 		bool hasAnimal;
-		Animal animal;
-
-		float altitude;
 
 		CellType cellType;
-
-		bool flooded;
-		int floodCounter;
 
 		bool plantWantsChild;
 		void plantHadChild() { plants.Reproduce(); plantWantsChild = false; }
@@ -46,17 +44,26 @@ namespace EcoResilience
 		void killPrey() { hasAnimal = false; }
 
 		Cell(int row, int column, float maxPlantMass);
-		~Cell() {};
+		~Cell() = default;
 
+		void SetAltitude(float alt) { altitude = alt; }
+		float GetAltitude() const { return altitude; }
 		void Update();
 		void AddPlant(Plant plant);
 		void AddAnimal(Animal animal);
+		Plant GetPlant() const { return plants; }
+		Animal GetAnimal() const { return animal; }
 
 		float GetWater() { return waterLevel; };
 		void SetWater(float newWaterLevel);
 
 		void Flood() { flooded = true; floodCounter = 0; }
 
+		void InfectAnimal() { if (hasAnimal) { animal.Infect(); } }
+		void SetFire() { if (hasPlant) { plants.SetFire(); } }
+
 		int GetPopulation(PopulationType type);
+
+		bool fire;
 	};
 };

@@ -7,10 +7,11 @@ EcoResilience::Cell::Cell(int row, int column, float plantMass) :
 	plants(NULL),
 	plantWantsChild(false),
 	animalWantsMove(false),
-	maxPlantMass(plantMass),
+	maxMass(plantMass),
 	flooded(false),
 	hasPlant(false),
-	hasAnimal(false)
+	hasAnimal(false),
+	fire(false)
 {
 }
 
@@ -91,7 +92,6 @@ void EcoResilience::Cell::Update()
 			animal.RecoverBurn();
 	}
 
-
 	if (cellType == CellType::WATER)
 	{
 		SetWater(waterLevel * 0.99999f);
@@ -110,16 +110,16 @@ void EcoResilience::Cell::Update()
 			{
 				float mod = -0.5 + rand() % 1000 / 1000.f;
 
-				if (waterLevel - plants.stomachMax * (0.005 + 0.005 * mod) > 0)
+				if (waterLevel - plants.GetNeededFood() * (0.005 + 0.005 * mod) > 0)
 				{
-					plants.Feed(plants.stomachMax * (0.6 + 0.2 * mod));
-					SetWater(waterLevel - plants.stomachMax * (0.005 + 0.005 * mod));
+					plants.Feed(plants.GetNeededFood() * (0.6 + 0.2 * mod));
+					SetWater(waterLevel - plants.GetNeededFood() * (0.005 + 0.005 * mod));
 				}
 			}
 
 			plantWantsChild = plants.wantsChild;
 
-			plants.mass = std::min(maxPlantMass, plants.mass);
+			plants.CapMass(maxMass);
 
 			if (plants.wantsDeath)
 			{
@@ -141,15 +141,15 @@ void EcoResilience::Cell::Update()
 				{
 					if (hasPlant)
 					{
-						float neededFood = (animal.stomachMax - animal.stomach) * 0.4f;
-						if (plants.mass >= neededFood * 0.4f)
+						float neededFood = animal.GetNeededFood() * 0.7;
+						if (plants.GetMass() >= neededFood * 0.3f)
 						{
-							plants.mass -= neededFood * 0.4f;
+							plants.Decay(neededFood * 0.3f);
 							animal.Feed(neededFood);
 						}
 						else
 						{
-							animal.Feed(plants.mass);
+							animal.Feed(plants.GetMass());
 
 							hasPlant = false;
 						}

@@ -1,4 +1,5 @@
 #include "Animal.h"
+#include <random>
 
 EcoResilience::Animal::Animal(PopulationType species) :
 	type(species),
@@ -10,27 +11,30 @@ EcoResilience::Animal::Animal(PopulationType species) :
 	infected(false),
 	immune(false),
 	burnCounter(0),
-	drownCounter(0)
+	drownCounter(0),
+	sinceLastFeed(0)
 {
 	vigor = rand() % 1000 / 100.;
 	mass = vigor / 10.;
-	maxAge = vigor * 40;
-	age = maxAge * vigor / 15;
-	stomachMax = vigor / 10.;
-	stomach = stomachMax * (rand() % 1000 / 1000.f);
 
-	switch(type)
+	switch (type)
 	{
 	case PopulationType::PREDATOR:
-		moveCounter = 3;
-		childCounter = 50;
+		moveCounter = 14;
+		childCounter = 120;
+		maxAge = vigor * 400;
 		break;
 
 	case PopulationType::PREY:
 		moveCounter = 7;
-		childCounter = 10;
+		childCounter = 60;
+		maxAge = vigor * 100;
 		break;
 	}
+
+	age = maxAge * vigor / 15;
+	stomachMax = vigor / 10.;
+	stomach = stomachMax * (rand() % 1000 / 1000.f);
 }
 
 void EcoResilience::Animal::Update()
@@ -48,7 +52,7 @@ void EcoResilience::Animal::Update()
 		if (mass <= 0.1f)
 			wantsDeath = true;
 
-		if (rand() % 100 < 2)
+		if (rand() % 1000 < 5)
 			Cure();
 	}
 
@@ -83,26 +87,26 @@ void EcoResilience::Animal::Update()
 	moveCounter--;
 	wantsMove = moveCounter == 0;
 
+	sinceLastFeed++;
+
 	switch(type)
 	{
 	case PopulationType::PREDATOR:
-		stomach -= 0.004f / vigor;
-
-		wantsChild = stomach >= stomachMax * 0.5f && age > 0.3f * maxAge && childCounter <= 0;
+		stomach -= 0.006f * mass * (sinceLastFeed / 5.f) / vigor;
 
 		wantsEat = stomach <= stomachMax * 0.1f && age < maxAge;
+		wantsChild = stomach >= stomachMax * 0.7f && age > 0.3f * maxAge && age <= maxAge && childCounter <= 0;
 
 		if (moveCounter == 0)
-			moveCounter = 3;
+			moveCounter = 14;
 
 		break;
 
 	case PopulationType::PREY:
-		stomach -= 0.008f / vigor;
+		stomach -= 0.03f * mass * (sinceLastFeed / 5.f) / vigor;
 
-		wantsChild = stomach >= stomachMax * 0.5f && age > 0.3f * maxAge && childCounter <= 0;
-
-		wantsEat = stomach <= stomachMax * 0.25f;
+		wantsEat = stomach <= stomachMax * 0.15f && age < maxAge;
+		wantsChild = stomach >= stomachMax * 0.7f && age > 0.1f * maxAge && age <= maxAge && childCounter <= 0;
 
 		if (moveCounter == 0)
 			moveCounter = 7;
@@ -111,11 +115,15 @@ void EcoResilience::Animal::Update()
 	if (stomach <= 0)
 	{
 		stomach = 0;
-		stepsBeforeDeath++;
 		mass = std::max(mass * 0.9, 0.);
+		stepsBeforeDeath++;
+	}
+	else if (age < maxAge)
+	{
+		stepsBeforeDeath = 0;
 	}
 	else
-		stepsBeforeDeath = 0;
+		stepsBeforeDeath++;
 
 	if (stepsBeforeDeath == static_cast<int>(vigor))
 	{
@@ -125,6 +133,7 @@ void EcoResilience::Animal::Update()
 
 void EcoResilience::Animal::Feed(float food)
 {
+	sinceLastFeed = 0;
 	stomach += food;
 	wantsEat = false;
 }
@@ -132,17 +141,16 @@ void EcoResilience::Animal::Feed(float food)
 void EcoResilience::Animal::Reproduce()
 {
 	wantsChild = false;
-
-	stomach -= stomachMax * 0.5f;
+	stomach -= stomachMax * 0.7f;
 
 	switch (type)
 	{
 	case PopulationType::PREDATOR:
-		childCounter = 50;
+		childCounter = 120;
 		break;
 
 	case PopulationType::PREY:
-		childCounter = 10;
+		childCounter = 60;
 		break;
 	}
 }

@@ -54,7 +54,7 @@ void EcoResilience::Plant::Update()
 	if (burnt)
 	{
 		burnCounter++;
-		if (burnCounter > 50)
+		if (burnCounter > 200)
 			burnt = false;
 	}
 

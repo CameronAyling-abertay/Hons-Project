@@ -1,5 +1,4 @@
 #pragma once
-#include <random>
 
 namespace EcoResilience
 {
@@ -7,51 +6,75 @@ namespace EcoResilience
 
 	class Animal
 	{
-	public:
-		void Reproduce();
-
+		//General data
 		float stomach;
 		float stomachMax;
 		float mass;
 		float vigor;
 
-		Animal(PopulationType species = PopulationType::PREY);
-		~Animal() {};
-
-		PopulationType type;
-
+		//Closeness to death
 		int stepsBeforeDeath;
-		bool wantsDeath;
-
-		bool wantsEat;
-		
-		bool wantsMove;
-		int moveCounter;
-
-		bool wantsChild;
-		int childCounter;
 
 		int age;
 		int maxAge;
 
-		void Update();
+		//Countdown to well it can have a child
+		int childCounter;
 
-		void Feed(float food);
+		//Countdown to when it can move
+		int moveCounter;
 
-		bool infected;
+		//Immunity to plague
 		bool immune;
 		bool immuneCounter;
-		void Infect() { if (!immune) { infected = true; immuneCounter = 0; } };
-		void Cure() { infected = false; immune = true; }
 
-		void Burn() { burning = true; };
-		void RecoverBurn() { burning = false; };
+		//Fire
 		bool burning;
 		int burnCounter;
 
-		void Drown() { drowning = true; };
-		void Resuscitate() { drowning = false; };
+		//Drowning
 		bool drowning;
 		int drownCounter;
+
+	public:
+		//Constructor and destructor
+		Animal(PopulationType species = PopulationType::PREY);
+		~Animal() = default;
+
+		void Update();
+
+		//The species
+		PopulationType type;
+
+		//Flags
+		bool wantsChild;
+		bool wantsDeath;
+		bool wantsEat;
+		bool wantsMove;
+
+		//Reproduction
+		void Reproduce();
+
+		//Getters
+		float GetMass() const { return mass; }
+
+		//Food
+		int sinceLastFeed;
+		void Feed(float food);
+		float GetNeededFood() const { return stomachMax - stomach; }
+		float GetFullness() const { return stomach; }
+
+		//Plague
+		bool infected;
+		void Infect() { if (!immune) { infected = true; immuneCounter = 0; } };
+		void Cure() { infected = false; immune = true; }
+
+		//Fire
+		void Burn() { burning = true; };
+		void RecoverBurn() { burning = false; };
+
+		//Drowning
+		void Drown() { drowning = true; };
+		void Resuscitate() { drowning = false; };
 	};
 }
