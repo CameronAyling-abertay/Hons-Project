@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 
 namespace EcoResilience
 {
@@ -7,6 +8,7 @@ namespace EcoResilience
 	class Animal
 	{
 		//General data
+		int sinceLastFeed;
 		float stomach;
 		float stomachMax;
 		float mass;
@@ -55,11 +57,11 @@ namespace EcoResilience
 		//Reproduction
 		void Reproduce();
 
-		//Getters
+		//Mass Management
 		float GetMass() const { return mass; }
+		void CapMass(float cap) { mass = std::min(cap, mass); }
 
 		//Food
-		int sinceLastFeed;
 		void Feed(float food);
 		float GetNeededFood() const { return stomachMax - stomach; }
 		float GetFullness() const { return stomach; }

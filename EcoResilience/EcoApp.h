@@ -7,11 +7,10 @@
 class EcoApp
 {
 	//World parameters
-	bool drought;
 	EcoResilience::GenerationType worldGenType;
 
 	//Disturbance events
-	float timebank;
+	bool drought;
 
 public:
 	//World parameters

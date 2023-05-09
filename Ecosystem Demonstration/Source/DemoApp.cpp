@@ -13,16 +13,19 @@ DemoApp::DemoApp() :
     paused(false),
     viewSeparate(false)
 {
+    //Seed randomness
     srand(time(0));
 }
 
 void DemoApp::init()
 {
-    //Initialise window and starting variables
+    //Initialise window
     window = new sf::RenderWindow(sf::VideoMode(2000, 1200), "Ecosystem Resilience Demonstration");
 
+    //Initialise SFML within a window
     ImGui::SFML::Init(*window);
 
+    //Generate a default world
     ecology.GenerateWorld();
 }
 
@@ -93,7 +96,7 @@ void DemoApp::update(sf::Time dt)
         }
     }
 
-    //Construct diagnostic data
+    //Construct diagnostic data - water level, plant mass, and species populations
     ImGui::SFML::Update(*window, dt);
 
     float water = 0;
@@ -134,6 +137,7 @@ void DemoApp::update(sf::Time dt)
     }
 
     //Natural events
+    //Disabled while the ecology is in drought but this is purely for aesthetic purposes
     ImGui::Text("\nNatural Events");
     if (!ecology.GetDrought())
     {
@@ -144,6 +148,8 @@ void DemoApp::update(sf::Time dt)
         ImGui::Button("Rain (Disabled due to drought)", ImVec2(250, 20));
 
     //Disturbance events
+    //Flooding
+    //Disabled while the ecology is in drought but this is purely for aesthetic purposes
     ImGui::Text("\nDisturbance Events");
     if (!ecology.GetDrought())
     {
@@ -151,21 +157,25 @@ void DemoApp::update(sf::Time dt)
             ecology.Flood();
     }
     else
-        ImGui::Button("Rain (Disabled due to drought)", ImVec2(250, 20));
+        ImGui::Button("Flood (Disabled due to drought)", ImVec2(250, 20));
 
+    //Drought
     if (ImGui::Button("Drought", ImVec2(250, 20)))
         ecology.Drought();
 
+    //Urban Development
     if (ImGui::Button("Urban Development", ImVec2(250, 20)))
         ecology.Urbanise();
-    
+
+    //Plague
     if (ImGui::Button("Plague", ImVec2(250, 20)))
         ecology.Plague();
 
+    //Wildfire
     if (ImGui::Button("Wildfire", ImVec2(250, 20)))
         ecology.Fire();
 
-    //Viewing
+    //Viewing settings
     ImGui::Text("\nViewing");
     ImGui::Checkbox("View Separate layers", &viewSeparate);
 
@@ -180,6 +190,7 @@ void DemoApp::update(sf::Time dt)
         if (ImGui::Button("Pause", ImVec2(250, 20)))
             paused = true;
 
+    //Complete the ImGui window
     ImGui::End();
 }
 
@@ -189,6 +200,7 @@ void DemoApp::render()
     //Clear the display
     window->clear();
 
+    //Create a cell representative
     sf::RectangleShape cellRep;
 
     int sideSize;
@@ -203,6 +215,7 @@ void DemoApp::render()
     //Render anything needed
     for (EcoResilience::Cell currentCell : ecology.world)
     {
+        //Set the representative's position on the screen
         sf::Vector2f pos;
 
         const sf::Vector2f cellPos(currentCell.cellColumn * sideSize - (ecology.height / 2 * sideSize), currentCell.cellRow * sideSize - (ecology.width / 2 * sideSize));
@@ -331,7 +344,7 @@ void DemoApp::render()
         }
     }
 
-    ImGui::SFML::Render(*window);
     //Send the drawn objects to the screen
+    ImGui::SFML::Render(*window);
     window->display();
 }

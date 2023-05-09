@@ -10,26 +10,30 @@ namespace EcoResilience
 	{
 		//Unique properties
 		float waterLevel;
-
+		float altitude;
 		float maxMass;
 
+		//Contained objects
 		Plant plants;
 		Animal animal;
 
+		//Disturbance Effects
 		bool flooded;
 		int floodCounter;
 
-		float altitude;
-
 	public:
+		//Location
 		int cellRow;
 		int cellColumn;
 
+		//Flags that act in the same way as pointers for presence verification
 		bool hasPlant;
 		bool hasAnimal;
 
+		//The landscape within the cell
 		CellType cellType;
 
+		//Intermediary functions that allow the world object to communicate with the contained objects without direct reference
 		bool plantWantsChild;
 		void plantHadChild() { plants.Reproduce(); plantWantsChild = false; }
 
@@ -43,27 +47,30 @@ namespace EcoResilience
 		void feedPredator(float biomass) { animal.Feed(biomass); predatorWantsFood = false; }
 		void killPrey() { hasAnimal = false; }
 
+		//Constructor/Destructor
 		Cell(int row, int column, float maxPlantMass);
 		~Cell() = default;
+		void Update();
 
+		//Getters and Setters
 		void SetAltitude(float alt) { altitude = alt; }
 		float GetAltitude() const { return altitude; }
-		void Update();
+		float GetWater() { return waterLevel; };
+		void SetWater(float newWaterLevel);
 		void AddPlant(Plant plant);
 		void AddAnimal(Animal animal);
 		Plant GetPlant() const { return plants; }
 		Animal GetAnimal() const { return animal; }
 
-		float GetWater() { return waterLevel; };
-		void SetWater(float newWaterLevel);
-
+		//Disturbance effects
 		void Flood() { flooded = true; floodCounter = 0; }
 
 		void InfectAnimal() { if (hasAnimal) { animal.Infect(); } }
+
 		void SetFire() { if (hasPlant) { plants.SetFire(); } }
-
-		int GetPopulation(PopulationType type);
-
 		bool fire;
+
+		//Diagnostics
+		int GetPopulation(PopulationType type);
 	};
 };

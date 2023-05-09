@@ -2,7 +2,6 @@
 
 EcoApp::EcoApp() :
 	drought(false),
-	timebank(0),
 	worldGenType(EcoResilience::GenerationType::RANDOM),
 	width(DEFAULT_SIDE),
 	height(DEFAULT_SIDE)
@@ -10,8 +9,10 @@ EcoApp::EcoApp() :
 
 void EcoApp::Update()
 {
+	//Set the world reference to the back frame
 	world = world.Update();
 
+	//Find the amount of water in the world to determine whether the drought is over
 	float water = 0;
 
 	for (auto cell : world)
@@ -23,27 +24,30 @@ void EcoApp::Update()
 
 void EcoApp::GenerateWorld(EcoResilience::GenerationType genType, int worldWidth, int worldHeight, float maxCellPlantMass)
 {
+	//Generate the world
 	worldGenType = genType;
 	
 	world.Generate(worldWidth, worldHeight, genType, maxCellPlantMass);
 	width = worldWidth;
 	height = worldHeight;
 
-	timebank = 0;
-
+	//Set the drought flag to false
 	drought = false;
 }
 
 void EcoApp::Rain()
 {
+	//If the world is not in drought, let it rain
 	if (!drought)
 		world.Rain();
 }
 
 void EcoApp::Flood()
 {
+	//If the world is not in drought, let it rain until the world is flooded
 	while(!drought)
 	{
+		//Find the amount of water in the world to determine whether it is flooded
 		float water = 0;
 
 		for (int cellNum = 0; cellNum < width * height; cellNum++)
@@ -52,15 +56,17 @@ void EcoApp::Flood()
 			world.at(cellNum).Flood();
 		}
 
+		//If the world is not flooded, make it rain
 		if (water < width * height * 0.75f)
 			Rain();
-		else
+		else//End the cycle otherwise as it is flooded
 			break;
 	}
 }
 
 void EcoApp::Plague()
 {
+	//Find how many animals are in the world
 	int population = 0;
 	for(auto cell : world)
 	{
@@ -68,17 +74,18 @@ void EcoApp::Plague()
 			population++;
 	}
 
+	//Determine an index to be patient zero
 	int zero = rand() % population;
 
+	//Find patient zero
 	for(int i = 0; i < width * height; i++)
 	{
 		if(world[i].hasAnimal)
-		{
 			zero--;
-		}
 
 		if(zero == 0)
 		{
+			//Infect patient zero
 			world[i].InfectAnimal();
 			break;
 		}
@@ -87,6 +94,7 @@ void EcoApp::Plague()
 
 void EcoApp::Fire()
 {
+	//Find a cell with plants to light on fire
 	bool started = false;
 
 	while(!started)
@@ -95,6 +103,7 @@ void EcoApp::Fire()
 
 		if(world[cellStart].hasPlant && world[cellStart].cellType == EcoResilience::CellType::LAND)
 		{
+			//Light the plants in the cell on fire
 			world[cellStart].SetFire();
 			started = true;
 		}

@@ -15,6 +15,7 @@ EcoResilience::Cell::Cell(int row, int column, float plantMass) :
 {
 }
 
+//A diagnostic/species detection function to check if the cell is inhabited by an animal and by what species at the same time
 int EcoResilience::Cell::GetPopulation(PopulationType type)
 {
 	if (hasAnimal)
@@ -35,6 +36,7 @@ int EcoResilience::Cell::GetPopulation(PopulationType type)
 	return 0;
 }
 
+//Getters and Setters
 void EcoResilience::Cell::AddPlant(Plant plant)
 {
 	plants = plant;
@@ -64,8 +66,10 @@ void EcoResilience::Cell::SetWater(float newWaterLevel)
 	}
 }
 
+//Update
 void EcoResilience::Cell::Update()
 {
+	//If the cell is flooded, drain it a bit
 	if(flooded)
 	{
 		SetWater(waterLevel * 0.99);
@@ -77,6 +81,7 @@ void EcoResilience::Cell::Update()
 		}
 	}
 
+	//Manage whether the cell is on fire
 	if (hasPlant)
 	{
 		fire = plants.fire;
@@ -92,20 +97,28 @@ void EcoResilience::Cell::Update()
 			animal.RecoverBurn();
 	}
 
-	if (cellType == CellType::WATER)
+	//Different actions based on what the landscape is like within the cell
+	if (cellType == CellType::WATER)//The landscape is underwater
 	{
+		//Slightly drain the cell to simulate evaporation
 		SetWater(waterLevel * 0.99999f);
 
+		//Drown the biota in the cell
 		if (hasAnimal)
 			animal.Drown();
 
 		if (hasPlant)
 			plants.Drown();
 	}
-	else if (cellType == CellType::LAND)
+	else if (cellType == CellType::LAND)//The landscape is inhabitable
 	{
+		//Manage the plants
 		if (hasPlant)
 		{
+			//Because the cell is not water, allow the cell to recover from drowning if it was previously
+			plants.Resuscitate();
+
+			//If the plant is hungry so give it some food and drain the appropriate amount of water
 			if (plants.wantsFood)
 			{
 				float mod = -0.5 + rand() % 1000 / 1000.f;
@@ -117,53 +130,59 @@ void EcoResilience::Cell::Update()
 				}
 			}
 
+			//Check whether the plant wants a child
 			plantWantsChild = plants.wantsChild;
 
+			//Cap the plant's mass
 			plants.CapMass(maxMass);
-
-			if (plants.wantsDeath)
-			{
-				hasPlant = false;
-			}
 		}
-		else
+		else//There is no plant so reset related flags
 		{
 			plantWantsChild = false;
 		}
 
+		//Manage the animal
 		if (hasAnimal)
 		{
+			//Because the cell is not water, allow the cell to recover from drowning if it was previously
 			animal.Resuscitate();
 
+			//If the animal is hungry, do different things depending on the animal's species
 			if (animal.wantsEat)
 			{
+				//If the animal is a prey animal, give it some plant mass and subtract the appropriate amount from the plants in the cell
 				if (animal.type == PopulationType::PREY)
 				{
 					if (hasPlant)
 					{
-						float neededFood = animal.GetNeededFood() * 0.7;
+						//Take as much plant mass as is available up to a cap
+						float neededFood = animal.GetNeededFood() * 0.7f;
 						if (plants.GetMass() >= neededFood * 0.3f)
 						{
 							plants.Decay(neededFood * 0.3f);
 							animal.Feed(neededFood);
 						}
-						else
+						else//Otherwise take everything and kill the plants
 						{
 							animal.Feed(plants.GetMass());
-
 							hasPlant = false;
 						}
 					}
 				}
-				else
+				else//The animal is a predator so it needs to be handled by the world object
 					predatorWantsFood = true;
 			}
 
+			//Set flags
 			animalWantsMove = animal.wantsMove;
 			animalWantsChild = animal.wantsChild;
+
+			//Cap the mass
+			animal.CapMass(maxMass);
 		}
 		else
 		{
+			//There is no animal so reset flags
 			animalWantsMove = false;
 			animalWantsChild = false;
 			predatorWantsFood = false;
@@ -171,22 +190,27 @@ void EcoResilience::Cell::Update()
 	}
 	else
 	{
+		//The cell is urbanised so kill all biota
 		hasAnimal = false;
 		hasPlant = false;
 	}
 
+	//Update the animal
 	if (hasAnimal)
 	{
 		animal.Update();
 
+		//If the animal should die, kill it
 		if (animal.wantsDeath)
 			hasAnimal = false;
 	}
 
+	//Update the plant
 	if (hasPlant)
 	{
 		plants.Update();
 
+		//If the plants should die, kill them
 		if (plants.wantsDeath)
 			hasPlant = false;
 	}

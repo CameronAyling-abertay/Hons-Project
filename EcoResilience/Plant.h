@@ -5,6 +5,7 @@ namespace EcoResilience
 {
 	class Plant
 	{
+		//Base stats
 		float vigor;
 		float mass;
 		float stomach;

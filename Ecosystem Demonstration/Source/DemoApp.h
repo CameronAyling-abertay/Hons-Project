@@ -5,11 +5,8 @@
 
 class DemoApp
 {
-	//General running
+	//General application
 	sf::RenderWindow* window;
-
-	bool paused;
-	sf::Clock clock;
 
 	void handleInput();
 	void update(sf::Time deltaTime);
@@ -18,8 +15,12 @@ class DemoApp
 	//EcoResilience
 	EcoApp ecology;
 
+	bool paused;
+	sf::Clock clock;
 	float timebank;
 	float speed;
+
+	//Diagnostic data
 	int stepCount;
 	bool perlin;
 	bool viewSeparate;
@@ -28,6 +29,7 @@ public:
 	DemoApp();
 	~DemoApp() = default;
 
+	//Starting and running the application
 	void init();
 	void run();
 };
