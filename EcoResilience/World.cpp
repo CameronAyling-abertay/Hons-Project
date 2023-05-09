@@ -127,7 +127,7 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 				float predatorVec[2]{ (row + predatorOffset) * 0.1f, (column + predatorOffset) * 0.1f };
 				int predatorPop = (CPerlinNoise::noise2(predatorVec) + 0.5f) * 10;
 
-				if (predatorPop == 0)
+				if (predatorPop == 0 || predatorPop == 9)
 					newCell.AddAnimal(Animal(PopulationType::PREDATOR));
 
 				//Add the cell to the world vector

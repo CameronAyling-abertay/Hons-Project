@@ -273,7 +273,7 @@ void DemoApp::render()
             pos.y = cellPos.y + worldPos.y;
             cellRep.setPosition(screenCentre + pos);
 
-            int waterNum = (currentCell.GetAltitude() - currentCell.GetWater()) * 75.f + 185.f;
+            int waterNum = (currentCell.GetWater() - currentCell.GetAltitude()) * 75.f + 185.f;
 
             repColor = sf::Color(0, 0, waterNum);
 

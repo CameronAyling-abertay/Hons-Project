@@ -101,7 +101,7 @@ void EcoResilience::Cell::Update()
 	if (cellType == CellType::WATER)//The landscape is underwater
 	{
 		//Slightly drain the cell to simulate evaporation
-		SetWater(waterLevel * 0.99999f);
+		SetWater(waterLevel * 0.99995f);
 
 		//Drown the biota in the cell
 		if (hasAnimal)
@@ -123,10 +123,10 @@ void EcoResilience::Cell::Update()
 			{
 				float mod = -0.5 + rand() % 1000 / 1000.f;
 
-				if (waterLevel - plants.GetNeededFood() * (0.075 + 0.05 * mod) > 0)
+				if (waterLevel - plants.GetNeededFood() * (0.005 + 0.005 * mod) > 0)
 				{
 					plants.Feed(plants.GetNeededFood() * (0.6 + 0.2 * mod));
-					SetWater(waterLevel - plants.GetNeededFood() * (0.075 + 0.05 * mod));
+					SetWater(waterLevel - plants.GetNeededFood() * (0.005 + 0.005 * mod));
 				}
 			}
 
@@ -156,8 +156,7 @@ void EcoResilience::Cell::Update()
 					if (hasPlant)
 					{
 						//Take as much plant mass as is available up to a cap
-						float mod = -0.5 + rand() % 1000 / 1000.f;
-						float neededFood = animal.GetNeededFood() * (0.7f + 0.15 * mod);
+						float neededFood = animal.GetNeededFood() * 0.7f;
 						if (plants.GetMass() >= neededFood * 0.3f)
 						{
 							plants.Decay(neededFood * 0.3f);

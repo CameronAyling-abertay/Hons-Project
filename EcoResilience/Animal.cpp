@@ -57,7 +57,7 @@ void EcoResilience::Animal::Update()
 		if (mass <= 0.1f)
 			wantsDeath = true;
 
-		if (rand() % 1000 < 5)
+		if (rand() % 100 < 2)
 			Cure();
 	}
 
