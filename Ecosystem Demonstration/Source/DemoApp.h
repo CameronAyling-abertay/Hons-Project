@@ -15,6 +15,9 @@ class DemoApp
 	//EcoResilience
 	EcoApp ecology;
 
+	EcoResilience::EcoSize size;
+	EcoResilience::EcoParameters parameters;
+
 	bool paused;
 	sf::Clock clock;
 	float timebank;

@@ -73,12 +73,8 @@ void EcoResilience::Cell::Update()
 	if(flooded)
 	{
 		SetWater(waterLevel * 0.99);
-		floodCounter++;
-		if (floodCounter > 50)
-		{
+		if (waterLevel < preFlood)
 			flooded = false;
-			floodCounter = 0;
-		}
 	}
 
 	//Manage whether the cell is on fire

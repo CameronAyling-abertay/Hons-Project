@@ -1,9 +1,6 @@
 #pragma once
 #include "World.h"
 
-#define DEFAULT_SIDE 160
-#define DEFAULT_MASS 2.f
-
 class EcoApp
 {
 	//World parameters
@@ -22,7 +19,7 @@ public:
 	//Start and update
 	EcoApp();
 	void Update();
-	void GenerateWorld(EcoResilience::GenerationType genType = EcoResilience::GenerationType::RANDOM, int worldWidth = DEFAULT_SIDE, int worldHeight = DEFAULT_SIDE, float maxCellMass = DEFAULT_MASS);
+	void GenerateWorld(EcoResilience::EcoSize size, EcoResilience::EcoParameters parameters);
 
 	//Disturbance events
 	void Rain();

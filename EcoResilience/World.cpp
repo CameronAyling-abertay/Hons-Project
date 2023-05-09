@@ -3,34 +3,28 @@
 #include <vector>
 #include "CPerlinNoise/CPerlinNoise.h"
 
-EcoResilience::World::World() :
-	width(0),
-	height(0)
+EcoResilience::World::World()
 {}
 
-void EcoResilience::World::Generate(int w, int h, GenerationType type, float plantMassMax)
+void EcoResilience::World::Generate(EcoSize size, EcoParameters parameters)
 {
 	//Clear all data - function from vector
 	clear();
 
-	width = w;
-	height = h;
-
-	maxCellPlantMass = plantMassMax;
-
-	genType = type;
+	worldSize = size;
+	worldParameters = parameters;
 
 	//Generate the world
 	//Random generation will randomly allocate cells water levels
 	//Perlin generation will generate it using perlin noise for a more natural look
-	switch (genType)
+	switch (worldParameters.genType)
 	{
 	case GenerationType::RANDOM://Random generation
-		for (int row = 0; row < height; row++)
+		for (int row = 0; row < worldSize.height; row++)
 		{
-			for (int column = 0; column < width; column++)
+			for (int column = 0; column < worldSize.width; column++)
 			{
-				Cell newCell(row, column, maxCellPlantMass);
+				Cell newCell(row, column, worldSize.maxMass);
 
 				//Add water
 				float water = float((rand() % 1000)) / 1000.f;
@@ -41,15 +35,15 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 				newCell.SetAltitude(altitude);
 
 				//Create plants
-				float plantMass = ((rand() % 1000) / 1000.f) * maxCellPlantMass;
+				float plantMass = ((rand() % 1000) / 1000.f) * worldSize.maxMass;
 
 				int iterations = 0;
 				while(iterations < 100)
 				{
 					Plant newPlant;
-					newPlant.TopMass(maxCellPlantMass);
+					newPlant.TopMass(worldSize.maxMass);
 
-					if (newPlant.GetMass() > std::max(plantMass - maxCellPlantMass * 0.05f, 0.f) && newPlant.GetMass() < std::min(plantMass + maxCellPlantMass * 0.05f, maxCellPlantMass))
+					if (newPlant.GetMass() > std::max(plantMass - worldSize.maxMass * 0.05f, 0.f) && newPlant.GetMass() < std::min(plantMass + worldSize.maxMass * 0.05f, worldSize.maxMass))
 					{
 						newCell.AddPlant(newPlant);
 						break;
@@ -80,35 +74,35 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 		const float preyOffset = rand();
 		const float predatorOffset = rand();
 
-		for (int row = 0; row < height; row++)
+		for (int row = 0; row < worldSize.height; row++)
 		{
-			for (int column = 0; column < width; column++)
+			for (int column = 0; column < worldSize.width; column++)
 			{
-				Cell newCell(row, column, maxCellPlantMass);
+				Cell newCell(row, column, worldSize.maxMass);
 
 				//Create the water level
-				float waterVec[2]{ (row + waterOffset) * 0.1f, (column + waterOffset) * 0.1f };
+				float waterVec[2]{ (row + waterOffset) * worldParameters.waterMod, (column + waterOffset) * worldParameters.waterMod };
 				float water = CPerlinNoise::noise2(waterVec) + 0.5f;
 
 				newCell.SetWater(water);
 
 				//Set altitude
-				float altVec[2]{ (row + altOffset) * 0.1f, (column + altOffset) * 0.1f };
+				float altVec[2]{ (row + altOffset) * worldParameters.altitudeMod, (column + altOffset) * worldParameters.altitudeMod };
 				float altitude = (CPerlinNoise::noise2(altVec) + 0.5f) * 0.55 + 0.45;
 
 				newCell.SetAltitude(altitude);
 
 				//Create the plants
-				float plantVec[2]{ (row + plantOffset) * 0.1f, (column + plantOffset) * 0.1f };
-				float plantMass = (CPerlinNoise::noise2(plantVec) + 0.5f) * maxCellPlantMass;
+				float plantVec[2]{ (row + plantOffset) * worldParameters.plantMod, (column + plantOffset) * worldParameters.plantMod };
+				float plantMass = (CPerlinNoise::noise2(plantVec) + 0.5f) * worldSize.maxMass;
 
 				int iterations = 0;
 				while (iterations < 100)
 				{
 					Plant newPlant;
-					newPlant.TopMass(maxCellPlantMass);
+					newPlant.TopMass(worldSize.maxMass);
 
-					if (newPlant.GetMass() > std::max(plantMass - maxCellPlantMass * 0.05f, 0.f) && newPlant.GetMass() < std::min(plantMass + maxCellPlantMass * 0.05f, maxCellPlantMass))
+					if (newPlant.GetMass() > std::max(plantMass - worldSize.maxMass * 0.05f, 0.f) && newPlant.GetMass() < std::min(plantMass + worldSize.maxMass * 0.05f, worldSize.maxMass))
 					{
 						newCell.AddPlant(newPlant);
 						break;
@@ -118,13 +112,13 @@ void EcoResilience::World::Generate(int w, int h, GenerationType type, float pla
 				}
 
 				//Create the animals
-				float preyVec[2]{ (row + preyOffset) * 0.1f, (column + preyOffset) * 0.1f };
+				float preyVec[2]{ (row + preyOffset) * parameters.preyMod, (column + preyOffset) * parameters.preyMod };
 				int preyPop = (CPerlinNoise::noise2(preyVec) + 0.5f) * 10;
 
 				if(preyPop <= 1 || preyPop >= 9)
 					newCell.AddAnimal(Animal(PopulationType::PREY));
 
-				float predatorVec[2]{ (row + predatorOffset) * 0.1f, (column + predatorOffset) * 0.1f };
+				float predatorVec[2]{ (row + predatorOffset) * parameters.predatorMod, (column + predatorOffset) * parameters.predatorMod };
 				int predatorPop = (CPerlinNoise::noise2(predatorVec) + 0.5f) * 10;
 
 				if (predatorPop == 0 || predatorPop == 9)
@@ -144,7 +138,7 @@ EcoResilience::World EcoResilience::World::Update()
 	//Create the back buffer
 	World newWorld = *this;
 
-	for (int cellNum = 0; cellNum < width * height; cellNum++)
+	for (int cellNum = 0; cellNum < worldSize.width * worldSize.height; cellNum++)
 	{
 		//Cut down on world object calls by using a reference to the cell in question
 		Cell currentCell = at(cellNum);
@@ -156,27 +150,27 @@ EcoResilience::World EcoResilience::World::Update()
 			{
 				//Up
 				if (rand() % 100 < 80)
-					if (cellNum >= width)
-						if (at(cellNum - width).hasPlant && at(cellNum - width).cellType == CellType::LAND)
-							newWorld[cellNum - width].SetFire();
+					if (cellNum >= worldSize.width)
+						if (at(cellNum - worldSize.width).hasPlant && at(cellNum - worldSize.width).cellType == CellType::LAND)
+							newWorld[cellNum - worldSize.width].SetFire();
 
 				//Left
 				if (rand() % 100 < 80)
-					if (cellNum % width > 0)
+					if (cellNum % worldSize.width > 0)
 						if (at(cellNum - 1).hasPlant && at(cellNum - 1).cellType == CellType::LAND)
 							newWorld[cellNum - 1].SetFire();
 
 				//Right
 				if (rand() % 100 < 80)
-					if (cellNum % width < width - 1)
+					if (cellNum % worldSize.width < worldSize.width - 1)
 						if (at(cellNum + 1).hasPlant && at(cellNum + 1).cellType == CellType::LAND)
 							newWorld[cellNum + 1].SetFire();
 
 				//Down
 				if (rand() % 100 < 80)
-					if (cellNum < width * (height - 1))
-						if (at(cellNum + width).hasPlant && at(cellNum + width).cellType == CellType::LAND)
-							newWorld[cellNum + width].SetFire();
+					if (cellNum < worldSize.width * (worldSize.height - 1))
+						if (at(cellNum + worldSize.width).hasPlant && at(cellNum + worldSize.width).cellType == CellType::LAND)
+							newWorld[cellNum + worldSize.width].SetFire();
 			}
 		}
 
@@ -187,27 +181,27 @@ EcoResilience::World EcoResilience::World::Update()
 			{
 				//Up
 				if (rand() % 100 < 80)
-					if (cellNum >= width)
-						if (at(cellNum - width).hasAnimal)
-							newWorld[cellNum - width].InfectAnimal();
+					if (cellNum >= worldSize.width)
+						if (at(cellNum - worldSize.width).hasAnimal)
+							newWorld[cellNum - worldSize.width].InfectAnimal();
 
 				//Left
 				if (rand() % 100 < 80)
-					if (cellNum % width > 0)
+					if (cellNum % worldSize.width > 0)
 						if (at(cellNum - 1).hasAnimal)
 							newWorld[cellNum - 1].InfectAnimal();
 
 				//Right
 				if (rand() % 100 < 80)
-					if (cellNum % width < width - 1)
+					if (cellNum % worldSize.width < worldSize.width - 1)
 						if (at(cellNum + 1).hasAnimal)
 							newWorld[cellNum + 1].InfectAnimal();
 
 				//Down
 				if (rand() % 100 < 80)
-					if (cellNum < width * (height - 1))
-						if (at(cellNum + width).hasAnimal)
-							newWorld[cellNum + width].InfectAnimal();
+					if (cellNum < worldSize.width * (worldSize.height - 1))
+						if (at(cellNum + worldSize.width).hasAnimal)
+							newWorld[cellNum + worldSize.width].InfectAnimal();
 			}
 		}
 
@@ -234,12 +228,12 @@ EcoResilience::World EcoResilience::World::Update()
 				switch (place)
 				{
 				case 1:// Up 2
-					if (cellNum >= width * 2)
+					if (cellNum >= worldSize.width * 2)
 					{
-						if (!at(cellNum - width * 2).hasPlant)
+						if (!at(cellNum - worldSize.width * 2).hasPlant)
 						{
 							Plant newPlant(currentCell.GetPlant().GetVigor() * 0.1);
-							newWorld[cellNum - width * 2].AddPlant(newPlant);
+							newWorld[cellNum - worldSize.width * 2].AddPlant(newPlant);
 							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
@@ -247,12 +241,12 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 2:// Up 1, Left 1
-					if (cellNum >= width && cellNum % width > 0)
+					if (cellNum >= worldSize.width && cellNum % worldSize.width > 0)
 					{
-						if (!at(cellNum - width - 1).hasPlant)
+						if (!at(cellNum - worldSize.width - 1).hasPlant)
 						{
 							Plant newPlant(currentCell.GetPlant().GetVigor() * 0.1);
-							newWorld[cellNum - width - 1].AddPlant(newPlant);
+							newWorld[cellNum - worldSize.width - 1].AddPlant(newPlant);
 							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
@@ -260,12 +254,12 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 3:// Up 1
-					if (cellNum >= width)
+					if (cellNum >= worldSize.width)
 					{
-						if (!at(cellNum - width).hasPlant)
+						if (!at(cellNum - worldSize.width).hasPlant)
 						{
 							Plant newPlant(currentCell.GetPlant().GetVigor() * 0.1);
-							newWorld[cellNum - width].AddPlant(newPlant);
+							newWorld[cellNum - worldSize.width].AddPlant(newPlant);
 							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
@@ -273,12 +267,12 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 4:// Up 1, Right 1
-					if (cellNum >= width && cellNum % width < width - 1)
+					if (cellNum >= worldSize.width && cellNum % worldSize.width < worldSize.width - 1)
 					{
-						if (!at(cellNum - width + 1).hasPlant)
+						if (!at(cellNum - worldSize.width + 1).hasPlant)
 						{
 							Plant newPlant(currentCell.GetPlant().GetVigor() * 0.1);
-							newWorld[cellNum - width + 1].AddPlant(newPlant);
+							newWorld[cellNum - worldSize.width + 1].AddPlant(newPlant);
 							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
@@ -286,7 +280,7 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 5:// Left 2
-					if (cellNum % width > 1)
+					if (cellNum % worldSize.width > 1)
 					{
 						if (!at(cellNum - 2).hasPlant)
 						{
@@ -299,7 +293,7 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 6:// Left 1
-					if (cellNum % width > 0)
+					if (cellNum % worldSize.width > 0)
 					{
 						if (!at(cellNum - 1).hasPlant)
 						{
@@ -312,7 +306,7 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 7:// Right 1
-					if (cellNum % width < width - 1)
+					if (cellNum % worldSize.width < worldSize.width - 1)
 					{
 						if (!at(cellNum + 1).hasPlant)
 						{
@@ -325,7 +319,7 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 8:// Right 2
-					if (cellNum % width < width - 2)
+					if (cellNum % worldSize.width < worldSize.width - 2)
 					{
 						if (!at(cellNum + 2).hasPlant)
 						{
@@ -338,12 +332,12 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 9:// Down 1, Left 1
-					if (cellNum < width * (height - 1) && cellNum % width > 0)
+					if (cellNum < worldSize.width * (worldSize.height - 1) && cellNum % worldSize.width > 0)
 					{
-						if (!at(cellNum + width - 1).hasPlant)
+						if (!at(cellNum + worldSize.width - 1).hasPlant)
 						{
 							Plant newPlant(currentCell.GetPlant().GetVigor() * 0.1);
-							newWorld[cellNum + width - 1].AddPlant(newPlant);
+							newWorld[cellNum + worldSize.width - 1].AddPlant(newPlant);
 							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
@@ -351,12 +345,12 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 10:// Down 1
-					if (cellNum < width * (height - 1))
+					if (cellNum < worldSize.width * (worldSize.height - 1))
 					{
-						if (!at(cellNum + width).hasPlant)
+						if (!at(cellNum + worldSize.width).hasPlant)
 						{
 							Plant newPlant(currentCell.GetPlant().GetVigor() * 0.1);
-							newWorld[cellNum + width].AddPlant(newPlant);
+							newWorld[cellNum + worldSize.width].AddPlant(newPlant);
 							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
@@ -364,12 +358,12 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 11:// Down 1, Right 1
-					if (cellNum < width * (height - 1) && cellNum % width < width - 1)
+					if (cellNum < worldSize.width * (worldSize.height - 1) && cellNum % worldSize.width < worldSize.width - 1)
 					{
-						if (!at(cellNum + width + 1).hasPlant)
+						if (!at(cellNum + worldSize.width + 1).hasPlant)
 						{
 							Plant newPlant(currentCell.GetPlant().GetVigor() * 0.1);
-							newWorld[cellNum + width + 1].AddPlant(newPlant);
+							newWorld[cellNum + worldSize.width + 1].AddPlant(newPlant);
 							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
@@ -377,12 +371,12 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 12:// Down 2
-					if (cellNum + width < width * (height - 1))
+					if (cellNum + worldSize.width < worldSize.width * (worldSize.height - 1))
 					{
-						if (!at(cellNum + width * 2).hasPlant)
+						if (!at(cellNum + worldSize.width * 2).hasPlant)
 						{
 							Plant newPlant(currentCell.GetPlant().GetVigor() * 0.1);
-							newWorld[cellNum + width * 2].AddPlant(newPlant);
+							newWorld[cellNum + worldSize.width * 2].AddPlant(newPlant);
 							newWorld[cellNum].plantHadChild();
 							hadChild = true;
 						}
@@ -411,79 +405,79 @@ EcoResilience::World EcoResilience::World::Update()
 
 					//Up 2
 					if (currentCell.cellRow >= 2)
-						if (at((currentCell.cellRow - 2) * width + currentCell.cellColumn).hasPlant)
-							weights.at(1).first += at((currentCell.cellRow - 2) * width + currentCell.cellColumn).GetPlant().GetMass() * prio;
+						if (at((currentCell.cellRow - 2) * worldSize.width + currentCell.cellColumn).hasPlant)
+							weights.at(1).first += at((currentCell.cellRow - 2) * worldSize.width + currentCell.cellColumn).GetPlant().GetMass() * prio;
 
 					//Up 1, Left 1
 					if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
-						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).hasPlant)
+						if (at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn - 1)).hasPlant)
 						{
-							weights.at(1).first += at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
-							weights.at(2).first += at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
+							weights.at(1).first += at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
+							weights.at(2).first += at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
 						}
 
 					//Up 1
 					if (currentCell.cellRow >= 1)
-						if (at((currentCell.cellRow - 1) * width + currentCell.cellColumn).hasPlant)
-							weights.at(1).first += at((currentCell.cellRow - 1) * width + currentCell.cellColumn).GetPlant().GetMass() * prio;
+						if (at((currentCell.cellRow - 1) * worldSize.width + currentCell.cellColumn).hasPlant)
+							weights.at(1).first += at((currentCell.cellRow - 1) * worldSize.width + currentCell.cellColumn).GetPlant().GetMass() * prio;
 
 					//Up 1, Right 1
-					if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
-						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).hasPlant)
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn < worldSize.width - 1)
+						if (at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn + 1)).hasPlant)
 						{
-							weights.at(1).first += at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
-							weights.at(3).first += at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
+							weights.at(1).first += at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
+							weights.at(3).first += at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
 						}
 
 					//Left 2
 					if (currentCell.cellColumn >= 2)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).hasPlant)
-							weights.at(2).first += at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).GetPlant().GetMass() * prio;
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 2)).hasPlant)
+							weights.at(2).first += at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 2)).GetPlant().GetMass() * prio;
 
 					//Left 1
 					if (currentCell.cellColumn >= 1)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).hasPlant)
-							weights.at(2).first += at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 1)).hasPlant)
+							weights.at(2).first += at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
 
 					//This cell
 					if (currentCell.hasPlant)
 						weights.at(0).first += currentCell.GetPlant().GetMass() * prio;
 
 					//Right 1
-					if (currentCell.cellColumn < width - 1)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).hasPlant)
-							weights.at(3).first += at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
+					if (currentCell.cellColumn < worldSize.width - 1)
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 1)).hasPlant)
+							weights.at(3).first += at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
 
 					//Right 2
-					if (currentCell.cellColumn < width - 2)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).hasPlant)
-							weights.at(3).first += at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).GetPlant().GetMass() * prio;
+					if (currentCell.cellColumn < worldSize.width - 2)
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 2)).hasPlant)
+							weights.at(3).first += at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 2)).GetPlant().GetMass() * prio;
 
 					//Down 1, Left 1
-					if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
-						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).hasPlant)
+					if (currentCell.cellRow < worldSize.height - 1 && currentCell.cellColumn >= 1)
+						if (at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn - 1)).hasPlant)
 						{
-							weights.at(2).first += at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
-							weights.at(4).first += at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
+							weights.at(2).first += at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
+							weights.at(4).first += at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn - 1)).GetPlant().GetMass() * prio;
 						}
 
 					//Down 1
-					if (currentCell.cellRow < height - 1)
-						if (at((currentCell.cellRow + 1) * width + currentCell.cellColumn).hasPlant)
-							weights.at(4).first += at((currentCell.cellRow + 1) * width).GetPlant().GetMass() * prio;
+					if (currentCell.cellRow < worldSize.height - 1)
+						if (at((currentCell.cellRow + 1) * worldSize.width + currentCell.cellColumn).hasPlant)
+							weights.at(4).first += at((currentCell.cellRow + 1) * worldSize.width).GetPlant().GetMass() * prio;
 
 					//Down 1, Right 1
-					if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
-						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).hasPlant)
+					if (currentCell.cellRow < worldSize.height - 1 && currentCell.cellColumn < worldSize.width - 1)
+						if (at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn + 1)).hasPlant)
 						{
-							weights.at(3).first += at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
-							weights.at(4).first += at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
+							weights.at(3).first += at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
+							weights.at(4).first += at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn + 1)).GetPlant().GetMass() * prio;
 						}
 
 					//Down 2
-					if (currentCell.cellRow < height - 2)
-						if (at((currentCell.cellRow + 2) * width + currentCell.cellColumn).hasPlant)
-							weights.at(4).first += at((currentCell.cellRow + 2) * width).GetPlant().GetMass() * prio;
+					if (currentCell.cellRow < worldSize.height - 2)
+						if (at((currentCell.cellRow + 2) * worldSize.width + currentCell.cellColumn).hasPlant)
+							weights.at(4).first += at((currentCell.cellRow + 2) * worldSize.width).GetPlant().GetMass() * prio;
 				}
 
 				//Predator presence
@@ -492,7 +486,7 @@ EcoResilience::World EcoResilience::World::Update()
 
 					//Up 2
 					if (currentCell.cellRow >= 2)
-						if (at((currentCell.cellRow - 2) * width + currentCell.cellColumn).GetPopulation(predatorType))
+						if (at((currentCell.cellRow - 2) * worldSize.width + currentCell.cellColumn).GetPopulation(predatorType))
 						{
 							weights.at(0).first -= 1;
 							weights.at(1).first -= 2;
@@ -501,7 +495,7 @@ EcoResilience::World EcoResilience::World::Update()
 
 					//Up 1, Left 1
 					if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
-						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPopulation(predatorType))
+						if (at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn - 1)).GetPopulation(predatorType))
 						{
 							weights.at(0).first -= 1;
 							weights.at(1).first -= 2;
@@ -512,7 +506,7 @@ EcoResilience::World EcoResilience::World::Update()
 
 					//Up 1
 					if (currentCell.cellRow >= 1)
-						if (at((currentCell.cellRow - 1) * width + currentCell.cellColumn).GetPopulation(predatorType))
+						if (at((currentCell.cellRow - 1) * worldSize.width + currentCell.cellColumn).GetPopulation(predatorType))
 						{
 							weights.at(0).first -= 1;
 							weights.at(1).first -= 2;
@@ -520,8 +514,8 @@ EcoResilience::World EcoResilience::World::Update()
 						}
 
 					//Up 1, Right 1
-					if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
-						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPopulation(predatorType))
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn < worldSize.width - 1)
+						if (at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn + 1)).GetPopulation(predatorType))
 						{
 							weights.at(0).first -= 1;
 							weights.at(1).first -= 2;
@@ -532,7 +526,7 @@ EcoResilience::World EcoResilience::World::Update()
 
 					//Left 2
 					if (currentCell.cellColumn >= 2)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).GetPopulation(predatorType))
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 2)).GetPopulation(predatorType))
 						{
 							weights.at(0).first -= 1;
 							weights.at(2).first -= 2;
@@ -541,7 +535,7 @@ EcoResilience::World EcoResilience::World::Update()
 
 					//Left 1
 					if (currentCell.cellColumn >= 1)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).GetPopulation(predatorType))
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 1)).GetPopulation(predatorType))
 						{
 							weights.at(0).first -= 1;
 							weights.at(2).first -= 2;
@@ -549,8 +543,8 @@ EcoResilience::World EcoResilience::World::Update()
 						}
 
 					//Right 1
-					if (currentCell.cellColumn < width - 1)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).GetPopulation(predatorType))
+					if (currentCell.cellColumn < worldSize.width - 1)
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 1)).GetPopulation(predatorType))
 						{
 							weights.at(0).first -= 1;
 							weights.at(3).first -= 2;
@@ -558,8 +552,8 @@ EcoResilience::World EcoResilience::World::Update()
 						}
 
 					//Right 2
-					if (currentCell.cellColumn < width - 2)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).GetPopulation(predatorType))
+					if (currentCell.cellColumn < worldSize.width - 2)
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 2)).GetPopulation(predatorType))
 						{
 							weights.at(0).first -= 1;
 							weights.at(3).first -= 2;
@@ -567,8 +561,8 @@ EcoResilience::World EcoResilience::World::Update()
 						}
 
 					//Down 1, Left 1
-					if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
-						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPopulation(predatorType))
+					if (currentCell.cellRow < worldSize.height - 1 && currentCell.cellColumn >= 1)
+						if (at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn - 1)).GetPopulation(predatorType))
 						{
 							weights.at(0).first -= 1;
 							weights.at(2).first -= 2;
@@ -578,8 +572,8 @@ EcoResilience::World EcoResilience::World::Update()
 						}
 
 					//Down 1
-					if (currentCell.cellRow < height - 1)
-						if (at((currentCell.cellRow + 1) * width + currentCell.cellColumn).GetPopulation(predatorType))
+					if (currentCell.cellRow < worldSize.height - 1)
+						if (at((currentCell.cellRow + 1) * worldSize.width + currentCell.cellColumn).GetPopulation(predatorType))
 						{
 							weights.at(0).first -= 1;
 							weights.at(4).first -= 2;
@@ -587,8 +581,8 @@ EcoResilience::World EcoResilience::World::Update()
 						}
 
 					//Down 1, Right 1
-					if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
-						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPopulation(predatorType))
+					if (currentCell.cellRow < worldSize.height - 1 && currentCell.cellColumn < worldSize.width - 1)
+						if (at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn + 1)).GetPopulation(predatorType))
 						{
 							weights.at(0).first -= 1;
 							weights.at(3).first -= 2;
@@ -598,8 +592,8 @@ EcoResilience::World EcoResilience::World::Update()
 						}
 
 					//Down 2
-					if (currentCell.cellRow < height - 2)
-						if (at((currentCell.cellRow + 2) * width + currentCell.cellColumn).GetPopulation(predatorType))
+					if (currentCell.cellRow < worldSize.height - 2)
+						if (at((currentCell.cellRow + 2) * worldSize.width + currentCell.cellColumn).GetPopulation(predatorType))
 						{
 							weights.at(0).first -= 1;
 							weights.at(4).first -= 2;
@@ -616,12 +610,12 @@ EcoResilience::World EcoResilience::World::Update()
 
 					//Up 2
 					if (currentCell.cellRow >= 2)
-						if (at((currentCell.cellRow - 2) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow - 2) * width + currentCell.cellColumn).animalWantsChild)
+						if (at((currentCell.cellRow - 2) * worldSize.width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow - 2) * worldSize.width + currentCell.cellColumn).animalWantsChild)
 							weights.at(1).first += 1 * prio;
 
 					//Up 1, Left 1
 					if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
-						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).animalWantsChild)
+						if (at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn - 1)).animalWantsChild)
 						{
 							weights.at(1).first += 1 * prio;
 							weights.at(2).first += 1 * prio;
@@ -629,12 +623,12 @@ EcoResilience::World EcoResilience::World::Update()
 
 					//Up 1
 					if (currentCell.cellRow >= 1)
-						if (at((currentCell.cellRow - 1) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow - 1) * width + currentCell.cellColumn).animalWantsChild)
+						if (at((currentCell.cellRow - 1) * worldSize.width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow - 1) * worldSize.width + currentCell.cellColumn).animalWantsChild)
 							weights.at(0).first += 2 * prio;
 
 					//Up 1, Right 1
-					if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
-						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).animalWantsChild)
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn < worldSize.width - 1)
+						if (at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn + 1)).animalWantsChild)
 						{
 							weights.at(1).first += 1 * prio;
 							weights.at(3).first += 1 * prio;
@@ -642,48 +636,48 @@ EcoResilience::World EcoResilience::World::Update()
 
 					//Left 2
 					if (currentCell.cellColumn >= 2)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).animalWantsChild)
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 2)).GetPopulation(animalType) && at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 2)).animalWantsChild)
 							weights.at(2).first += 1 * prio;
 
 					//Left 1
 					if (currentCell.cellColumn >= 1)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).animalWantsChild)
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 1)).animalWantsChild)
 							weights.at(0).first += 2 * prio;
 
 					//Right 1
-					if (currentCell.cellColumn < width - 1)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).animalWantsChild)
+					if (currentCell.cellColumn < worldSize.width - 1)
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 1)).animalWantsChild)
 							weights.at(0).first += 2 * prio;
 
 					//Right 2
-					if (currentCell.cellColumn < width - 2)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).animalWantsChild)
+					if (currentCell.cellColumn < worldSize.width - 2)
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 2)).GetPopulation(animalType) && at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 2)).animalWantsChild)
 							weights.at(3).first += 1 * prio;
 
 					//Down 1, Left 1
-					if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
-						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).animalWantsChild)
+					if (currentCell.cellRow < worldSize.height - 1 && currentCell.cellColumn >= 1)
+						if (at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn - 1)).animalWantsChild)
 						{
 							weights.at(2).first += 1 * prio;
 							weights.at(4).first += 1 * prio;
 						}
 
 					//Down 1
-					if (currentCell.cellRow < height - 1)
-						if (at((currentCell.cellRow + 1) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow + 1) * width + currentCell.cellColumn).animalWantsChild)
+					if (currentCell.cellRow < worldSize.height - 1)
+						if (at((currentCell.cellRow + 1) * worldSize.width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow + 1) * worldSize.width + currentCell.cellColumn).animalWantsChild)
 							weights.at(0).first += 2 * prio;
 
 					//Down 1, Right 1
-					if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
-						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).animalWantsChild)
+					if (currentCell.cellRow < worldSize.height - 1 && currentCell.cellColumn < worldSize.width - 1)
+						if (at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn + 1)).animalWantsChild)
 						{
 							weights.at(3).first += 1 * prio;
 							weights.at(4).first += 1 * prio;
 						}
 
 					//Down 2
-					if (currentCell.cellRow < height - 2)
-						if (at((currentCell.cellRow + 2) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow + 2) * width + currentCell.cellColumn).animalWantsChild)
+					if (currentCell.cellRow < worldSize.height - 2)
+						if (at((currentCell.cellRow + 2) * worldSize.width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow + 2) * worldSize.width + currentCell.cellColumn).animalWantsChild)
 							weights.at(4).first += 1 * prio;
 				}
 			}
@@ -698,14 +692,14 @@ EcoResilience::World EcoResilience::World::Update()
 
 					//Up 2
 					if (currentCell.cellRow >= 2)
-						if (at((currentCell.cellRow - 2) * width + currentCell.cellColumn).GetPopulation(preyType))
+						if (at((currentCell.cellRow - 2) * worldSize.width + currentCell.cellColumn).GetPopulation(preyType))
 						{
 							weights.at(1).first += 2 * prio;
 						}
 
 					//Up 1, Left 1
 					if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
-						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPopulation(preyType))
+						if (at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn - 1)).GetPopulation(preyType))
 						{
 							weights.at(1).first += 2 * prio;
 							weights.at(2).first += 2 * prio;
@@ -713,15 +707,15 @@ EcoResilience::World EcoResilience::World::Update()
 
 					//Up 1
 					if (currentCell.cellRow >= 1)
-						if (at((currentCell.cellRow - 1) * width + currentCell.cellColumn).GetPopulation(preyType))
+						if (at((currentCell.cellRow - 1) * worldSize.width + currentCell.cellColumn).GetPopulation(preyType))
 						{
 							weights.at(0).first += 1 * prio;
 							weights.at(1).first += 2 * prio;
 						}
 
 					//Up 1, Right 1
-					if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
-						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPopulation(preyType))
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn < worldSize.width - 1)
+						if (at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn + 1)).GetPopulation(preyType))
 						{
 							weights.at(1).first += 2 * prio;
 							weights.at(3).first += 2 * prio;
@@ -729,60 +723,60 @@ EcoResilience::World EcoResilience::World::Update()
 
 					//Left 2
 					if (currentCell.cellColumn >= 2)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).GetPopulation(preyType))
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 2)).GetPopulation(preyType))
 						{
 							weights.at(2).first += 2 * prio;
 						}
 
 					//Left 1
 					if (currentCell.cellColumn >= 1)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).GetPopulation(preyType))
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 1)).GetPopulation(preyType))
 						{
 							weights.at(0).first += 1 * prio;
 							weights.at(2).first += 2 * prio;
 						}
 
 					//Right 1
-					if (currentCell.cellColumn < width - 1)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).GetPopulation(preyType))
+					if (currentCell.cellColumn < worldSize.width - 1)
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 1)).GetPopulation(preyType))
 						{
 							weights.at(0).first += 1 * prio;
 							weights.at(3).first += 2 * prio;
 						}
 
 					//Right 2
-					if (currentCell.cellColumn < width - 2)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).GetPopulation(preyType))
+					if (currentCell.cellColumn < worldSize.width - 2)
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 2)).GetPopulation(preyType))
 						{
 							weights.at(3).first += 2 * prio;
 						}
 
 					//Down 1, Left 1
-					if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
-						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPopulation(preyType))
+					if (currentCell.cellRow < worldSize.height - 1 && currentCell.cellColumn >= 1)
+						if (at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn - 1)).GetPopulation(preyType))
 						{
 							weights.at(2).first += 2 * prio;
 							weights.at(4).first += 2 * prio;
 						}
 
 					//Down 1
-					if (currentCell.cellRow < height - 1)
-						if (at((currentCell.cellRow + 1) * width + currentCell.cellColumn).GetPopulation(preyType))
+					if (currentCell.cellRow < worldSize.height - 1)
+						if (at((currentCell.cellRow + 1) * worldSize.width + currentCell.cellColumn).GetPopulation(preyType))
 						{
 							weights.at(4).first += 2 * prio;
 						}
 
 					//Down 1, Right 1
-					if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
-						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPopulation(preyType))
+					if (currentCell.cellRow < worldSize.height - 1 && currentCell.cellColumn < worldSize.width - 1)
+						if (at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn + 1)).GetPopulation(preyType))
 						{
 							weights.at(3).first += 2 * prio;
 							weights.at(4).first += 2 * prio;
 						}
 
 					//Down 2
-					if (currentCell.cellRow < height - 2)
-						if (at((currentCell.cellRow + 2) * width + currentCell.cellColumn).GetPopulation(preyType))
+					if (currentCell.cellRow < worldSize.height - 2)
+						if (at((currentCell.cellRow + 2) * worldSize.width + currentCell.cellColumn).GetPopulation(preyType))
 						{
 							weights.at(4).first += 2 * prio;
 						}
@@ -797,12 +791,12 @@ EcoResilience::World EcoResilience::World::Update()
 
 					//Up 2
 					if (currentCell.cellRow >= 2)
-						if (at((currentCell.cellRow - 2) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow - 2) * width + currentCell.cellColumn).animalWantsChild)
+						if (at((currentCell.cellRow - 2) * worldSize.width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow - 2) * worldSize.width + currentCell.cellColumn).animalWantsChild)
 							weights.at(1).first += 1 * prio;
 
 					//Up 1, Left 1
 					if (currentCell.cellRow >= 1 && currentCell.cellColumn >= 1)
-						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at((currentCell.cellRow - 1) * width + (currentCell.cellColumn - 1)).animalWantsChild)
+						if (at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn - 1)).animalWantsChild)
 						{
 							weights.at(1).first += 1 * prio;
 							weights.at(2).first += 1 * prio;
@@ -810,12 +804,12 @@ EcoResilience::World EcoResilience::World::Update()
 
 					//Up 1
 					if (currentCell.cellRow >= 1)
-						if (at((currentCell.cellRow - 1) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow - 1) * width + currentCell.cellColumn).animalWantsChild)
+						if (at((currentCell.cellRow - 1) * worldSize.width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow - 1) * worldSize.width + currentCell.cellColumn).animalWantsChild)
 							weights.at(0).first += 2 * prio;
 
 					//Up 1, Right 1
-					if (currentCell.cellRow >= 1 && currentCell.cellColumn < width - 1)
-						if (at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at((currentCell.cellRow - 1) * width + (currentCell.cellColumn + 1)).animalWantsChild)
+					if (currentCell.cellRow >= 1 && currentCell.cellColumn < worldSize.width - 1)
+						if (at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at((currentCell.cellRow - 1) * worldSize.width + (currentCell.cellColumn + 1)).animalWantsChild)
 						{
 							weights.at(1).first += 1 * prio;
 							weights.at(3).first += 1 * prio;
@@ -823,48 +817,48 @@ EcoResilience::World EcoResilience::World::Update()
 
 					//Left 2
 					if (currentCell.cellColumn >= 2)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn - 2)).animalWantsChild)
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 2)).GetPopulation(animalType) && at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 2)).animalWantsChild)
 							weights.at(2).first += 1 * prio;
 
 					//Left 1
 					if (currentCell.cellColumn >= 1)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn - 1)).animalWantsChild)
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn - 1)).animalWantsChild)
 							weights.at(0).first += 2 * prio;
 
 					//Right 1
-					if (currentCell.cellColumn < width - 1)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn + 1)).animalWantsChild)
+					if (currentCell.cellColumn < worldSize.width - 1)
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 1)).animalWantsChild)
 							weights.at(0).first += 2 * prio;
 
 					//Right 2
-					if (currentCell.cellColumn < width - 2)
-						if (at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).GetPopulation(animalType) && at(currentCell.cellRow * width + (currentCell.cellColumn + 2)).animalWantsChild)
+					if (currentCell.cellColumn < worldSize.width - 2)
+						if (at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 2)).GetPopulation(animalType) && at(currentCell.cellRow * worldSize.width + (currentCell.cellColumn + 2)).animalWantsChild)
 							weights.at(3).first += 1 * prio;
 
 					//Down 1, Left 1
-					if (currentCell.cellRow < height - 1 && currentCell.cellColumn >= 1)
-						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at((currentCell.cellRow + 1) * width + (currentCell.cellColumn - 1)).animalWantsChild)
+					if (currentCell.cellRow < worldSize.height - 1 && currentCell.cellColumn >= 1)
+						if (at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn - 1)).GetPopulation(animalType) && at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn - 1)).animalWantsChild)
 						{
 							weights.at(2).first += 1 * prio;
 							weights.at(4).first += 1 * prio;
 						}
 
 					//Down 1
-					if (currentCell.cellRow < height - 1)
-						if (at((currentCell.cellRow + 1) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow + 1) * width + currentCell.cellColumn).animalWantsChild)
+					if (currentCell.cellRow < worldSize.height - 1)
+						if (at((currentCell.cellRow + 1) * worldSize.width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow + 1) * worldSize.width + currentCell.cellColumn).animalWantsChild)
 							weights.at(0).first += 2 * prio;
 
 					//Down 1, Right 1
-					if (currentCell.cellRow < height - 1 && currentCell.cellColumn < width - 1)
-						if (at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at((currentCell.cellRow + 1) * width + (currentCell.cellColumn + 1)).animalWantsChild)
+					if (currentCell.cellRow < worldSize.height - 1 && currentCell.cellColumn < worldSize.width - 1)
+						if (at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn + 1)).GetPopulation(animalType) && at((currentCell.cellRow + 1) * worldSize.width + (currentCell.cellColumn + 1)).animalWantsChild)
 						{
 							weights.at(3).first += 1 * prio;
 							weights.at(4).first += 1 * prio;
 						}
 
 					//Down 2
-					if (currentCell.cellRow < height - 2)
-						if (at((currentCell.cellRow + 2) * width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow + 2) * width + currentCell.cellColumn).animalWantsChild)
+					if (currentCell.cellRow < worldSize.height - 2)
+						if (at((currentCell.cellRow + 2) * worldSize.width + currentCell.cellColumn).GetPopulation(animalType) && at((currentCell.cellRow + 2) * worldSize.width + currentCell.cellColumn).animalWantsChild)
 							weights.at(4).first += 1 * prio;
 				}
 
@@ -908,9 +902,9 @@ EcoResilience::World EcoResilience::World::Update()
 				case 1://Up 1
 					if (currentCell.cellRow >= 1)
 					{
-						if (!newWorld[cellNum - width].hasAnimal && (at(cellNum - width).cellType == CellType::LAND || currentCell.cellType != CellType::LAND))
+						if (!newWorld[cellNum - worldSize.width].hasAnimal && (at(cellNum - worldSize.width).cellType == CellType::LAND || currentCell.cellType != CellType::LAND))
 						{
-							newWorld[cellNum - width].AddAnimal(currentCell.GetAnimal());
+							newWorld[cellNum - worldSize.width].AddAnimal(currentCell.GetAnimal());
 							newWorld[cellNum].animalMoved();
 							moved = true;
 						}
@@ -932,7 +926,7 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 3://Right 1
-					if (currentCell.cellColumn < width - 1)
+					if (currentCell.cellColumn < worldSize.width - 1)
 					{
 						if (!newWorld[cellNum + 1].hasAnimal && (at(cellNum + 1).cellType == CellType::LAND || currentCell.cellType != CellType::LAND))
 						{
@@ -945,11 +939,11 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 4://Down 1
-					if (currentCell.cellRow < height - 1)
+					if (currentCell.cellRow < worldSize.height - 1)
 					{
-						if (!newWorld[cellNum + width].hasAnimal && (at(cellNum + width).cellType == CellType::LAND || currentCell.cellType != CellType::LAND))
+						if (!newWorld[cellNum + worldSize.width].hasAnimal && (at(cellNum + worldSize.width).cellType == CellType::LAND || currentCell.cellType != CellType::LAND))
 						{
-							newWorld[cellNum + width].AddAnimal(currentCell.GetAnimal());
+							newWorld[cellNum + worldSize.width].AddAnimal(currentCell.GetAnimal());
 							newWorld[cellNum].animalMoved();
 							moved = true;
 						}
@@ -968,24 +962,24 @@ EcoResilience::World EcoResilience::World::Update()
 			bool preyPresence[4]{ false };
 			int preyNum = 0;
 
-			if (cellNum >= width)
-				if (at(cellNum - width).hasAnimal)
-					if(at(cellNum - width).GetAnimal().type == PopulationType::PREY)
+			if (cellNum >= worldSize.width)
+				if (at(cellNum - worldSize.width).hasAnimal)
+					if(at(cellNum - worldSize.width).GetAnimal().type == PopulationType::PREY)
 						preyPresence[0] = true;
 
-			if (cellNum % width > 0)
+			if (cellNum % worldSize.width > 0)
 				if (at(cellNum - 1).hasAnimal)
 					if (at(cellNum - 1).GetAnimal().type == PopulationType::PREY)
 						preyPresence[1] = true;
 
-			if (cellNum % width < width - 1)
+			if (cellNum % worldSize.width < worldSize.width - 1)
 				if (at(cellNum + 1).hasAnimal)
 					if (at(cellNum + 1).GetAnimal().type == PopulationType::PREY)
 						preyPresence[2] = true;
 
-			if (cellNum < width * (height - 1))
-				if (at(cellNum + width).hasAnimal)
-					if (at(cellNum + width).GetAnimal().type == PopulationType::PREY)
+			if (cellNum < worldSize.width * (worldSize.height - 1))
+				if (at(cellNum + worldSize.width).hasAnimal)
+					if (at(cellNum + worldSize.width).GetAnimal().type == PopulationType::PREY)
 						preyPresence[3] = true;
 
 			for (auto cell : preyPresence)
@@ -1009,8 +1003,8 @@ EcoResilience::World EcoResilience::World::Update()
 				switch(preyIndex)
 				{
 				case 0:
-					newWorld[cellNum].feedPredator(at(cellNum - width).GetAnimal().GetMass() * 4);
-					newWorld[cellNum - width].killPrey();
+					newWorld[cellNum].feedPredator(at(cellNum - worldSize.width).GetAnimal().GetMass() * 4);
+					newWorld[cellNum - worldSize.width].killPrey();
 					break;
 
 				case 1:
@@ -1024,8 +1018,8 @@ EcoResilience::World EcoResilience::World::Update()
 					break;
 
 				case 3:
-					newWorld[cellNum].feedPredator(at(cellNum + width).GetAnimal().GetMass() * 4);
-					newWorld[cellNum + width].killPrey();
+					newWorld[cellNum].feedPredator(at(cellNum + worldSize.width).GetAnimal().GetMass() * 4);
+					newWorld[cellNum + worldSize.width].killPrey();
 					break;
 				}
 			}
@@ -1039,24 +1033,24 @@ EcoResilience::World EcoResilience::World::Update()
 			bool childBearers[4]{ false };
 			int bearerNum = 0;
 
-			if (cellNum >= width)
-				if (at(cellNum - width).animalWantsChild && at(cellNum - width).hasAnimal)
-					if (at(cellNum - width).GetAnimal().type == childType)
+			if (cellNum >= worldSize.width)
+				if (at(cellNum - worldSize.width).animalWantsChild && at(cellNum - worldSize.width).hasAnimal)
+					if (at(cellNum - worldSize.width).GetAnimal().type == childType)
 						childBearers[0] = true;
 
-			if (cellNum % width > 0)
+			if (cellNum % worldSize.width > 0)
 				if (at(cellNum - 1).animalWantsChild && at(cellNum - 1).hasAnimal)
 					if (at(cellNum - 1).GetAnimal().type == childType)
 						childBearers[1] = true;
 
-			if (cellNum % width < width - 1)
+			if (cellNum % worldSize.width < worldSize.width - 1)
 				if (at(cellNum + 1).animalWantsChild && at(cellNum + 1).hasAnimal)
 					if (at(cellNum + 1).GetAnimal().type == childType)
 						childBearers[2] = true;
 
-			if (cellNum < width * (height - 1))
-				if (at(cellNum + width).animalWantsChild && at(cellNum + width).hasAnimal)
-					if (at(cellNum + width).GetAnimal().type == childType)
+			if (cellNum < worldSize.width * (worldSize.height - 1))
+				if (at(cellNum + worldSize.width).animalWantsChild && at(cellNum + worldSize.width).hasAnimal)
+					if (at(cellNum + worldSize.width).GetAnimal().type == childType)
 						childBearers[3] = true;
 
 			for (auto cell : childBearers)
@@ -1084,23 +1078,23 @@ EcoResilience::World EcoResilience::World::Update()
 				case 0://Up
 					if (bearer)//Children spawn next to this cell
 					{
-						if (cellNum % width > 0)
+						if (cellNum % worldSize.width > 0)
 							if (!newWorld[cellNum - 1].hasAnimal && at(cellNum - 1).cellType == CellType::LAND)
 								newWorld[cellNum - 1].AddAnimal(Animal(childType));
 
-						if (cellNum % width < width - 1)
+						if (cellNum % worldSize.width < worldSize.width - 1)
 							if (!newWorld[cellNum + 1].hasAnimal && at(cellNum + 1).cellType == CellType::LAND)
 								newWorld[cellNum + 1].AddAnimal(Animal(childType));
 					}
 					else
 					{
-						if (cellNum % width > 0)
-							if (!newWorld[cellNum - width - 1].hasAnimal && at(cellNum - width - 1).cellType == CellType::LAND)
-								newWorld[cellNum - width - 1].AddAnimal(Animal(childType));
+						if (cellNum % worldSize.width > 0)
+							if (!newWorld[cellNum - worldSize.width - 1].hasAnimal && at(cellNum - worldSize.width - 1).cellType == CellType::LAND)
+								newWorld[cellNum - worldSize.width - 1].AddAnimal(Animal(childType));
 
-						if (cellNum % width < width - 1)
-							if (!newWorld[cellNum - width + 1].hasAnimal && at(cellNum - width + 1).cellType == CellType::LAND)
-								newWorld[cellNum - width + 1].AddAnimal(Animal(childType));
+						if (cellNum % worldSize.width < worldSize.width - 1)
+							if (!newWorld[cellNum - worldSize.width + 1].hasAnimal && at(cellNum - worldSize.width + 1).cellType == CellType::LAND)
+								newWorld[cellNum - worldSize.width + 1].AddAnimal(Animal(childType));
 					}
 
 					break;
@@ -1108,23 +1102,23 @@ EcoResilience::World EcoResilience::World::Update()
 				case 1://Left
 					if (bearer)//Children spawn next to this cell
 					{
-						if (cellNum >= width)
-							if (!newWorld[cellNum - width].hasAnimal && at(cellNum - width).cellType == CellType::LAND)
-								newWorld[cellNum - width].AddAnimal(Animal(childType));
+						if (cellNum >= worldSize.width)
+							if (!newWorld[cellNum - worldSize.width].hasAnimal && at(cellNum - worldSize.width).cellType == CellType::LAND)
+								newWorld[cellNum - worldSize.width].AddAnimal(Animal(childType));
 
-						if (cellNum + width < width * (height - 1))
-							if (!newWorld[cellNum + width].hasAnimal && at(cellNum + width).cellType == CellType::LAND)
-								newWorld[cellNum + width].AddAnimal(Animal(childType));
+						if (cellNum + worldSize.width < worldSize.width * (worldSize.height - 1))
+							if (!newWorld[cellNum + worldSize.width].hasAnimal && at(cellNum + worldSize.width).cellType == CellType::LAND)
+								newWorld[cellNum + worldSize.width].AddAnimal(Animal(childType));
 					}
 					else
 					{
-						if (cellNum >= width)
-							if (!newWorld[cellNum - 1 - width].hasAnimal && at(cellNum - 1 - width).cellType == CellType::LAND)
-								newWorld[cellNum - 1 - width].AddAnimal(Animal(childType));
+						if (cellNum >= worldSize.width)
+							if (!newWorld[cellNum - 1 - worldSize.width].hasAnimal && at(cellNum - 1 - worldSize.width).cellType == CellType::LAND)
+								newWorld[cellNum - 1 - worldSize.width].AddAnimal(Animal(childType));
 
-						if (cellNum + width < width * (height - 1))
-							if (!newWorld[cellNum - 1 + width].hasAnimal && at(cellNum - 1 + width).cellType == CellType::LAND)
-								newWorld[cellNum - 1 + width].AddAnimal(Animal(childType));
+						if (cellNum + worldSize.width < worldSize.width * (worldSize.height - 1))
+							if (!newWorld[cellNum - 1 + worldSize.width].hasAnimal && at(cellNum - 1 + worldSize.width).cellType == CellType::LAND)
+								newWorld[cellNum - 1 + worldSize.width].AddAnimal(Animal(childType));
 					}
 
 					break;
@@ -1132,23 +1126,23 @@ EcoResilience::World EcoResilience::World::Update()
 				case 2://Right
 					if (bearer)//Children spawn next to this cell
 					{
-						if (cellNum >= width)
-							if (!newWorld[cellNum - width].hasAnimal && at(cellNum - width).cellType == CellType::LAND)
-								newWorld[cellNum - width].AddAnimal(Animal(childType));
+						if (cellNum >= worldSize.width)
+							if (!newWorld[cellNum - worldSize.width].hasAnimal && at(cellNum - worldSize.width).cellType == CellType::LAND)
+								newWorld[cellNum - worldSize.width].AddAnimal(Animal(childType));
 
-						if (cellNum + width < width * (height - 1))
-							if (!newWorld[cellNum + width].hasAnimal && at(cellNum + width).cellType == CellType::LAND)
-								newWorld[cellNum + width].AddAnimal(Animal(childType));
+						if (cellNum + worldSize.width < worldSize.width * (worldSize.height - 1))
+							if (!newWorld[cellNum + worldSize.width].hasAnimal && at(cellNum + worldSize.width).cellType == CellType::LAND)
+								newWorld[cellNum + worldSize.width].AddAnimal(Animal(childType));
 					}
 					else
 					{
-						if (cellNum >= width)
-							if (!newWorld[cellNum + 1 - width].hasAnimal && at(cellNum + 1 - width).cellType == CellType::LAND)
-								newWorld[cellNum + 1 - width].AddAnimal(Animal(childType));
+						if (cellNum >= worldSize.width)
+							if (!newWorld[cellNum + 1 - worldSize.width].hasAnimal && at(cellNum + 1 - worldSize.width).cellType == CellType::LAND)
+								newWorld[cellNum + 1 - worldSize.width].AddAnimal(Animal(childType));
 
-						if (cellNum + width < width * (height - 1))
-							if (!newWorld[cellNum + 1 + width].hasAnimal && at(cellNum + 1 + width).cellType == CellType::LAND)
-								newWorld[cellNum + 1 + width].AddAnimal(Animal(childType));
+						if (cellNum + worldSize.width < worldSize.width * (worldSize.height - 1))
+							if (!newWorld[cellNum + 1 + worldSize.width].hasAnimal && at(cellNum + 1 + worldSize.width).cellType == CellType::LAND)
+								newWorld[cellNum + 1 + worldSize.width].AddAnimal(Animal(childType));
 					}
 
 					break;
@@ -1156,23 +1150,23 @@ EcoResilience::World EcoResilience::World::Update()
 				case 3://Down
 					if (bearer)//Children spawn next to this cell
 					{
-						if (cellNum % width > 0)
+						if (cellNum % worldSize.width > 0)
 							if (!newWorld[cellNum - 1].hasAnimal && at(cellNum - 1).cellType == CellType::LAND)
 								newWorld[cellNum - 1].AddAnimal(Animal(childType));
 
-						if (cellNum % width < width - 1)
+						if (cellNum % worldSize.width < worldSize.width - 1)
 							if (!newWorld[cellNum + 1].hasAnimal && at(cellNum + 1).cellType == CellType::LAND)
 								newWorld[cellNum + 1].AddAnimal(Animal(childType));
 					}
 					else
 					{
-						if (cellNum % width > 0)
-							if (!newWorld[cellNum + width - 1].hasAnimal && at(cellNum + width - 1).cellType == CellType::LAND)
-								newWorld[cellNum + width - 1].AddAnimal(Animal(childType));
+						if (cellNum % worldSize.width > 0)
+							if (!newWorld[cellNum + worldSize.width - 1].hasAnimal && at(cellNum + worldSize.width - 1).cellType == CellType::LAND)
+								newWorld[cellNum + worldSize.width - 1].AddAnimal(Animal(childType));
 
-						if (cellNum % width < width - 1)
-							if (!newWorld[cellNum + width + 1].hasAnimal && at(cellNum + width + 1).cellType == CellType::LAND)
-								newWorld[cellNum + width + 1].AddAnimal(Animal(childType));
+						if (cellNum % worldSize.width < worldSize.width - 1)
+							if (!newWorld[cellNum + worldSize.width + 1].hasAnimal && at(cellNum + worldSize.width + 1).cellType == CellType::LAND)
+								newWorld[cellNum + worldSize.width + 1].AddAnimal(Animal(childType));
 					}
 
 					break;
@@ -1206,15 +1200,15 @@ int EcoResilience::World::GetPopulation(PopulationType type)
 void EcoResilience::World::Rain()
 {
 	//Add water to every cell in accordance with the generation type
-	switch (genType)
+	switch (worldParameters.genType)
 	{
 	case GenerationType::RANDOM://Random generation
-		for (int row = 0; row < height; row++)
+		for (int row = 0; row < worldSize.height; row++)
 		{
-			for (int column = 0; column < width; column++)
+			for (int column = 0; column < worldSize.width; column++)
 			{
 				float water = float((rand() % 1000)) / 10000.f;
-				at(row * width + column).SetWater(water + at(row * width + column).GetWater());
+				at(row * worldSize.width + column).SetWater(water + at(row * worldSize.width + column).GetWater());
 			}
 		}
 		break;
@@ -1222,14 +1216,14 @@ void EcoResilience::World::Rain()
 	case GenerationType::PERLIN://Perlin generation
 		const float waterOffset = rand();
 
-		for (int row = 0; row < height; row++)
+		for (int row = 0; row < worldSize.height; row++)
 		{
-			for (int column = 0; column < width; column++)
+			for (int column = 0; column < worldSize.width; column++)
 			{
-				float waterVec[2]{ (row + waterOffset) * 0.1f, (column + waterOffset) * 0.1f };
+				float waterVec[2]{ (row + waterOffset) * worldParameters.waterMod, (column + waterOffset) * worldParameters.waterMod };
 				float water = (CPerlinNoise::noise2(waterVec) + 0.5f) * 0.1f;
 
-				at(row * width + column).SetWater(water + at(row * width + column).GetWater());
+				at(row * worldSize.width + column).SetWater(water + at(row * worldSize.width + column).GetWater());
 			}
 		}
 	}
@@ -1239,6 +1233,6 @@ void EcoResilience::World::UrbanDevelop()
 {
 	//Set the cells within the city as uninhabitable
 	for(auto cell : *this)
-		if(std::pow(cell.cellColumn, 2) + std::pow(cell.cellRow, 2) <= std::pow(width / 2, 2))
-			at(cell.cellRow * width + cell.cellColumn).cellType = CellType::URBANISED;
+		if(std::pow(cell.cellColumn, 2) + std::pow(cell.cellRow, 2) <= std::pow(worldSize.width / 2, 2))
+			at(cell.cellRow * worldSize.width + cell.cellColumn).cellType = CellType::URBANISED;
 }

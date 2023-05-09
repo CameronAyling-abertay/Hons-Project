@@ -18,8 +18,8 @@ namespace EcoResilience
 		Animal animal;
 
 		//Disturbance Effects
+		float preFlood;
 		bool flooded;
-		int floodCounter;
 
 	public:
 		//Location
@@ -63,7 +63,7 @@ namespace EcoResilience
 		Animal GetAnimal() const { return animal; }
 
 		//Disturbance effects
-		void Flood() { flooded = true; floodCounter = 0; }
+		void Flood() { if (!flooded) { flooded = true; preFlood = waterLevel; } }
 
 		void InfectAnimal() { if (hasAnimal) { animal.Infect(); } }
 

@@ -22,14 +22,14 @@ void EcoApp::Update()
 		drought = false;
 }
 
-void EcoApp::GenerateWorld(EcoResilience::GenerationType genType, int worldWidth, int worldHeight, float maxCellPlantMass)
+void EcoApp::GenerateWorld(EcoResilience::EcoSize size, EcoResilience::EcoParameters parameters)
 {
 	//Generate the world
-	worldGenType = genType;
+	worldGenType = parameters.genType;
 	
-	world.Generate(worldWidth, worldHeight, genType, maxCellPlantMass);
-	width = worldWidth;
-	height = worldHeight;
+	world.Generate(size, parameters);
+	width = size.width;
+	height = size.height;
 
 	//Set the drought flag to false
 	drought = false;
@@ -57,7 +57,7 @@ void EcoApp::Flood()
 		}
 
 		//If the world is not flooded, make it rain
-		if (water < width * height * 0.75f)
+		if (water < width * height * 0.85f)
 			Rain();
 		else//End the cycle otherwise as it is flooded
 			break;

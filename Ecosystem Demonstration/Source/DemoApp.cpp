@@ -26,7 +26,7 @@ void DemoApp::init()
     ImGui::SFML::Init(*window);
 
     //Generate a default world
-    ecology.GenerateWorld();
+    ecology.GenerateWorld(size, parameters);
 }
 
 //Run the app until the window is closed
@@ -87,9 +87,7 @@ void DemoApp::update(sf::Time dt)
             float water = 0;
 
             for (int cellNum = 0; cellNum < ecology.width * ecology.height; cellNum++)
-            {
                 water += ecology.world.at(cellNum).GetWater();
-            }
 
             if (water < ecology.width * ecology.height * 0.6f)
                 ecology.Rain();
@@ -126,14 +124,28 @@ void DemoApp::update(sf::Time dt)
     //Triggers
     //Generation
     ImGui::Text("\nGeneration");
+    ImGui::SliderInt("Width", &size.width, 10, 400);
+    ImGui::SliderInt("Height", &size.height, 10, 400);
+    ImGui::SliderFloat("Maximum Mass", &size.maxMass, 0.1, 5);
+    
     ImGui::Checkbox("Use Perlin Noise?", &perlin);
+    if (perlin)
+        parameters.genType = EcoResilience::GenerationType::PERLIN;
+    else
+        parameters.genType = EcoResilience::GenerationType::RANDOM;
     if (ImGui::Button("Generate", ImVec2(250, 20)))
     {
-        if (!perlin)
-            ecology.GenerateWorld();
-        else
-            ecology.GenerateWorld(EcoResilience::GenerationType::PERLIN);
+        ecology.GenerateWorld(size, parameters);
         stepCount = 0;
+    }
+
+    if(perlin)
+    {
+        ImGui::SliderFloat("Water Resolution", &parameters.waterMod, 0.01f, 0.9f, "%.2f");
+        ImGui::SliderFloat("Altitude Resolution", &parameters.altitudeMod, 0.01f, 0.9f, "%.2f");
+        ImGui::SliderFloat("Plant Resolution", &parameters.plantMod, 0.01f, 0.9f, "%.2f");
+        ImGui::SliderFloat("Prey Resolution", &parameters.preyMod, 0.01f, 0.9f, "%.2f");
+        ImGui::SliderFloat("Predator Resolution", &parameters.predatorMod, 0.01f, 0.9f, "%.2f");
     }
 
     //Natural events
@@ -205,9 +217,9 @@ void DemoApp::render()
 
     int sideSize;
     if(viewSeparate)
-		sideSize = std::min(window->getSize().x * 0.5f, window->getSize().y * 0.5f) / DEFAULT_SIDE;
+		sideSize = std::min(window->getSize().x * 0.5f, window->getSize().y * 0.5f) / std::max(ecology.width, ecology.height);
     else
-        sideSize = std::min(window->getSize().x, window->getSize().y) / DEFAULT_SIDE;
+        sideSize = std::min(window->getSize().x, window->getSize().y) / std::max(ecology.width, ecology.height);
 
     cellRep.setSize(sf::Vector2f(sideSize, sideSize));
     const sf::Vector2f screenCentre = window->getView().getCenter();
@@ -218,7 +230,7 @@ void DemoApp::render()
         //Set the representative's position on the screen
         sf::Vector2f pos;
 
-        const sf::Vector2f cellPos(currentCell.cellColumn * sideSize - (ecology.height / 2 * sideSize), currentCell.cellRow * sideSize - (ecology.width / 2 * sideSize));
+        const sf::Vector2f cellPos(currentCell.cellColumn * sideSize - (ecology.width / 2 * sideSize), currentCell.cellRow * sideSize - (ecology.height / 2 * sideSize));
         const sf::Vector2f worldPos(window->getSize().x * 0.25f, window->getSize().y * 0.25f);
 
         sf::Color repColor(0, 0, 0);
@@ -262,7 +274,7 @@ void DemoApp::render()
             if (currentCell.hasPlant)
                 mass = currentCell.GetPlant().GetMass();
 
-            repColor = sf::Color(86, 125 + mass * 60.f / DEFAULT_MASS, 70);
+            repColor = sf::Color(86, 125 + mass * 60.f / size.maxMass, 70);
 
             cellRep.setFillColor(repColor);
 
@@ -305,7 +317,7 @@ void DemoApp::render()
             if (currentCell.hasPlant)
                 mass = currentCell.GetPlant().GetMass();
 
-            sf::Color baseColour(209 - (209 - 86) * mass / DEFAULT_MASS, 189 - (189 - 125) * mass / DEFAULT_MASS, 100 - (100 - 70) * mass / DEFAULT_MASS);
+            sf::Color baseColour(209 - (209 - 86) * mass / size.maxMass, 189 - (189 - 125) * mass / size.maxMass, 100 - (100 - 70) * mass / size.maxMass);
 
             //Water
             int waterNum = (currentCell.GetAltitude() - currentCell.GetWater()) * 75.f + 185.f;
