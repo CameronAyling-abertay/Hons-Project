@@ -31,7 +31,7 @@ EcoResilience::Animal::Animal(PopulationType species) :
 
 	case PopulationType::PREY:
 		moveCounter = rand() % 7;
-		childCounter = rand() % 60;
+		childCounter = rand() % 80;
 		maxAge = vigor * 100;
 		break;
 	}
@@ -176,7 +176,7 @@ void EcoResilience::Animal::Reproduce()
 		break;
 
 	case PopulationType::PREY:
-		childCounter = 60;
+		childCounter = 80;
 		break;
 	}
 }
